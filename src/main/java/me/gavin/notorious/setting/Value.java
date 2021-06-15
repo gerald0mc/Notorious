@@ -16,7 +16,10 @@ public class Value<T> {
     }
 
     public Value(String name, T value, T min, T max) {
-
+        this.name = name;
+        this.value = value;
+        this.min = min;
+        this.max = max;
     }
 
     public T clamp(T value, T min, T max) {
