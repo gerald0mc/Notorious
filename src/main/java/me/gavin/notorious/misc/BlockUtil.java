@@ -7,6 +7,11 @@ import net.minecraft.world.GameType;
 
 import java.util.ArrayList;
 
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
+
 public class BlockUtil implements IMinecraft {
 
     public static ArrayList<BlockPos> getSurroundingBlocks(int radius, boolean motion) {

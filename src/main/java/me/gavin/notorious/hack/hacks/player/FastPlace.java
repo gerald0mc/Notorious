@@ -7,6 +7,11 @@ import me.gavin.notorious.hack.RegisterValue;
 import me.gavin.notorious.setting.Value;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
+
 @RegisterHack(name = "FastPlace", description = "Use items faster", category = Hack.Category.Player)
 public class FastPlace extends Hack {
 

@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// EntityRendererMixin.java
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
 
 @RegisterHack(name = "Fullbright", description = "Makes it fully bright", category = Hack.Category.Render, bind = Keyboard.KEY_B)
 public class Fullbright extends Hack {

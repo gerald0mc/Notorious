@@ -14,6 +14,11 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
+
 @RegisterHack(name = "Lawnmower", description = "Mines tall grass and stuff around you", category = Hack.Category.World, bind = Keyboard.KEY_R)
 public class Lawnmower extends Hack {
 
@@ -23,7 +28,7 @@ public class Lawnmower extends Hack {
         for (BlockPos pos : posList) {
             if (isMineable(mc.world.getBlockState(pos).getBlock())) {
                 mc.player.swingArm(EnumHand.MAIN_HAND);
-                mc.playerController.onPlayerDamageBlock(pos, EnumFacing.UP);
+                mc.playerController.clickBlock(pos, EnumFacing.UP);
             }
         }
     }

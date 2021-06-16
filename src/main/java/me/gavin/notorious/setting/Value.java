@@ -1,6 +1,9 @@
 package me.gavin.notorious.setting;
 
-import java.util.function.Predicate;
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
 
 public class Value<T> {
 
@@ -9,6 +12,8 @@ public class Value<T> {
     public T value;
     public T min;
     public T max;
+
+    public ValueGroup group;
 
     public Value(String name, T value) {
         this.name = name;
@@ -39,5 +44,11 @@ public class Value<T> {
             return value.toString();
         else
             return name;
+    }
+
+    public Value<T> withGroup(ValueGroup group) {
+        group.getValues().add(this);
+        this.group = group;
+        return this;
     }
 }

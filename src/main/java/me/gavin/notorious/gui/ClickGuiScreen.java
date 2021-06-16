@@ -4,6 +4,11 @@ import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
 
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
+
 public class ClickGuiScreen extends GuiScreen {
 
     @Override

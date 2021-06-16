@@ -7,6 +7,11 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
+
 public abstract class Hack {
 
     protected final Minecraft mc = Minecraft.getMinecraft();

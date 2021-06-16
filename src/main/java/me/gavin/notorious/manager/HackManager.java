@@ -9,6 +9,11 @@ import org.reflections.Reflections;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
+
 public class HackManager {
 
     private final ArrayList<Hack> hacks;

@@ -8,6 +8,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
+/**
+ * @author Gav06
+ * @since 6/15/2021
+ */
+
 public class EventProcessor {
 
     public EventProcessor() {
