@@ -28,6 +28,8 @@ public class Notorious {
     public final CFontRenderer fontRenderer;
 
     public Notorious() {
+        INSTANCE = this;
+
         hackManager = new HackManager();
         fontRenderer = new CFontRenderer(CFontLoader.HELVETICA, true, true);
         clickGui = new ClickGuiScreen();

@@ -41,6 +41,17 @@ public class HackManager {
         return null;
     }
 
+    public ArrayList<Hack> getHacksFromCategory(Hack.Category category) {
+        final ArrayList<Hack> tempList = new ArrayList<>();
+
+        for (Hack hack : hacks) {
+            if (hack.getCategory() == category)
+                tempList.add(hack);
+        }
+
+        return tempList;
+    }
+
     private void loadHacks() throws IllegalAccessException, InstantiationException {
         final Reflections reflections = new Reflections("me.gavin.notorious.hack.hacks");
 
