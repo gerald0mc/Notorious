@@ -4,12 +4,12 @@ import me.gavin.notorious.hack.Hack;
 
 import java.util.ArrayList;
 
-public class ValueGroup {
+public class SettingGroup {
 
     private final String name;
-    private final ArrayList<Value<?>> values;
+    private final ArrayList<Setting> values;
 
-    public ValueGroup(String name) {
+    public SettingGroup(String name) {
         this.name = name;
         this.values = new ArrayList<>();
     }
@@ -18,7 +18,7 @@ public class ValueGroup {
         return name;
     }
 
-    public ArrayList<Value<?>> getValues() {
+    public ArrayList<Setting> getValues() {
         return values;
     }
 }

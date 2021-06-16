@@ -3,9 +3,7 @@ package me.gavin.notorious.hack.hacks.player;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
-import me.gavin.notorious.hack.RegisterValue;
 import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
-import me.gavin.notorious.setting.Value;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**

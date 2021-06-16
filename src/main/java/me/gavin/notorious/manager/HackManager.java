@@ -2,8 +2,8 @@ package me.gavin.notorious.manager;
 
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
-import me.gavin.notorious.hack.RegisterValue;
-import me.gavin.notorious.setting.Value;
+import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.Setting;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
@@ -66,11 +66,12 @@ public class HackManager {
                 hack.setKeybind(registerAnnotation.bind());
 
                 for (Field field : clazz.getDeclaredFields()) {
-                    if (Value.class.isAssignableFrom(field.getType()) && field.isAnnotationPresent(RegisterValue.class)) {
-                        hack.getSettings().add((Value) field.get(hack));
+                    if (Setting.class.isAssignableFrom(field.getType()) && field.isAnnotationPresent(RegisterSetting.class)) {
+                        hack.getSettings().add((Setting) field.get(hack));
                     }
                 }
 
+                System.out.println(hack.getSettings());
                 hacks.add(hack);
             }
         }

@@ -18,7 +18,6 @@ public class RenderUtil implements IMinecraft {
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
         GlStateManager.disableTexture2D();
         GlStateManager.depthMask(false);
-        GL11.glLineWidth(1.0F);
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
     }

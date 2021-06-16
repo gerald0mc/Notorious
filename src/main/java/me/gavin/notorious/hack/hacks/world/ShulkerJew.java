@@ -3,16 +3,15 @@ package me.gavin.notorious.hack.hacks.world;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
-import me.gavin.notorious.hack.RegisterValue;
+import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.misc.BlockUtil;
-import me.gavin.notorious.setting.Value;
+import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,17 +23,17 @@ import org.lwjgl.input.Keyboard;
 @RegisterHack(name = "ShulkerJew", description = "Automatically breaks shulkers.", category = Hack.Category.World, bind = Keyboard.KEY_H)
 public class ShulkerJew extends Hack {
 
-    @RegisterValue
-    public final Value<Float> range = new Value<>("Range", 5f, 0f, 6f);
+    @RegisterSetting
+    public final NumSetting range = new NumSetting("Range", 5f, 0f, 6f, 0.5f);
 
-    @RegisterValue
-    public final Value<Integer> red = new Value<>("Red", 255, 0, 255);
+    @RegisterSetting
+    public final NumSetting red = new NumSetting("Red", 255, 0, 255, 1);
 
-    @RegisterValue
-    public final Value<Integer> green = new Value<>("Green", 255, 0, 255);
+    @RegisterSetting
+    public final NumSetting green = new NumSetting("Green", 255, 0, 255, 1);
 
-    @RegisterValue
-    public final Value<Integer> blue = new Value<>("Blue", 255, 0, 255);
+    @RegisterSetting
+    public final NumSetting blue = new NumSetting("Blue", 255, 0, 255, 1);
 
     private BlockPos targetedBlock = null;
 
@@ -55,7 +54,7 @@ public class ShulkerJew extends Hack {
                 return;
             }
 
-            if (targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > range.value) {
+            if (targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > range.getValue()) {
                 targetedBlock = null;
                 return;
             }
@@ -73,7 +72,7 @@ public class ShulkerJew extends Hack {
                     -mc.getRenderManager().viewerPosX,
                     -mc.getRenderManager().viewerPosY,
                     -mc.getRenderManager().viewerPosZ);
-            RenderGlobal.renderFilledBox(bb, red.value / 255f, green.value / 255f, blue.value / 255f, 0.5f);
+            RenderGlobal.renderFilledBox(bb, red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, 0.5f);
             RenderUtil.release();
         }
     }
