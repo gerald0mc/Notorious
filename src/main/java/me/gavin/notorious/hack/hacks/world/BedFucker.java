@@ -29,6 +29,18 @@ public class BedFucker extends Hack {
     @RegisterValue
     public final Value<BreakMode> breakModeValue = new Value<>("Break Mode", BreakMode.NORMAL);
 
+    @RegisterValue
+    public final Value<Float> range = new Value<>("Range", 5f, 0f, 6f);
+
+    @RegisterValue
+    public final Value<Integer> red = new Value<>("Red", 255, 0, 255);
+
+    @RegisterValue
+    public final Value<Integer> green = new Value<>("Green", 255, 0, 255);
+
+    @RegisterValue
+    public final Value<Integer> blue = new Value<>("Blue", 255, 0, 255);
+
     private BlockPos targetedBlock = null;
 
     @SubscribeEvent
@@ -48,7 +60,7 @@ public class BedFucker extends Hack {
                 return;
             }
 
-            if (targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > 5) {
+            if (targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > range.value) {
                 targetedBlock = null;
                 return;
             }
@@ -66,7 +78,7 @@ public class BedFucker extends Hack {
                     -mc.getRenderManager().viewerPosX,
                     -mc.getRenderManager().viewerPosY,
                     -mc.getRenderManager().viewerPosZ);
-            RenderGlobal.renderFilledBox(bb, 1f, 1f, 1f, 0.5f);
+            RenderGlobal.renderFilledBox(bb, red.value / 255f, green.value / 255f, blue.value / 255f, 0.5f);
             RenderUtil.release();
         }
     }

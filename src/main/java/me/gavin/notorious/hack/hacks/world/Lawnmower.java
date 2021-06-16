@@ -3,7 +3,9 @@ package me.gavin.notorious.hack.hacks.world;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
+import me.gavin.notorious.hack.RegisterValue;
 import me.gavin.notorious.misc.BlockUtil;
+import me.gavin.notorious.setting.Value;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -22,11 +24,14 @@ import java.util.ArrayList;
 @RegisterHack(name = "Lawnmower", description = "Mines tall grass and stuff around you", category = Hack.Category.World, bind = Keyboard.KEY_R)
 public class Lawnmower extends Hack {
 
+    @RegisterValue
+    public final Value<Integer> delay = new Value<>("Delay", 2, 1, 10);
+
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
         final ArrayList<BlockPos> posList = BlockUtil.getSurroundingBlocks(4, true);
         for (BlockPos pos : posList) {
-            if (isMineable(mc.world.getBlockState(pos).getBlock())) {
+            if (isMineable(mc.world.getBlockState(pos).getBlock()) && mc.player.ticksExisted % delay.value == 0.0) {
                 mc.player.swingArm(EnumHand.MAIN_HAND);
                 mc.playerController.clickBlock(pos, EnumFacing.UP);
             }
