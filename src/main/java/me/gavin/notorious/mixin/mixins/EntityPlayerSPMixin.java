@@ -1,6 +1,7 @@
 package me.gavin.notorious.mixin.mixins;
 
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
+import me.gavin.notorious.event.events.PlayerWalkingUpdateEvent;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,5 +20,15 @@ public class EntityPlayerSPMixin {
     @Inject(method = "onLivingUpdate", at = @At("HEAD"))
     public void onLivingUpdateInject(CallbackInfo ci) {
         MinecraftForge.EVENT_BUS.post(new PlayerLivingUpdateEvent());
+    }
+
+    @Inject(method = "onUpdateWalkingPlayer", at = @At("HEAD"))
+    public void onUpdateWalkingPlayerInjectPre(CallbackInfo ci) {
+        MinecraftForge.EVENT_BUS.post(new PlayerWalkingUpdateEvent(PlayerWalkingUpdateEvent.Stage.PRE));
+    }
+
+    @Inject(method = "onUpdateWalkingPlayer", at = @At("TAIL"))
+    public void onUpdateWalkingPlayerInjectPost(CallbackInfo ci) {
+        MinecraftForge.EVENT_BUS.post(new PlayerWalkingUpdateEvent(PlayerWalkingUpdateEvent.Stage.POST));
     }
 }

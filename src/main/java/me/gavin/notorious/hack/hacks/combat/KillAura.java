@@ -9,6 +9,12 @@ import me.gavin.notorious.setting.ValueGroup;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+/**
+ * @author Gav06
+ *
+ * @since 6/16/2021
+ */
+
 @RegisterHack(name = "KillAura", description = "Attacks entities for you", category = Hack.Category.Combat)
 public class KillAura extends Hack {
 

@@ -23,9 +23,9 @@ public class EventProcessor {
     public void onKey(InputEvent.KeyInputEvent event) {
         if (Keyboard.getEventKeyState()) {
             if (Keyboard.getEventKey() == Keyboard.KEY_RSHIFT)
-                Minecraft.getMinecraft().displayGuiScreen(Notorious.INSTANCE.CLICK_GUI);
+                Minecraft.getMinecraft().displayGuiScreen(Notorious.INSTANCE.clickGui);
 
-            for (Hack hack : Notorious.INSTANCE.HACK_MANAGER.getHacks()) {
+            for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
                 if (hack.getKeybind() == Keyboard.getEventKey()) {
                     hack.toggle();
                 }

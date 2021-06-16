@@ -19,7 +19,7 @@ public class EntityRendererMixin {
 
     @Inject(method = "setupFog", at = @At("RETURN"))
     public void setupFogInject(int startCoords, float partialTicks, CallbackInfo ci) {
-        if (Notorious.INSTANCE.HACK_MANAGER.getHack(AntiFog.class).isEnabled())
+        if (Notorious.INSTANCE.hackManager.getHack(AntiFog.class).isEnabled())
             GlStateManager.disableFog();
     }
 }
