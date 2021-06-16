@@ -1,9 +1,14 @@
 package me.gavin.notorious.util;
 
+import me.gavin.notorious.misc.IMinecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.util.math.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
 
-public class RenderUtil {
+import java.awt.*;
+
+public class RenderUtil implements IMinecraft {
 
     public static void prepare() {
         GlStateManager.pushMatrix();
@@ -26,5 +31,32 @@ public class RenderUtil {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
+    }
+
+    public static void renderFilledBB(AxisAlignedBB box, Color color) {
+        renderBB(box, color, RenderMode.FILLED);
+    }
+
+    public static void renderOutlineBB(AxisAlignedBB box, Color color) {
+        renderBB(box, color, RenderMode.OUTLINE);
+    }
+
+    private static void renderBB(AxisAlignedBB box, Color color, RenderMode mode) {
+        prepare();
+        final float r = color.getRed() / 255f;
+        final float g = color.getGreen() / 255f;
+        final float b = color.getBlue() / 255f;
+        final float a = color.getAlpha() / 255f;
+        box = box.offset(-mc.getRenderManager().viewerPosX, -mc.getRenderManager().viewerPosY, -mc.getRenderManager().viewerPosZ);
+        if (mode == RenderMode.FILLED)
+            RenderGlobal.renderFilledBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, r, g, b, a);
+        else
+            RenderGlobal.drawBoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, r, g, b, a);
+        release();
+    }
+
+    private enum RenderMode {
+        FILLED,
+        OUTLINE,
     }
 }
