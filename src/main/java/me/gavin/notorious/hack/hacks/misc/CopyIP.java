@@ -1,9 +1,9 @@
-package me.gavin.notorious.hack.hacks.other;
+package me.gavin.notorious.hack.hacks.misc;
 
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 
-@RegisterHack(name = "CopyIP", description = "Copies the current server IP to clipboard", category = Hack.Category.Other)
+@RegisterHack(name = "CopyIP", description = "Copies the current server IP to clipboard", category = Hack.Category.Misc)
 public class CopyIP extends Hack {
 
     @Override

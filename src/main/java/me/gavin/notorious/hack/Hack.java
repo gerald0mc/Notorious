@@ -90,13 +90,13 @@ public abstract class Hack implements Toggleable {
     }
 
     public enum Category {
-        Combat,
-        Render,
-        Movement,
-        Player,
-        World,
         Chat,
         Client,
-        Misc
+        Combat,
+        Misc,
+        Movement,
+        Player,
+        Render,
+        World
     }
 }

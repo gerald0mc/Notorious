@@ -39,14 +39,4 @@ public class Notorious {
         MinecraftForge.EVENT_BUS.register(this);
         Display.setTitle(NotoriousMod.NAME_VERSION);
     }
-
-    @SubscribeEvent
-    public void onRender(RenderGameOverlayEvent.Text event) {
-        int yOffset = 2;
-        for (Hack hack : hackManager.getHacks()) {
-            ChatFormatting color = hack.isEnabled() ? ChatFormatting.GREEN : ChatFormatting.RED;
-            fontRenderer.drawStringWithShadow(color + hack.getName(), 2.0, yOffset, new Color(-1));
-            yOffset += fontRenderer.getHeight() + 3;
-        }
-    }
 }
