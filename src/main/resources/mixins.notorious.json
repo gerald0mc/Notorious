@@ -8,6 +8,5 @@
     "EntityPlayerSPMixin",
     "EntityRendererMixin",
     "accessor.IMinecraftMixin",
-    "accessor.IWorldProviderMixin"
   ]
 }

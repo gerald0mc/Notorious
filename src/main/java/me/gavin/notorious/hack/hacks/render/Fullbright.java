@@ -16,25 +16,27 @@ import java.util.List;
 @RegisterHack(name = "Fullbright", description = "Makes it fully bright", category = Hack.Category.Render, bind = Keyboard.KEY_B)
 public class Fullbright extends Hack {
 
-//    private List<Float> previousLevels = new ArrayList<>();
-//
-//    @Override
-//    public void onEnable() {
-//        if (mc.world.provider != null) {
-//            for (float f : mc.world.provider.lightBrightnessTable) {
-//                previousLevels.add(f);
-//            }
-//
-//            Arrays.fill(mc.world.provider.lightBrightnessTable, 1f);
-//        }
-//    }
-//
-//    @Override
-//    public void onDisable() {
-//        for (int i = 0; i < mc.world.provider.lightBrightnessTable.length; i++) {
-//            mc.world.provider.lightBrightnessTable[i] = previousLevels.get(i);
-//        }
-//
-//        previousLevels.clear();
-//    }
+    private final List<Float> previousLevels = new ArrayList<>();
+
+    @Override
+    public void onEnable() {
+        final float[] table = mc.world.provider.getLightBrightnessTable();
+        if (mc.world.provider != null) {
+            for (float f : table) {
+                previousLevels.add(f);
+            }
+
+            Arrays.fill(table, 1f);
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        final float[] table = mc.world.provider.getLightBrightnessTable();
+        for (int i = 0; i < table.length; i++) {
+            table[i] = previousLevels.get(i);
+        }
+
+        previousLevels.clear();
+    }
 }
