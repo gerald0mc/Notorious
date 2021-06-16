@@ -6,6 +6,8 @@
   "minVersion": "0.7",
   "mixins": [
     "EntityPlayerSPMixin",
-    "EntityRendererMixin"
+    "EntityRendererMixin",
+    "accessor.IMinecraftMixin",
+    "accessor.IWorldProviderMixin"
   ]
 }

@@ -5,6 +5,7 @@ import me.gavin.notorious.event.EventProcessor;
 import me.gavin.notorious.gui.ClickGuiScreen;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.manager.HackManager;
+import me.gavin.notorious.util.font.CFontLoader;
 import me.gavin.notorious.util.font.CFontRenderer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,7 +29,7 @@ public class Notorious {
 
     public Notorious() {
         hackManager = new HackManager();
-        fontRenderer = new CFontRenderer(new Font("Verdana", Font.PLAIN, 18), true, true);
+        fontRenderer = new CFontRenderer(CFontLoader.HELVETICA, true, true);
         clickGui = new ClickGuiScreen();
 
         new EventProcessor();
@@ -43,7 +44,7 @@ public class Notorious {
         for (Hack hack : hackManager.getHacks()) {
             ChatFormatting color = hack.isEnabled() ? ChatFormatting.GREEN : ChatFormatting.RED;
             fontRenderer.drawStringWithShadow(color + hack.getName(), 2.0, yOffset, new Color(-1));
-            yOffset += fontRenderer.getHeight() + 1;
+            yOffset += fontRenderer.getHeight() + 3;
         }
     }
 }
