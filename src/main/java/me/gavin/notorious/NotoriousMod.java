@@ -23,6 +23,6 @@ public class NotoriousMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        Notorious.INSTANCE = new Notorious();
+        new Notorious();
     }
 }
