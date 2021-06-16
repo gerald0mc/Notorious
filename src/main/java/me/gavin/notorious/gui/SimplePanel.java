@@ -3,6 +3,7 @@ package me.gavin.notorious.gui;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.AbstractComponent;
 import me.gavin.notorious.hack.Hack;
+import net.minecraft.client.gui.Gui;
 
 import java.util.ArrayList;
 
@@ -22,10 +23,12 @@ public class SimplePanel extends AbstractComponent {
             buttons.add(new SimplePanelButton(hack, x, yOffset, width, 14));
             yOffset += 14;
         }
+        this.height = yOffset;
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        Gui.drawRect(x, y, x + width, y + height, 0x90000000);
         header.render(mouseX, mouseY, partialTicks);
         for (SimplePanelButton button : buttons) {
             button.render(mouseX, mouseY, partialTicks);
