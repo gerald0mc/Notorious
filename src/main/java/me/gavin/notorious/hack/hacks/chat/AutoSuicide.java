@@ -1,10 +1,10 @@
-package me.gavin.notorious.hack.hacks.other;
+package me.gavin.notorious.hack.hacks.chat;
 
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import org.lwjgl.input.Keyboard;
 
-@RegisterHack(name = "AutoSuicide", description = "Automatically kills you.", category = Hack.Category.Other, bind = Keyboard.KEY_C)
+@RegisterHack(name = "AutoSuicide", description = "Automatically kills you.", category = Hack.Category.Chat, bind = Keyboard.KEY_C)
 public class AutoSuicide extends Hack {
 
     @Override

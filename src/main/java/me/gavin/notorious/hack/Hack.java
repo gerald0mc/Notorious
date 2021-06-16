@@ -95,6 +95,8 @@ public abstract class Hack implements Toggleable {
         Movement,
         Player,
         World,
-        Other
+        Chat,
+        Client,
+        Misc
     }
 }
