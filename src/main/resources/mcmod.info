@@ -1,0 +1,16 @@
+[
+    {
+        "modid": "notorious",
+        "name": "Notorious",
+        "description": "client",
+        "version": "${version}",
+        "mcversion": "${mcversion}",
+        "url": "",
+        "updateUrl": "",
+        "authorList": ["Gav06"],
+        "credits": "",
+        "logoFile": "",
+        "screenshots": [],
+        "dependencies": []
+    }
+]

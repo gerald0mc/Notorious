@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "me.gavin.notorious.mixin.mixins",
+  "refmap": "notorious.refmap.json",
+  "minVersion": "0.7",
+  "mixins": [
+    "EntityPlayerSPMixin",
+    "EntityRendererMixin"
+  ]
+}
