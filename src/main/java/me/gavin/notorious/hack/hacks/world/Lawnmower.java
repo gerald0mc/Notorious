@@ -4,7 +4,7 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.misc.BlockUtil;
+import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.setting.NumSetting;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * @since 6/15/2021
  */
 
-@RegisterHack(name = "Lawnmower", description = "Mines tall grass and stuff around you", category = Hack.Category.World, bind = Keyboard.KEY_R)
+@RegisterHack(name = "Lawnmower", description = "Mines tall grass and stuff around you", category = Hack.Category.World)
 public class Lawnmower extends Hack {
 
     @RegisterSetting

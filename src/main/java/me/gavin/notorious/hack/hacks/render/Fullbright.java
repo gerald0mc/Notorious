@@ -13,7 +13,7 @@ import java.util.List;
  * @since 6/15/2021
  */
 
-@RegisterHack(name = "Fullbright", description = "Makes it fully bright", category = Hack.Category.Render, bind = Keyboard.KEY_B)
+@RegisterHack(name = "Fullbright", description = "Makes it fully bright", category = Hack.Category.Render)
 public class Fullbright extends Hack {
 
     private final List<Float> previousLevels = new ArrayList<>();

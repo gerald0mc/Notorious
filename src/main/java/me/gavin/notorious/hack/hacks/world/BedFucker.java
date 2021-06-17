@@ -4,8 +4,7 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.misc.BlockUtil;
-import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
@@ -25,7 +24,7 @@ import org.lwjgl.input.Keyboard;
  * @since 6/15/2021
  */
 
-@RegisterHack(name = "BedFucker", description = "Fucks beds", category = Hack.Category.World, bind = Keyboard.KEY_J)
+@RegisterHack(name = "BedFucker", description = "Fucks beds", category = Hack.Category.World)
 public class BedFucker extends Hack {
 
     @RegisterSetting

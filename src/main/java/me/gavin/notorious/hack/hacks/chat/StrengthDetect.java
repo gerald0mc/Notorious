@@ -1,6 +1,7 @@
 package me.gavin.notorious.hack.hacks.chat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.util.MessageUtil;
@@ -21,7 +22,7 @@ public class StrengthDetect extends Hack {
         this.str = Collections.newSetFromMap(new WeakHashMap<EntityPlayer, Boolean>());
     }
 
-    public void onUpdate() {
+    public void onUpdate(PlayerLivingUpdateEvent event) {
         for(Entity e : mc.world.loadedEntityList) {
             if(e instanceof EntityPlayer) {
                 if(e.equals(mc.player))
@@ -38,6 +39,5 @@ public class StrengthDetect extends Hack {
                 str.remove(e);
             }
         }
-        return;
     }
 }

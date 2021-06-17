@@ -11,6 +11,6 @@ import org.lwjgl.input.Keyboard;
 
 // EntityRendererMixin.java
 
-@RegisterHack(name = "AntiFog", description = "Prevents fog from rendering", category = Hack.Category.Render, bind = Keyboard.KEY_G)
+@RegisterHack(name = "AntiFog", description = "Prevents fog from rendering", category = Hack.Category.Render)
 public class AntiFog extends Hack {
 }

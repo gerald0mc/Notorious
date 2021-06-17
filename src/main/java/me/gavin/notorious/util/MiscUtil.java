@@ -1,6 +1,6 @@
 package me.gavin.notorious.util;
 
-import me.gavin.notorious.misc.IMinecraft;
+import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
