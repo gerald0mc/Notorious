@@ -1,0 +1,147 @@
+package me.gavin.notorious.hack.hacks.render;
+
+import me.gavin.notorious.hack.Hack;
+import me.gavin.notorious.hack.RegisterHack;
+import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ColorSetting;
+import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.NColor;
+import me.gavin.notorious.util.RenderUtil;
+import net.minecraft.tileentity.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+
+/**
+ * @author gerald0mc
+ *
+ * @since 6/17/21 at 12:13am
+ */
+
+@RegisterHack(name = "StorageESP", description = "Draws a box around storage stuff.", category = Hack.Category.Render)
+public class StorageESP extends Hack {
+
+    @RegisterSetting
+    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Box");
+    @RegisterSetting
+    public final ModeSetting colorMode = new ModeSetting("ColorMode", "Custom", "Static", "Custom");
+    @RegisterSetting
+    public final ColorSetting outlineColor = new ColorSetting("Outline", new Color(255, 255, 255, 255));
+    @RegisterSetting
+    public final ColorSetting boxColor = new ColorSetting("Box", new Color(255, 255, 255, 125));
+    @RegisterSetting
+    public final NumSetting lineWidth = new NumSetting("LineWidth", 2f, 0.1f, 4f, 0.1f);
+
+    private boolean outline = false;
+    private boolean box = false;
+
+    public Color chestOutlineStatic = new Color(139, 69, 19, 255);
+    public Color chestBoxStatic = new Color(205, 133, 63, 125);
+    public Color enderChestOutlineStatic = new Color(75, 0, 130, 255);
+    public Color enderChestBoxStatic = new Color(138, 43, 226, 125);
+    public Color hopperOutlineStatic = new Color(105, 105, 105, 255);
+    public Color hopperBoxStatic = new Color(169, 169, 169, 125);
+    public Color shulkerOutlineStatic = new Color(199, 21, 133, 255);
+    public Color shulkerBoxStatic = new Color(234, 16, 130, 125);
+
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
+        for(TileEntity e : mc.world.loadedTileEntityList) {
+            AxisAlignedBB bb = new AxisAlignedBB(e.getPos()).offset(-mc.getRenderManager().viewerPosX, -mc.getRenderManager().viewerPosY, -mc.getRenderManager().viewerPosZ);
+            if(renderMode.getMode().equals("Both"))
+                outline = true;
+                box = true;
+            if(renderMode.getMode().equals("Outline"))
+                outline = true;
+                box = false;
+            if(renderMode.getMode().equals("Box"))
+                outline = false;
+                box = true;
+            if(e instanceof TileEntityChest) {
+                if(colorMode.getMode().equals("Custom")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+                    RenderUtil.release();
+                }
+                if(colorMode.getMode().equals("Static")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, chestOutlineStatic);
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, chestBoxStatic);
+                    RenderUtil.release();
+                }
+            }
+            if(e instanceof TileEntityEnderChest) {
+                if(colorMode.getMode().equals("Custom")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+                    RenderUtil.release();
+                }
+                if(colorMode.getMode().equals("Static")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, enderChestOutlineStatic);
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, enderChestBoxStatic);
+                    RenderUtil.release();
+                }
+            }
+            if(e instanceof TileEntityHopper) {
+                if(colorMode.getMode().equals("Custom")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+                    RenderUtil.release();
+                }
+                if(colorMode.getMode().equals("Static")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, hopperOutlineStatic);
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, hopperBoxStatic);
+                    RenderUtil.release();
+                }
+            }
+            if(e instanceof TileEntityShulkerBox) {
+                if(colorMode.getMode().equals("Custom")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+                    RenderUtil.release();
+                }
+                if(colorMode.getMode().equals("Static")) {
+                    RenderUtil.prepare();
+                    GL11.glLineWidth(lineWidth.getValue());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(bb, shulkerOutlineStatic);
+                    if(box)
+                        RenderUtil.renderFilledBB(bb, shulkerBoxStatic);
+                    RenderUtil.release();
+                }
+            }
+        }
+    }
+}

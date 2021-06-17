@@ -4,8 +4,11 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.ColorSetting;
+import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.NColor;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -29,15 +32,12 @@ public class BedFucker extends Hack {
 
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 5f, 0f, 6f, 0.5f);
-
     @RegisterSetting
-    public final NumSetting red = new NumSetting("Red", 255, 0, 255, 1);
-
+    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Box", "Outline");
     @RegisterSetting
-    public final NumSetting green = new NumSetting("Green", 255, 0, 255, 1);
-
+    public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
     @RegisterSetting
-    public final NumSetting blue = new NumSetting("Blue", 255, 0, 255, 1);
+    public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
 
     private BlockPos targetedBlock = null;
 
@@ -76,7 +76,8 @@ public class BedFucker extends Hack {
                     -mc.getRenderManager().viewerPosX,
                     -mc.getRenderManager().viewerPosY,
                     -mc.getRenderManager().viewerPosZ);
-            RenderGlobal.renderFilledBox(bb, red.getValue() / 255f, green.getValue() / 255f, blue.getValue() / 255f, 0.5f);
+            RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+            RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
             RenderUtil.release();
         }
     }

@@ -10,7 +10,6 @@ import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -35,11 +34,11 @@ public class ChatModifications extends Hack {
     @SubscribeEvent
     public void onChat(ClientChatEvent event) {
         String originalMessage = event.getOriginalMessage();
-        String suffix = " | Notorious";
-        if(event.getMessage().startsWith("!")) return;
-        if(event.getMessage().startsWith(".")) return;
-        if(event.getMessage().startsWith("/")) return;
         if(chatSuffix.isEnabled()) {
+            String suffix = " | Notorious";
+            if(event.getMessage().startsWith("!")) return;
+            if(event.getMessage().startsWith(".")) return;
+            if(event.getMessage().startsWith("/")) return;
             event.setMessage(originalMessage + suffix);
         }
     }
