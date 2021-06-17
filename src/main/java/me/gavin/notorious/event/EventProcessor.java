@@ -23,7 +23,7 @@ public class EventProcessor {
         if (Keyboard.getEventKeyState()) {
             //System.out.println("Pressed key: " + Keyboard.getEventKey() + " - " + Keyboard.getKeyName(Keyboard.getEventKey()) + " APPS: " + Keyboard.KEY_APPS + " - " + Keyboard.getKeyName(Keyboard.KEY_APPS));
             for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
-                if (hack.getKeybind() == Keyboard.getEventKey()) {
+                if (hack.getBind() == Keyboard.getEventKey()) {
                     hack.toggle();
                 }
             }

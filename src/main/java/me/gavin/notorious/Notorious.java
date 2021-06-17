@@ -4,6 +4,7 @@ import me.gavin.notorious.event.EventProcessor;
 import me.gavin.notorious.gui.ClickGuiScreen;
 import me.gavin.notorious.manager.HackManager;
 import me.gavin.notorious.manager.MessageManager;
+import me.gavin.notorious.manager.RotationManager;
 import me.gavin.notorious.util.font.CFontLoader;
 import me.gavin.notorious.util.font.CFontRenderer;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,6 +23,7 @@ public class Notorious {
     public final ClickGuiScreen clickGui;
     public final CFontRenderer fontRenderer;
     public final MessageManager messageManager;
+    public final RotationManager rotationManager;
 
     public Notorious() {
         INSTANCE = this;
@@ -30,10 +32,11 @@ public class Notorious {
         fontRenderer = new CFontRenderer(CFontLoader.HELVETICA, true, true);
         clickGui = new ClickGuiScreen();
         messageManager = new MessageManager();
+        rotationManager = new RotationManager();
 
         new EventProcessor();
 
-        hackManager.getHacks().forEach(hack -> System.out.println(hack.getKeybind()));
+        hackManager.getHacks().forEach(hack -> System.out.println(hack.getBind()));
 
         MinecraftForge.EVENT_BUS.register(this);
         Display.setTitle(NotoriousMod.NAME_VERSION);

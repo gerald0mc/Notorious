@@ -31,9 +31,10 @@ public class HackList extends Hack {
                     x = ((startPos) * -MathHelper.clamp(AnimationUtil.getSmooth2Animation(250, System.currentTimeMillis() - hack.lastDisabledTime), 0.0, 1.0));
                 }
                 double y = yOffset;
-                Gui.drawRect((int)x - 3, (int)y - 2, (int)(x + startPos), (int)(y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
-                Gui.drawRect((int)(x + startPos), (int)y - 2, (int)(x + startPos + 2), (int)(y + notorious.fontRenderer.getHeight() + 2), color);
-                notorious.fontRenderer.drawStringWithShadow(hack.getName(), x, y, new Color(color));
+                Gui.drawRect((int)x - 3, (int)y - 2, (int)(x + startPos + 1), (int)(y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
+                Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int)(y + notorious.fontRenderer.getHeight() + 2), color);
+                //Gui.drawRect((int)(x + startPos), (int)y - 2, (int)(x + startPos + 2), (int)(y + notorious.fontRenderer.getHeight() + 2), color);
+                notorious.fontRenderer.drawStringWithShadow(hack.getName(), x + 2, y, new Color(color));
                 yOffset += notorious.fontRenderer.getHeight() + 4;
             }
         }

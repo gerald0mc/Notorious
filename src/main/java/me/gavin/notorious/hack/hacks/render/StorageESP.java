@@ -40,19 +40,19 @@ public class StorageESP extends Hack {
     private boolean outline = false;
     private boolean box = false;
 
-    public Color chestOutlineStatic = new Color(139, 69, 19, 255);
-    public Color chestBoxStatic = new Color(205, 133, 63, 125);
-    public Color enderChestOutlineStatic = new Color(75, 0, 130, 255);
-    public Color enderChestBoxStatic = new Color(138, 43, 226, 125);
-    public Color hopperOutlineStatic = new Color(105, 105, 105, 255);
-    public Color hopperBoxStatic = new Color(169, 169, 169, 125);
-    public Color shulkerOutlineStatic = new Color(199, 21, 133, 255);
-    public Color shulkerBoxStatic = new Color(234, 16, 130, 125);
+    public final Color chestOutlineStatic = new Color(139, 69, 19, 255);
+    public final Color chestBoxStatic = new Color(205, 133, 63, 125);
+    public final Color enderChestOutlineStatic = new Color(75, 0, 130, 255);
+    public final Color enderChestBoxStatic = new Color(138, 43, 226, 125);
+    public final Color hopperOutlineStatic = new Color(105, 105, 105, 255);
+    public final Color hopperBoxStatic = new Color(169, 169, 169, 125);
+    public final Color shulkerOutlineStatic = new Color(199, 21, 133, 255);
+    public final Color shulkerBoxStatic = new Color(234, 16, 130, 125);
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         for(TileEntity e : mc.world.loadedTileEntityList) {
-            AxisAlignedBB bb = new AxisAlignedBB(e.getPos()).offset(-mc.getRenderManager().viewerPosX, -mc.getRenderManager().viewerPosY, -mc.getRenderManager().viewerPosZ);
+            AxisAlignedBB bb = new AxisAlignedBB(e.getPos());
             if(renderMode.getMode().equals("Both"))
                 outline = true;
                 box = true;
@@ -64,82 +64,67 @@ public class StorageESP extends Hack {
                 box = true;
             if(e instanceof TileEntityChest) {
                 if(colorMode.getMode().equals("Custom")) {
-                    RenderUtil.prepare();
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
                     if(box)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
-                    RenderUtil.release();
                 }
                 if(colorMode.getMode().equals("Static")) {
-                    RenderUtil.prepare();
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, chestOutlineStatic);
                     if(box)
                         RenderUtil.renderFilledBB(bb, chestBoxStatic);
-                    RenderUtil.release();
                 }
             }
             if(e instanceof TileEntityEnderChest) {
                 if(colorMode.getMode().equals("Custom")) {
-                    RenderUtil.prepare();
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
                     if(box)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
-                    RenderUtil.release();
                 }
                 if(colorMode.getMode().equals("Static")) {
-                    RenderUtil.prepare();
+
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, enderChestOutlineStatic);
                     if(box)
                         RenderUtil.renderFilledBB(bb, enderChestBoxStatic);
-                    RenderUtil.release();
                 }
             }
             if(e instanceof TileEntityHopper) {
                 if(colorMode.getMode().equals("Custom")) {
-                    RenderUtil.prepare();
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
                     if(box)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
-                    RenderUtil.release();
-                }
+              }
                 if(colorMode.getMode().equals("Static")) {
-                    RenderUtil.prepare();
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, hopperOutlineStatic);
                     if(box)
                         RenderUtil.renderFilledBB(bb, hopperBoxStatic);
-                    RenderUtil.release();
                 }
             }
             if(e instanceof TileEntityShulkerBox) {
                 if(colorMode.getMode().equals("Custom")) {
-                    RenderUtil.prepare();
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
                     if(box)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
-                    RenderUtil.release();
                 }
                 if(colorMode.getMode().equals("Static")) {
-                    RenderUtil.prepare();
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, shulkerOutlineStatic);
                     if(box)
                         RenderUtil.renderFilledBB(bb, shulkerBoxStatic);
-                    RenderUtil.release();
                 }
             }
         }

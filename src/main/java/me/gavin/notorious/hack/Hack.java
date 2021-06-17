@@ -1,6 +1,7 @@
 package me.gavin.notorious.hack;
 
 import me.gavin.notorious.Notorious;
+import me.gavin.notorious.gui.api.Bind;
 import me.gavin.notorious.gui.api.Toggleable;
 import me.gavin.notorious.setting.Setting;
 import me.gavin.notorious.stuff.IMinecraft;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @since 6/15/2021
  */
 
-public abstract class Hack implements Toggleable, IMinecraft {
+public abstract class Hack implements Toggleable, Bind, IMinecraft {
     protected final Notorious notorious = Notorious.INSTANCE;
 
     private String name;
@@ -80,11 +81,13 @@ public abstract class Hack implements Toggleable, IMinecraft {
         return category;
     }
 
-    public int getKeybind() {
+    @Override
+    public int getBind() {
         return keybind;
     }
 
-    public void setKeybind(int keybind) {
+    @Override
+    public void setBind(int keybind) {
         this.keybind = keybind;
     }
 

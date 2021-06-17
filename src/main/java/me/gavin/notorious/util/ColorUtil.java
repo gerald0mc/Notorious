@@ -13,4 +13,9 @@ public class ColorUtil {
         float hue = (float)((System.currentTimeMillis() + index) % (long)((int)(seconds * 1000.0F))) / (seconds * 1000.0F);
         return Color.HSBtoRGB(hue, saturation, 1f);
     }
+
+    public static Color normalizedFade(float value) {
+        final float green = (1f - value);
+        return new Color((value), green, 0f);
+    }
 }

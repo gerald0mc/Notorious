@@ -1,13 +1,16 @@
 package me.gavin.notorious.hack.hacks.world;
 
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
+import me.gavin.notorious.event.events.PlayerModelRotationEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.mixin.mixins.accessor.IEntityPlayerSPMixin;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.MathUtil;
 import me.gavin.notorious.util.NColor;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
@@ -27,7 +30,7 @@ import org.lwjgl.input.Keyboard;
  * @since 6/15/2021
  */
 
-@RegisterHack(name = "BedFucker", description = "Fucks beds", category = Hack.Category.World)
+@RegisterHack(name = "BedFucker", description = "Fucks beds", category = Hack.Category.World, bind = Keyboard.KEY_J)
 public class BedFucker extends Hack {
 
     @RegisterSetting
@@ -55,16 +58,30 @@ public class BedFucker extends Hack {
         } else {
             if (mc.world.getBlockState(targetedBlock).getBlock() == Blocks.AIR) {
                 targetedBlock = null;
+                //notorious.rotationManager.setShouldRotate(false);
                 return;
             }
 
             if (targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > range.getValue()) {
                 targetedBlock = null;
+                //notorious.rotationManager.setShouldRotate(false);
                 return;
             }
 
+            //notorious.rotationManager.setShouldRotate(true);
+
+            //notorious.rotationManager.setRotation(rotation[0], rotation[1]);
             mc.player.swingArm(EnumHand.MAIN_HAND);
             mc.playerController.onPlayerDamageBlock(targetedBlock, EnumFacing.UP);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerModelRotate(PlayerModelRotationEvent event) {
+        if (targetedBlock != null) {
+            float[] rotation = MathUtil.calculateLookAt(targetedBlock.getX(), targetedBlock.getY(), targetedBlock.getZ(), mc.player);
+            event.setYaw(rotation[0]);
+            event.setPitch(rotation[1]);
         }
     }
 

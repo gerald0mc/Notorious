@@ -70,7 +70,7 @@ public class HackManager {
                 hack.setName(registerAnnotation.name());
                 hack.setDescription(registerAnnotation.description());
                 hack.setCategory(registerAnnotation.category());
-                hack.setKeybind(registerAnnotation.bind());
+                hack.setBind(registerAnnotation.bind());
 
                 for (Field field : clazz.getDeclaredFields()) {
                     if (Setting.class.isAssignableFrom(field.getType()) && field.isAnnotationPresent(RegisterSetting.class)) {
