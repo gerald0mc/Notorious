@@ -1,5 +1,7 @@
 package me.gavin.notorious.hack;
 
+import org.lwjgl.input.Keyboard;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -17,5 +19,5 @@ public @interface RegisterHack {
 
     Hack.Category category();
 
-    int bind() default 0;
+    int bind() default Keyboard.KEY_NONE;
 }

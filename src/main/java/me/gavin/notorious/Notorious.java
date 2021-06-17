@@ -33,6 +33,8 @@ public class Notorious {
 
         new EventProcessor();
 
+        hackManager.getHacks().forEach(hack -> System.out.println(hack.getKeybind()));
+
         MinecraftForge.EVENT_BUS.register(this);
         Display.setTitle(NotoriousMod.NAME_VERSION);
     }

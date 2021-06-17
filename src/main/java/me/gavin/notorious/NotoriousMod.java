@@ -2,6 +2,9 @@ package me.gavin.notorious;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+
+import java.util.Comparator;
 
 /**
  * @author Gav06
@@ -24,5 +27,10 @@ public class NotoriousMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         new Notorious();
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        Notorious.INSTANCE.hackManager.getSortedHacks().sort(Comparator.comparing(hack -> -Notorious.INSTANCE.fontRenderer.getStringWidth(hack.getName())));
     }
 }

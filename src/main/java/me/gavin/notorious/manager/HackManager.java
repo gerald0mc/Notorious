@@ -17,20 +17,27 @@ import java.util.ArrayList;
 public class HackManager {
 
     private final ArrayList<Hack> hacks;
+    private final ArrayList<Hack> sortedHacks;
 
     public HackManager() {
         hacks = new ArrayList<>();
+        sortedHacks = new ArrayList<>();
 
         try {
             loadHacks();
         } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
+
+        hacks.sort(this::sortABC);
+        sortedHacks.addAll(hacks);
     }
 
     public ArrayList<Hack> getHacks() {
         return hacks;
     }
+
+    public ArrayList<Hack> getSortedHacks() { return sortedHacks; }
 
     public Hack getHack(Class<? extends Hack> clazz) {
         for (Hack hack : hacks) {
@@ -71,9 +78,12 @@ public class HackManager {
                     }
                 }
 
-                System.out.println(hack.getSettings());
                 hacks.add(hack);
             }
         }
+    }
+
+    private int sortABC(Hack hack1, Hack hack2) {
+        return hack1.getName().compareTo(hack2.getName());
     }
 }

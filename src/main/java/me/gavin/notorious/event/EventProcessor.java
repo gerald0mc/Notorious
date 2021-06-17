@@ -2,7 +2,6 @@ package me.gavin.notorious.event;
 
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.hack.Hack;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -22,9 +21,7 @@ public class EventProcessor {
     @SubscribeEvent
     public void onKey(InputEvent.KeyInputEvent event) {
         if (Keyboard.getEventKeyState()) {
-            if (Keyboard.getEventKey() == Keyboard.KEY_RSHIFT)
-                Minecraft.getMinecraft().displayGuiScreen(Notorious.INSTANCE.clickGui);
-
+            //System.out.println("Pressed key: " + Keyboard.getEventKey() + " - " + Keyboard.getKeyName(Keyboard.getEventKey()) + " APPS: " + Keyboard.KEY_APPS + " - " + Keyboard.getKeyName(Keyboard.KEY_APPS));
             for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
                 if (hack.getKeybind() == Keyboard.getEventKey()) {
                     hack.toggle();

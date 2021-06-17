@@ -20,6 +20,9 @@ public abstract class Hack implements Toggleable, IMinecraft {
     private String description;
     private Category category;
 
+    public long lastEnabledTime = -1L;
+    public long lastDisabledTime = -1L;
+
     private int keybind;
 
     private boolean enabled;
@@ -43,12 +46,14 @@ public abstract class Hack implements Toggleable, IMinecraft {
         enabled = true;
         MinecraftForge.EVENT_BUS.register(this);
         onEnable();
+        lastEnabledTime = System.currentTimeMillis();
     }
 
     public void disable() {
         enabled = false;
         MinecraftForge.EVENT_BUS.unregister(this);
         onDisable();
+        lastDisabledTime = System.currentTimeMillis();
     }
 
     protected void onEnable() { }
