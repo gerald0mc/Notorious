@@ -2,9 +2,8 @@ package me.gavin.notorious.hack;
 
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.Toggleable;
-import me.gavin.notorious.misc.IMinecraft;
 import me.gavin.notorious.setting.Setting;
-import net.minecraft.client.Minecraft;
+import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
@@ -89,13 +88,13 @@ public abstract class Hack implements Toggleable, IMinecraft {
     }
 
     public enum Category {
-        Combat,
-        Render,
-        Movement,
-        Player,
-        World,
         Chat,
         Client,
-        Misc
+        Combat,
+        Misc,
+        Movement,
+        Player,
+        Render,
+        World
     }
 }

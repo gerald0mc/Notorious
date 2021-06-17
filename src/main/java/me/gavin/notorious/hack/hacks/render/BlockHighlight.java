@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-@RegisterHack(name = "BlockHighlight", description = "Draws a bounding box around boxes you are looking at.", category = Hack.Category.Render, bind = Keyboard.KEY_K)
+@RegisterHack(name = "BlockHighlight", description = "Draws a bounding box around boxes you are looking at.", category = Hack.Category.Render)
 public class BlockHighlight extends Hack {
 
     @RegisterSetting

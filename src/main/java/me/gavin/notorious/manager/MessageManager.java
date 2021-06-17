@@ -2,7 +2,7 @@ package me.gavin.notorious.manager;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.NotoriousMod;
-import me.gavin.notorious.misc.IMinecraft;
+import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.util.text.TextComponentString;
 
 public class MessageManager implements IMinecraft {

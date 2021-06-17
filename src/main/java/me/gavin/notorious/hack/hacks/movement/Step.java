@@ -8,7 +8,7 @@ import me.gavin.notorious.setting.NumSetting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-@RegisterHack( name = "Step", description = "Automatically moves you up a block", category = Hack.Category.Movement, bind = Keyboard.KEY_Y)
+@RegisterHack( name = "Step", description = "Automatically moves you up a block", category = Hack.Category.Movement)
 public class Step extends Hack {
 
     @RegisterSetting

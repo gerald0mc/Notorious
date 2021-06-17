@@ -53,7 +53,7 @@ public class HackManager {
     }
 
     private void loadHacks() throws IllegalAccessException, InstantiationException {
-        final Reflections reflections = new Reflections("me.gavin.notorious.hack.hacks");
+        final Reflections reflections = new Reflections("me.gavin.notorious.hack");
 
         for (Class<? extends Hack> clazz : reflections.getSubTypesOf(Hack.class)) {
             if (clazz.isAnnotationPresent(RegisterHack.class)) {
