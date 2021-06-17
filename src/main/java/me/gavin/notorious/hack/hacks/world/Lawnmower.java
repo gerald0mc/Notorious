@@ -6,18 +6,23 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * @author Gav06
+ * @author Gav06 and gerald0mc
  * @since 6/15/2021
  */
 
@@ -27,9 +32,11 @@ public class Lawnmower extends Hack {
     @RegisterSetting
     public final NumSetting delay = new NumSetting("Delay", 2, 1, 10, 1);
 
+    public ArrayList<BlockPos> posList;
+
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
-        final ArrayList<BlockPos> posList = BlockUtil.getSurroundingBlocks(4, true);
+        posList = BlockUtil.getSurroundingBlocks(4, true);
         for (BlockPos pos : posList) {
             if (isMineable(mc.world.getBlockState(pos).getBlock()) && mc.player.ticksExisted % delay.getValue() == 0.0) {
                 mc.player.swingArm(EnumHand.MAIN_HAND);
