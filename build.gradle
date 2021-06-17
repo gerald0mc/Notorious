@@ -111,7 +111,6 @@ shadowJar {
         include(dependency('org.spongepowered:mixin'))
         include(dependency('club.minnced:java-discord-rpc'))
         include(dependency('javassist:javassist'))
-        //include(dependency('org.slick2d:slick2d-core'))
     }
     exclude 'dummyThing'
     exclude 'LICENSE.txt'

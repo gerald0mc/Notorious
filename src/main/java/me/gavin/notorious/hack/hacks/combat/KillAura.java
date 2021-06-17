@@ -22,7 +22,7 @@ import org.lwjgl.input.Keyboard;
  * @since 6/16/2021
  */
 
-@RegisterHack(name = "KillAura", description = "Attacks entities for you", category = Hack.Category.Combat, bind = Keyboard.KEY_R)
+@RegisterHack(name = "KillAura", description = "Attacks entities for you", category = Hack.Category.Combat)
 public class KillAura extends Hack {
 
     // TODO: Add rotations

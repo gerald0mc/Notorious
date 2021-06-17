@@ -16,11 +16,7 @@ import java.util.WeakHashMap;
 @RegisterHack(name = "StrengthDetect", description = "Tells you when someone runs out of strength", category = Hack.Category.Chat)
 public class StrengthDetect extends Hack {
 
-    private final Set<EntityPlayer> str;
-
-    public StrengthDetect(Set<EntityPlayer> str) {
-        this.str = Collections.newSetFromMap(new WeakHashMap<EntityPlayer, Boolean>());
-    }
+    private final Set<EntityPlayer> str = Collections.newSetFromMap(new WeakHashMap<>());
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
