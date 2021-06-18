@@ -1,8 +1,10 @@
 package me.gavin.notorious.mixin.mixins;
 
 import me.gavin.notorious.event.events.PlayerModelRotationEvent;
+import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,18 +12,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ModelPlayer.class)
-public class ModelPlayerMixin {
+public class ModelPlayerMixin implements IMinecraft {
 
-    //@Inject(method = "render", at = @At("HEAD"))
-    //public void renderInject(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale, CallbackInfo ci) {
-
-    //}
-
-    @Inject(method = "setRotationAngles", at = @At("HEAD"))
+    @Inject(method = "setRotationAngles", at = @At("INVOKE")) // yo gav you need to inject after line 120 in that and make it so that this.bipedHead.rotateAngleX = headPitch * 0.017453292F; turns into this.bipedHead.rotateAngleX = event.getPitch() * 0.017453292F;
     public void setRotationAnglesInject(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn, CallbackInfo ci) {
-        PlayerModelRotationEvent event = new PlayerModelRotationEvent(netHeadYaw, headPitch);
-        MinecraftForge.EVENT_BUS.post(event);
-        headPitch = event.getPitch();
-        netHeadYaw = event.getYaw();
+        if (entityIn == mc.player) {
+            PlayerModelRotationEvent event = new PlayerModelRotationEvent(netHeadYaw, headPitch);
+            MinecraftForge.EVENT_BUS.post(event);
+            ((ModelPlayer) (Object) this).bipedHead.rotateAngleX = event.getPitch() * .017453292F;
+            ((ModelPlayer) (Object) this).bipedHead.rotateAngleY = event.getYaw() * .017453292F;
+        }
     }
+
 }

@@ -3,6 +3,8 @@ package me.gavin.notorious.manager;
 import me.gavin.notorious.event.events.PlayerModelRotationEvent;
 import me.gavin.notorious.event.events.PlayerWalkingUpdateEvent;
 import me.gavin.notorious.stuff.IMinecraft;
+import me.gavin.notorious.util.MathUtil;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -36,15 +38,6 @@ public class RotationManager implements IMinecraft {
             mc.player.rotationYaw = oldYaw;
         }
     }
-
-//    @SubscribeEvent
-//    public void onModelRotate(PlayerModelRotationEvent event) {
-//        if (!shouldRotate)
-//            return;
-//
-//        event.setPitch(desiredPitch);
-//        event.setYaw(desiredYaw);
-//    }
 
     public void setRotation(float yaw, float pitch) {
         this.desiredYaw = yaw;
