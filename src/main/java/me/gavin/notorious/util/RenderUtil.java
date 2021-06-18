@@ -40,7 +40,7 @@ public class RenderUtil implements IMinecraft {
         renderBB(box, color, RenderMode.OUTLINE);
     }
 
-    private static void renderBB(AxisAlignedBB box, Color color, RenderMode mode) {
+    public static void renderBB(AxisAlignedBB box, Color color, RenderMode mode) {
         prepare();
         final float r = color.getRed() / 255f;
         final float g = color.getGreen() / 255f;

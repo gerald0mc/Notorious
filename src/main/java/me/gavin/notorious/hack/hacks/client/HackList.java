@@ -9,11 +9,16 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
-@RegisterHack(name = "ArrayList", description = "Shows enabled modules.", category = Hack.Category.Client)
+@RegisterHack(name = "ArrayList", description = "Shows enabled modules.", category = Hack.Category.Client, bind = Keyboard.KEY_Z)
 public class HackList extends Hack {
+
+    public HackList() {
+        this.toggle();
+    }
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Text event) {
