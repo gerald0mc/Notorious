@@ -3,6 +3,7 @@ package me.gavin.notorious.hack.hacks.render;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.NColor;
@@ -22,7 +23,6 @@ public class BlockHighlight extends Hack {
 
     @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255));
-
     @RegisterSetting
     public final NumSetting lineWidth = new NumSetting("Line Width", 2, 0.1f, 10, 0.1f);
 
