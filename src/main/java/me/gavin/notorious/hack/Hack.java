@@ -91,6 +91,10 @@ public abstract class Hack implements Toggleable, Bind, IMinecraft {
         this.keybind = keybind;
     }
 
+    public String getMetaData() {
+        return "";
+    }
+
     public void setCategory(Category category) {
         this.category = category;
     }

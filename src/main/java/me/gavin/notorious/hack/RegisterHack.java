@@ -20,4 +20,6 @@ public @interface RegisterHack {
     Hack.Category category();
 
     int bind() default Keyboard.KEY_NONE;
+
+    String metaData() default " ";
 }

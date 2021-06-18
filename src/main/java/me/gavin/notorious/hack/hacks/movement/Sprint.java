@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.movement;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -16,6 +17,11 @@ public class Sprint extends Hack {
 
     @RegisterSetting
     public final ModeSetting sprintMode = new ModeSetting("SprintMode", "Legit", "Legit", "Rage");
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + sprintMode.getMode() + ChatFormatting.RESET + "]";
+    }
 
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
