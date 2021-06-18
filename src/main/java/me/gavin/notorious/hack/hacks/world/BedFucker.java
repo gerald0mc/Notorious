@@ -79,7 +79,7 @@ public class BedFucker extends Hack {
     @SubscribeEvent
     public void onPlayerModelRotate(PlayerModelRotationEvent event) {
         if (targetedBlock != null) {
-            float[] rotation = MathUtil.calculateLookAt(targetedBlock.getX(), targetedBlock.getY(), targetedBlock.getZ(), mc.player);
+            float[] rotation = MathUtil.calculateLookAt(targetedBlock.getX() + 0.5, targetedBlock.getY()  + 0.25, targetedBlock.getZ()  + 0.5, mc.player);
             event.setYaw(rotation[0] - MathHelper.wrapDegrees(mc.player.rotationYaw));
             event.setPitch(rotation[1]);
         }
@@ -88,14 +88,9 @@ public class BedFucker extends Hack {
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         if (targetedBlock != null) {
-            RenderUtil.prepare();
-            final AxisAlignedBB bb = new AxisAlignedBB(targetedBlock).offset(
-                    -mc.getRenderManager().viewerPosX,
-                    -mc.getRenderManager().viewerPosY,
-                    -mc.getRenderManager().viewerPosZ);
+            final AxisAlignedBB bb = new AxisAlignedBB(targetedBlock);
             RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
             RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
-            RenderUtil.release();
         }
     }
 }

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ModelPlayer.class)
 public class ModelPlayerMixin implements IMinecraft {
 
-    @Inject(method = "setRotationAngles", at = @At("INVOKE")) // yo gav you need to inject after line 120 in that and make it so that this.bipedHead.rotateAngleX = headPitch * 0.017453292F; turns into this.bipedHead.rotateAngleX = event.getPitch() * 0.017453292F;
+    @Inject(method = "setRotationAngles", at = @At("INVOKE"))
     public void setRotationAnglesInject(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn, CallbackInfo ci) {
         if (entityIn == mc.player) {
             PlayerModelRotationEvent event = new PlayerModelRotationEvent(netHeadYaw, headPitch);
