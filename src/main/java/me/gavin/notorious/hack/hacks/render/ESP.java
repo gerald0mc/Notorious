@@ -18,9 +18,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-@RegisterHack(name = "ESP", description = "Draws a box around entities.", category = Hack.Category.Render)
+@RegisterHack(name = "ESP", description = "Draws a box around entities.", category = Hack.Category.Render, bind = Keyboard.KEY_B)
 public class ESP extends Hack {
 
     @RegisterSetting
@@ -44,11 +45,12 @@ public class ESP extends Hack {
     public void onRender(RenderWorldLastEvent event) {
         for(Entity e : mc.world.loadedEntityList) {
             AxisAlignedBB bb = e.getEntityBoundingBox();
-            boolean box = false;
+            boolean box;
             boolean outline = false;
             double x = (e.posX - e.lastTickPosX) * event.getPartialTicks();
             double y = (e.posY - e.lastTickPosY) * event.getPartialTicks();
             double z = (e.posZ - e.lastTickPosZ) * event.getPartialTicks();
+            bb = new AxisAlignedBB(bb.minX + x, bb.minY + y, bb.minZ + z, bb.maxX + x, bb.maxY + y, bb.maxZ + z);
             if(e == mc.player)
                 continue;
             if(renderMode.getMode().equals("Both"))
@@ -77,8 +79,7 @@ public class ESP extends Hack {
                 GL11.glLineWidth(lineWidth.getValue());
                 if(outline)
                     RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
-                if(box)
-                    RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+                RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
             }
             if(e instanceof EntityItem && items.isEnabled()) {
                 GL11.glLineWidth(lineWidth.getValue());
