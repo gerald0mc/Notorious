@@ -80,7 +80,7 @@ public class BedFucker extends Hack {
     public void onPlayerModelRotate(PlayerModelRotationEvent event) {
         if (targetedBlock != null) {
             float[] rotation = MathUtil.calculateLookAt(targetedBlock.getX(), targetedBlock.getY(), targetedBlock.getZ(), mc.player);
-            event.setYaw(rotation[0]);
+            event.setYaw(rotation[0] - MathHelper.wrapDegrees(mc.player.rotationYaw));
             event.setPitch(rotation[1]);
         }
     }
