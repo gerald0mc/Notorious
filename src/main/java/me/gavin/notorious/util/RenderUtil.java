@@ -3,6 +3,8 @@ package me.gavin.notorious.util;
 import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
 
@@ -47,10 +49,34 @@ public class RenderUtil implements IMinecraft {
         final float b = color.getBlue() / 255f;
         final float a = color.getAlpha() / 255f;
         box = box.offset(-mc.getRenderManager().viewerPosX, -mc.getRenderManager().viewerPosY, -mc.getRenderManager().viewerPosZ);
+
         if (mode == RenderMode.FILLED)
             RenderGlobal.renderFilledBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, r, g, b, a);
         else
             RenderGlobal.drawBoundingBox(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, r, g, b, a);
+        release();
+    }
+
+    public static void entityESPBox(Entity entity, Color c) {
+        final AxisAlignedBB ebox = entity.getEntityBoundingBox();
+
+        final double lerpX = MathUtil.lerp(mc.getRenderPartialTicks(), entity.lastTickPosX, entity.posX);
+        final double lerpY = MathUtil.lerp(mc.getRenderPartialTicks(), entity.lastTickPosY, entity.posY);
+        final double lerpZ = MathUtil.lerp(mc.getRenderPartialTicks(), entity.lastTickPosZ, entity.posZ);
+
+        final AxisAlignedBB lerpBox = new AxisAlignedBB(
+                ebox.minX - 0.05 - lerpX + (lerpX - mc.getRenderManager().viewerPosX),
+                ebox.minY - lerpY + (lerpY - mc.getRenderManager().viewerPosY),
+                ebox.minZ - 0.05 - lerpZ + (lerpZ - mc.getRenderManager().viewerPosZ),
+                ebox.maxX + 0.05 - lerpX + (lerpX - mc.getRenderManager().viewerPosX),
+                ebox.maxY + 0.1 - lerpY + (lerpY - mc.getRenderManager().viewerPosY),
+                    ebox.maxZ + 0.05 - lerpZ + (lerpZ - mc.getRenderManager().viewerPosZ)
+        );
+
+        prepare();
+        GL11.glLineWidth(1.0f);
+        RenderGlobal.renderFilledBox(lerpBox, c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f);
+        RenderGlobal.drawSelectionBoundingBox(lerpBox, c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f);
         release();
     }
 
