@@ -55,22 +55,16 @@ public class ShulkerJew extends Hack {
                 return;
             }
 
-            mc.player.swingArm(EnumHand.MAIN_HAND);
-            mc.playerController.onPlayerDamageBlock(targetedBlock, EnumFacing.UP);
+            BlockUtil.damageBlock(targetedBlock, false, true);
         }
     }
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         if (targetedBlock != null) {
-            RenderUtil.prepare();
-            final AxisAlignedBB bb = new AxisAlignedBB(targetedBlock).offset(
-                    -mc.getRenderManager().viewerPosX,
-                    -mc.getRenderManager().viewerPosY,
-                    -mc.getRenderManager().viewerPosZ);
+            final AxisAlignedBB bb = new AxisAlignedBB(targetedBlock);
             RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
             RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
-            RenderUtil.release();
         }
     }
 }

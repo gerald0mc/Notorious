@@ -2,6 +2,7 @@ package me.gavin.notorious.hack.hacks.world;
 
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.event.events.PlayerModelRotationEvent;
+import me.gavin.notorious.event.events.PlayerWalkingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -30,7 +31,7 @@ import org.lwjgl.input.Keyboard;
  * @since 6/15/2021
  */
 
-@RegisterHack(name = "BedFucker", description = "Fucks beds", category = Hack.Category.World, bind = Keyboard.KEY_J)
+@RegisterHack(name = "BedFucker", description = "Fucks beds", category = Hack.Category.World)
 public class BedFucker extends Hack {
 
     @RegisterSetting
@@ -45,7 +46,7 @@ public class BedFucker extends Hack {
     private BlockPos targetedBlock = null;
 
     @SubscribeEvent
-    public void onLivingUpdate(PlayerLivingUpdateEvent event) {
+    public void onLivingUpdate(PlayerWalkingUpdateEvent.Pre event) {
         if (targetedBlock == null) {
             for (BlockPos pos : BlockUtil.getSurroundingBlocks(MathHelper.ceil(range.getValue()), true)) {
                 final Block block = mc.world.getBlockState(pos).getBlock();
@@ -58,32 +59,26 @@ public class BedFucker extends Hack {
         } else {
             if (mc.world.getBlockState(targetedBlock).getBlock() == Blocks.AIR) {
                 targetedBlock = null;
-                //notorious.rotationManager.setShouldRotate(false);
                 return;
             }
 
             if (targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > range.getValue()) {
                 targetedBlock = null;
-                //notorious.rotationManager.setShouldRotate(false);
                 return;
             }
 
-            //notorious.rotationManager.setShouldRotate(true);
-
-            //notorious.rotationManager.setRotation(rotation[0], rotation[1]);
-            mc.player.swingArm(EnumHand.MAIN_HAND);
-            mc.playerController.onPlayerDamageBlock(targetedBlock, EnumFacing.UP);
+            BlockUtil.damageBlock(targetedBlock, false, true);
         }
     }
 
-    @SubscribeEvent
-    public void onPlayerModelRotate(PlayerModelRotationEvent event) {
-        if (targetedBlock != null) {
-            float[] rotation = MathUtil.calculateLookAt(targetedBlock.getX() + 0.5, targetedBlock.getY()  + 0.25, targetedBlock.getZ()  + 0.5, mc.player);
-            event.setYaw(rotation[0] - MathHelper.wrapDegrees(mc.player.rotationYaw));
-            event.setPitch(rotation[1]);
-        }
-    }
+//    @SubscribeEvent
+//    public void onPlayerModelRotate(PlayerModelRotationEvent event) {
+//        if (targetedBlock != null) {
+//
+//            //event.setYaw(rotation[0] - MathHelper.wrapDegrees(mc.player.rotationYaw));
+//            event.setPitch(rotation[1]);
+//        }
+//    }
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {

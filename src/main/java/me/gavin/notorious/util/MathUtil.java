@@ -23,15 +23,15 @@ public class MathUtil implements IMinecraft {
         diry /= distance;
         dirz /= distance;
 
-        double pitch = Math.asin(diry);
-        double yaw = Math.atan2(dirz, dirx);
+        float pitch = (float) Math.asin(diry);
+        float yaw = (float) Math.atan2(dirz, dirx);
 
-        pitch = pitch * 180.0f / Math.PI;
-        yaw = yaw * 180.0f / Math.PI;
+        pitch = (float) (pitch * 180.0f / Math.PI);
+        yaw = (float) (yaw * 180.0f / Math.PI);
 
         yaw += 90.0f;
 
-        return new float[] {(float)yaw, (float)pitch};
+        return new float[] {yaw, pitch};
     }
 
     private static float[] getLegitRotations(Vec3d vec) {

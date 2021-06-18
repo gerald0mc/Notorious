@@ -1,8 +1,11 @@
 package me.gavin.notorious.util;
 
+import me.gavin.notorious.Notorious;
 import me.gavin.notorious.stuff.IMinecraft;
+import net.minecraft.block.Block;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameType;
 
@@ -32,7 +35,17 @@ public class BlockUtil implements IMinecraft {
         return posList;
     }
 
-    public static void damageBlock(BlockPos position, EnumFacing facing, boolean packet) {
+    public static void damageBlock(BlockPos position, boolean packet, boolean rotations) {
+        damageBlock(position, EnumFacing.getDirectionFromEntityLiving(position, mc.player), packet, rotations);
+    }
+
+    public static void damageBlock(BlockPos position, EnumFacing facing, boolean packet, boolean rotations) {
+        if (rotations) {
+            float[] r = MathUtil.calculateLookAt(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5, mc.player);
+            Notorious.INSTANCE.rotationManager.desiredYaw = r[0];
+            Notorious.INSTANCE.rotationManager.desiredPitch = r[1];
+        }
+        mc.player.swingArm(EnumHand.MAIN_HAND);
         if (packet) {
             mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, position, facing));
             mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, position, facing));

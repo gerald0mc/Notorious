@@ -24,11 +24,11 @@ public class EntityPlayerSPMixin {
 
     @Inject(method = "onUpdateWalkingPlayer", at = @At("HEAD"))
     public void onUpdateWalkingPlayerInjectPre(CallbackInfo ci) {
-        MinecraftForge.EVENT_BUS.post(new PlayerWalkingUpdateEvent(PlayerWalkingUpdateEvent.Stage.PRE));
+        MinecraftForge.EVENT_BUS.post(new PlayerWalkingUpdateEvent.Pre());
     }
 
     @Inject(method = "onUpdateWalkingPlayer", at = @At("TAIL"))
     public void onUpdateWalkingPlayerInjectPost(CallbackInfo ci) {
-        MinecraftForge.EVENT_BUS.post(new PlayerWalkingUpdateEvent(PlayerWalkingUpdateEvent.Stage.POST));
+        MinecraftForge.EVENT_BUS.post(new PlayerWalkingUpdateEvent.Post());
     }
 }

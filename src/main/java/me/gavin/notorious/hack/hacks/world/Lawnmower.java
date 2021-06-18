@@ -6,6 +6,7 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.MathUtil;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -19,7 +20,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Gav06 and gerald0mc
@@ -30,17 +33,19 @@ import java.util.ArrayList;
 public class Lawnmower extends Hack {
 
     @RegisterSetting
-    public final NumSetting delay = new NumSetting("Delay", 2, 1, 10, 1);
+    public final NumSetting delay = new NumSetting("Delay", 5, 1, 10, 1);
 
     public ArrayList<BlockPos> posList;
+
+    private BlockPos targetBlock;
 
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
         posList = BlockUtil.getSurroundingBlocks(4, true);
+
         for (BlockPos pos : posList) {
             if (isMineable(mc.world.getBlockState(pos).getBlock()) && mc.player.ticksExisted % delay.getValue() == 0.0) {
-                mc.player.swingArm(EnumHand.MAIN_HAND);
-                mc.playerController.clickBlock(pos, EnumFacing.UP);
+                BlockUtil.damageBlock(pos, false, true);
             }
         }
     }

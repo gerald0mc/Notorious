@@ -10,18 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class PlayerWalkingUpdateEvent extends Event {
 
-    private final Stage stage;
+    public static class Pre extends PlayerWalkingUpdateEvent { }
 
-    public PlayerWalkingUpdateEvent(Stage stage) {
-        this.stage = stage;
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public enum Stage {
-        PRE,
-        POST
-    }
+    public static class Post extends PlayerWalkingUpdateEvent { }
 }

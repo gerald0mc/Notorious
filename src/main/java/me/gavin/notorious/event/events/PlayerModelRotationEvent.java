@@ -6,6 +6,7 @@ public class PlayerModelRotationEvent extends Event {
 
     private float yaw;
     private float pitch;
+    private float bodyYaw;
 
     public PlayerModelRotationEvent(float yaw, float pitch) {
         this.yaw = yaw;
@@ -26,5 +27,13 @@ public class PlayerModelRotationEvent extends Event {
 
     public float getPitch() {
         return pitch;
+    }
+
+    public void setBodyYaw(float yaw) {
+        this.bodyYaw = yaw;
+    }
+
+    public float getBodyYaw() {
+        return bodyYaw;
     }
 }

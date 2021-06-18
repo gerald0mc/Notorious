@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(EntityPlayerSP.class)
 public interface IEntityPlayerSPMixin {
 
-    @Accessor("lastReportedPitch")
-    void setLastReportedPitchAccessor(float pitch);
+    @Accessor("positionUpdateTicks")
+    void positionUpdateTicksAccessor(int ticks);
 
-    @Accessor("lastReportedYaw")
-    void setLastReportedYawAccessor(float yaw);
+    @Accessor("positionUpdateTicks")
+    int getPositionUpdateTicksAccessor();
 }
