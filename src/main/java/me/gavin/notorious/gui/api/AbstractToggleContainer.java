@@ -17,6 +17,8 @@ public abstract class AbstractToggleContainer extends AbstractComponent {
         return toggleable;
     }
 
+    public abstract int getTotalHeight();
+
     public ArrayList<SettingComponent> getComponents() {
         return components;
     }

@@ -17,4 +17,9 @@ public abstract class AbstractComponent extends Rect {
     public abstract void mouseReleased(int mouseX, int mouseY, int mouseButton);
 
     public abstract void keyTyped(char keyChar, int keyCode);
+
+    public void setPos(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }

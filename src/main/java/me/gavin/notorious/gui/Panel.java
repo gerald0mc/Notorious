@@ -1,11 +1,17 @@
 package me.gavin.notorious.gui;
 
 import me.gavin.notorious.gui.api.*;
+import me.gavin.notorious.hack.Hack;
+
+import java.util.ArrayList;
 
 public class Panel extends AbstractDragComponent {
 
-    public Panel(int x, int y, int width, int height) {
+    private final ArrayList<AbstractToggleContainer> buttons;
+
+    public Panel(Hack.Category category, int x, int y, int width, int height) {
         super(x, y, width, height);
+        this.buttons = new ArrayList<>();
     }
 
     @Override
@@ -26,5 +32,9 @@ public class Panel extends AbstractDragComponent {
     @Override
     public void keyTyped(char keyChar, int keyCode) {
 
+    }
+
+    public ArrayList<AbstractToggleContainer> getButtons() {
+        return buttons;
     }
 }
