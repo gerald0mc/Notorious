@@ -19,4 +19,11 @@ public class BooleanSetting extends Setting implements Toggleable {
     public boolean isEnabled() {
         return value;
     }
+
+    public boolean getValue() {
+        if(isEnabled())
+            return true;
+        else
+            return false;
+    }
 }

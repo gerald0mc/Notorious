@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.render;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -43,13 +44,9 @@ public class ESP extends Hack {
     @RegisterSetting
     public final BooleanSetting items = new BooleanSetting("Items", true);
 
-    private boolean outline;
-    private boolean fill;
-
-    private AxisAlignedBB bb;
-
-    public ESP() {
-        enable();
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + renderMode.getMode() + ChatFormatting.RESET + "]";
     }
 
     @SubscribeEvent
@@ -59,9 +56,11 @@ public class ESP extends Hack {
             double x = (e.posX - e.lastTickPosX) * event.getPartialTicks();
             double y = (e.posY - e.lastTickPosY) * event.getPartialTicks();
             double z = (e.posZ - e.lastTickPosZ) * event.getPartialTicks();
-            bb = new AxisAlignedBB(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y, box.maxZ + z);
+            AxisAlignedBB bb = new AxisAlignedBB(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y, box.maxZ + z);
             if(e == mc.player && mc.gameSettings.thirdPersonView == 0)
                 continue;
+            boolean outline = false;
+            boolean fill = false;
             if(renderMode.getMode().equals("Both"))
                 outline = true;
                 fill = true;

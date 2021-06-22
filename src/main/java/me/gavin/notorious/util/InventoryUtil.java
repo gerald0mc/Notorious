@@ -1,10 +1,12 @@
 package me.gavin.notorious.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
 
 public class InventoryUtil {
 
@@ -18,6 +20,22 @@ public class InventoryUtil {
                 break;
             }
         }
+    }
+
+    public static int checkSlotsBlock(Block block) {
+        for(i = 9; i <= 36; i++) {
+            if(Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem().equals(block)) {
+                found = true;
+                break;
+            }
+        }
+        return -1;
+    }
+
+    public static void switchToSlot(final int slot) {
+        Minecraft.getMinecraft().player.connection.sendPacket(new CPacketHeldItemChange(slot));
+        Minecraft.getMinecraft().player.inventory.currentItem = slot;
+        Minecraft.getMinecraft().playerController.updateController();
     }
 
     public static boolean isChestEmpty(final ContainerChest c) {

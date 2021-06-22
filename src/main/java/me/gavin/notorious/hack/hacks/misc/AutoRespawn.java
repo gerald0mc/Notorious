@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
-@RegisterHack(name = "AutoRespawn", description = "Respawn automatically", category = Hack.Category.Player, bind = Keyboard.KEY_K)
+@RegisterHack(name = "AutoRespawn", description = "Respawn automatically", category = Hack.Category.Misc, bind = Keyboard.KEY_K)
 public class AutoRespawn extends Hack {
 
     @RegisterSetting

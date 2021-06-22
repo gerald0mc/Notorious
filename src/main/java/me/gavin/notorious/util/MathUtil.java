@@ -49,12 +49,24 @@ public class MathUtil implements IMinecraft {
         return new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ);
     }
 
+    public static float[] calcAngle(Vec3d from, Vec3d to) {
+        double difX = to.x - from.x;
+        double difY = (to.y - from.y) * -1.0;
+        double difZ = to.z - from.z;
+        double dist = MathHelper.sqrt(difX * difX + difZ * difZ);
+        return new float[]{(float) MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difZ, difX)) - 90.0), (float) MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difY, dist)))};
+    }
+
     public static float lerp(float delta, float start, float end) {
         return start + delta * (end - start);
     }
 
     public static double lerp(double delta, double start, double end) {
         return start + delta * (end - start);
+    }
+
+    public static double square(double input) {
+        return input * input;
     }
 
 }
