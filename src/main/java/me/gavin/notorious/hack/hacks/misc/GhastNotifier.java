@@ -15,7 +15,7 @@ import org.lwjgl.input.Keyboard;
 import java.util.HashSet;
 import java.util.Set;
 
-@RegisterHack(name = "GhastNotifier", description = "", category = Hack.Category.Misc, bind = Keyboard.KEY_U)
+@RegisterHack(name = "GhastNotifier", description = "", category = Hack.Category.Misc)
 public class GhastNotifier extends Hack {
 
     @RegisterSetting
@@ -24,6 +24,11 @@ public class GhastNotifier extends Hack {
     public final BooleanSetting glow = new BooleanSetting("Glow", true);
 
     private Set<Entity> ghasts = new HashSet<Entity>();
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + ghasts.toString() + ChatFormatting.RESET + "]";
+    }
 
     @Override
     public void onEnable() {

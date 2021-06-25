@@ -4,11 +4,9 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +25,7 @@ public class VisualRange extends Hack {
         for(Entity e : mc.world.loadedEntityList){
             if(!(e instanceof EntityPlayer) || players.contains(e))
                 continue;
-            notorious.messageManager.sendMessage("Player has entered your range at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
+            notorious.messageManager.sendMessage(ChatFormatting.RED + e.getName() + ChatFormatting.RESET + " has entered your range at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
             players.add(e);
         }
     }

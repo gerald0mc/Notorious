@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-@RegisterHack(name = "StrengthDetect", description = "Tells you when someone runs out of strength", category = Hack.Category.Chat, bind = Keyboard.KEY_G)
+@RegisterHack(name = "StrengthDetect", description = "Tells you when someone runs out of strength", category = Hack.Category.Chat)
 public class StrengthDetect extends Hack {
 
     @RegisterSetting

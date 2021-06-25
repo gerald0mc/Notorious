@@ -5,11 +5,14 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ModeSetting;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,7 +20,15 @@ import java.util.Date;
 public class ChatModifications extends Hack {
 
     @RegisterSetting
+    public final BooleanSetting chatNotifications = new BooleanSetting("ChatNotifications", true);
+    @RegisterSetting
     public final BooleanSetting chatSuffix = new BooleanSetting("ChatSuffix", true);
+    @RegisterSetting
+    public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla");
+    @RegisterSetting
+    public final BooleanSetting colorChat = new BooleanSetting("ColorChat", true);
+    @RegisterSetting
+    public final ModeSetting chatColor = new ModeSetting("ChatColor", "Green", "Green", "Red", "Cyan");
     @RegisterSetting
     public final BooleanSetting chatTimestamps = new BooleanSetting("ChatTimestamps", true);
 
@@ -31,15 +42,35 @@ public class ChatModifications extends Hack {
         MinecraftForge.EVENT_BUS.unregister(this);
     }
 
+    public String suffix = " ";
+    public String color = "";
+
     @SubscribeEvent
     public void onChat(ClientChatEvent event) {
         String originalMessage = event.getOriginalMessage();
         if(chatSuffix.isEnabled()) {
-            String suffix = " | Notorious";
+            if(mode.getMode().equals("Vanilla")) {
+                suffix = " | Notorious";
+            }else {
+                suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D1C\uA731";
+            }
             if(event.getMessage().startsWith("!")) return;
             if(event.getMessage().startsWith(".")) return;
             if(event.getMessage().startsWith("/")) return;
             event.setMessage(originalMessage + suffix);
+        }
+        if(colorChat.isEnabled()) {
+            if(chatColor.getMode().equals("Green")) {
+                color = ">";
+            }else if(chatColor.getMode().equals("Red")) {
+                color = "@";
+            }else if(chatColor.getMode().equals("Cyan")) {
+                color = "^";
+            }
+            if(event.getMessage().startsWith("!")) return;
+            if(event.getMessage().startsWith(".")) return;
+            if(event.getMessage().startsWith("/")) return;
+            event.setMessage(color + originalMessage);
         }
     }
 
@@ -49,6 +80,13 @@ public class ChatModifications extends Hack {
             String time = new SimpleDateFormat("k:mm").format(new Date());
             TextComponentString text = new TextComponentString(ChatFormatting.GRAY + "<" + time + ">" + " " + ChatFormatting.RESET);
             event.setMessage(text.appendSibling(event.getMessage()));
+        }
+    }
+
+    @SubscribeEvent
+    public void onUpdate(TickEvent.ClientTickEvent event) {
+        for(Hack h : notorious.hackManager.getHacks()) {
+
         }
     }
 }

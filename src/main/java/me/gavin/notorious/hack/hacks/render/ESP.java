@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-@RegisterHack(name = "ESP", description = "Draws a box around entities.", category = Hack.Category.Render, bind = Keyboard.KEY_B)
+@RegisterHack(name = "ESP", description = "Draws a box around entities.", category = Hack.Category.Render)
 public class ESP extends Hack {
 
     @RegisterSetting
@@ -85,9 +85,12 @@ public class ESP extends Hack {
         GL11.glLineWidth(lineWidth.getValue());
         GlStateManager.pushMatrix();
         final AxisAlignedBB b = entity.getEntityBoundingBox().offset(-mc.getRenderManager().viewerPosX, -mc.getRenderManager().viewerPosY, -mc.getRenderManager().viewerPosZ);
-        GL11.glTranslated(((b.maxX - b.minX) / 2) + b.minX, ((b.maxY - b.minY) / 2) + b.minY, ((b.maxZ - b.minZ) / 2) + b.minZ);
+        double x = ((b.maxX - b.minX) / 2) + b.minX;
+        double y = ((b.maxY - b.minY) / 2) + b.minY;
+        double z = ((b.maxZ - b.minZ) / 2) + b.minZ;
+        GL11.glTranslated(x, y, z);
         GL11.glRotated(-MathHelper.clampedLerp(entity.prevRotationYaw, entity.rotationYaw, mc.getRenderPartialTicks()), 0.0, 1.0, 0.0);
-        GL11.glTranslated(-(((b.maxX - b.minX) / 2) + b.minX), -(((b.maxY - b.minY) / 2) + b.minY), -(((b.maxZ - b.minZ) / 2) + b.minZ));
+        GL11.glTranslated(-(x), -y, -z);
         RenderUtil.entityESPBox(entity, boxColor.getAsColor());
         GlStateManager.popMatrix();
     }

@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
-@RegisterHack(name = "PotionAlert", description = "Tells you in chat when you are hit by a arrow.", category = Hack.Category.Chat, bind = Keyboard.KEY_P)
+@RegisterHack(name = "PotionAlert", description = "Tells you in chat when you are hit by a arrow.", category = Hack.Category.Chat)
 public class PotionAlert extends Hack {
 
     @RegisterSetting

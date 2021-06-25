@@ -21,13 +21,17 @@ import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.List;
 
-@RegisterHack(name = "AnvilBurrow", description = "Drops a anvil inside of you to act as a burrow.", category = Hack.Category.Combat, bind = Keyboard.KEY_H)
+/**
+ * @skidded literally just phobos anvilAura but changed so it drops a anvil on your head and disables instead of dropping on other players and not toggling.
+ */
+
+@RegisterHack(name = "AnvilBurrow", description = "Drops a anvil inside of you to act as a burrow.", category = Hack.Category.Combat, bind = Keyboard.KEY_G)
 public class AnvilBurrow extends Hack {
 
     @RegisterSetting
     public final BooleanSetting rotate = new BooleanSetting("Rotate", true);
     @RegisterSetting
-    public final BooleanSetting packet = new BooleanSetting("Packet", false);
+    public final BooleanSetting packet = new BooleanSetting("Packet", true);
     @RegisterSetting
     public final BooleanSetting switchToAnvil = new BooleanSetting("SwitchToAnvil", true);
 
@@ -62,7 +66,7 @@ public class AnvilBurrow extends Hack {
         if (this.switchToAnvil.isEnabled() && !isHoldingAnvil()) {
             this.switchToAnvil();
         }
-        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, false, this.packet.getValue(), mc.player.isSneaking());
+        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, false, packet.isEnabled(), mc.player.isSneaking());
     }
 
     private boolean isHoldingAnvil() {
@@ -73,8 +77,8 @@ public class AnvilBurrow extends Hack {
     }
 
     private void switchToAnvil() {
+        slot = InventoryUtil.getItemSlot(anvil);
         if(mc.player.getHeldItemMainhand().getItem() != anvil) {
-            slot = InventoryUtil.getItemSlot(anvil);
             if(slot != -1) {
                 InventoryUtil.switchToSlot(slot);
             }

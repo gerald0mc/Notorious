@@ -21,7 +21,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
-@RegisterHack(name = "ArrayList", description = "Shows enabled modules.", category = Hack.Category.Client, bind = Keyboard.KEY_Z)
+@RegisterHack(name = "ArrayList", description = "Shows enabled modules.", category = Hack.Category.Client)
 public class HackList extends Hack {
 
     @RegisterSetting

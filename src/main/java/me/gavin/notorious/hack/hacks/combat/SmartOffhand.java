@@ -15,13 +15,13 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-@RegisterHack(name = "SmartOffhand", description = "Automates offhand use.", category = Hack.Category.Combat, bind = Keyboard.KEY_I)
+@RegisterHack(name = "SmartOffhand", description = "Automates offhand use.", category = Hack.Category.Combat)
 public class SmartOffhand extends Hack {
 
     @RegisterSetting
     public final ModeSetting offhandMode = new ModeSetting("OffhandMode", "Crystal",  "Crystal", "Totem", "Gapple");
     @RegisterSetting
-    public final NumSetting health = new NumSetting("HealthToSwitch", 6.0f, 0.5f, 36.0f, 0.5f);
+    public final NumSetting health = new NumSetting("HealthToSwitch", 14.0f, 0.5f, 36.0f, 0.5f);
 
     public int slot;
 
