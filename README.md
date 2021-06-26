@@ -1,4 +1,4 @@
 # Notorious
 Based client so swag
 
-Made By: gerald0mc (based and best) and Gav06 (tranny) and Ethius (amazing)
+Made By: gerald0mc (tranny) and Gav06 (based and best) and Ethius (amazing)
