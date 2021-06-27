@@ -1,5 +1,6 @@
 package me.gavin.notorious.gui;
 
+import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.*;
 import me.gavin.notorious.hack.Hack;
 
@@ -12,6 +13,10 @@ public class Panel extends AbstractDragComponent {
     public Panel(Hack.Category category, int x, int y, int width, int height) {
         super(x, y, width, height);
         this.buttons = new ArrayList<>();
+
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacksFromCategory(category)) {
+            //buttons.add(new Button(hack, x, y, width, ))
+        }
     }
 
     @Override

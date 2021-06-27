@@ -1,7 +1,7 @@
 package me.gavin.notorious.hack;
 
 import me.gavin.notorious.Notorious;
-import me.gavin.notorious.gui.api.Bind;
+import me.gavin.notorious.gui.api.Bindable;
 import me.gavin.notorious.gui.api.Toggleable;
 import me.gavin.notorious.setting.Setting;
 import me.gavin.notorious.stuff.IMinecraft;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @since 6/15/2021
  */
 
-public abstract class Hack implements Toggleable, Bind, IMinecraft {
+public abstract class Hack implements Toggleable, Bindable, IMinecraft {
     protected final Notorious notorious = Notorious.INSTANCE;
 
     private String name;

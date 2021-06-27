@@ -35,17 +35,17 @@ public class GhastNotifier extends Hack {
         ghasts.clear();
     }
 
-    @SubscribeEvent
-    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
-        for(Entity e : mc.world.loadedEntityList) {
-            if(!(e instanceof EntityGhast) || ghasts.contains(e))
-                continue;
-            notorious.messageManager.sendMessage("Ghast detected at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
-            ghasts.add(e);
-            if(playSound.isEnabled())
-                mc.player.playSound(SoundEvents.BLOCK_ANVIL_DESTROY, 1.0f, 1.0f);
-            if(glow.isEnabled())
-                e.setGlowing(true);
-        }
-    }
+//    @SubscribeEvent
+//    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
+//        for(Entity e : mc.world.loadedEntityList) {
+//            if(!(e instanceof EntityGhast) || ghasts.contains(e))
+//                continue;
+//            notorious.messageManager.sendMessage("Ghast detected at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
+//            ghasts.add(e);
+//            if(playSound.isEnabled())
+//                mc.player.playSound(SoundEvents.BLOCK_ANVIL_DESTROY, 1.0f, 1.0f);
+//            if(glow.isEnabled())
+//                e.setGlowing(true);
+//        }
+//    }
 }

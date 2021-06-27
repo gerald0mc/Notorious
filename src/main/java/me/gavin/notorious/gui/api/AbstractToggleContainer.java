@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 public abstract class AbstractToggleContainer extends AbstractComponent {
 
-    private final Toggleable toggleable;
-    private final ArrayList<SettingComponent> components;
+    protected boolean open;
+    protected final Toggleable toggleable;
+    protected final ArrayList<SettingComponent> components;
 
     public AbstractToggleContainer(Toggleable toggleable, int x, int y, int width, int height) {
         super(x, y, width, height);

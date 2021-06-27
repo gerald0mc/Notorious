@@ -1,8 +1,12 @@
 package me.gavin.notorious;
 
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Comparator;
 
@@ -27,10 +31,11 @@ public class NotoriousMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         new Notorious();
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        Notorious.INSTANCE.hackManager.getSortedHacks().sort(Comparator.comparing(hack -> -Notorious.INSTANCE.fontRenderer.getStringWidth(hack.getName())));
+    @SubscribeEvent
+    public void onTick(PlayerLivingUpdateEvent event) {
+        Notorious.INSTANCE.hackManager.getSortedHacks().sort(Comparator.comparing(hack -> -Notorious.INSTANCE.fontRenderer.getStringWidth(hack.getName() + hack.getMetaData())));
     }
 }

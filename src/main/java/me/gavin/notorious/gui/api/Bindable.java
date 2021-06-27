@@ -1,6 +1,6 @@
 package me.gavin.notorious.gui.api;
 
-public interface Bind {
+public interface Bindable {
 
     int getBind();
 
