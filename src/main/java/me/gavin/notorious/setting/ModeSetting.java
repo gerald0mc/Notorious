@@ -8,6 +8,7 @@ public class ModeSetting extends Setting {
     public ModeSetting(String name, String value, String... modes) {
         super(name);
         this.modes = modes;
+        this.modeIndex = getIndex(value);
     }
 
     public String getMode() {

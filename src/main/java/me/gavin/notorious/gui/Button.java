@@ -4,7 +4,13 @@ import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.AbstractToggleContainer;
 import me.gavin.notorious.gui.api.SettingComponent;
 import me.gavin.notorious.gui.api.Toggleable;
+import me.gavin.notorious.gui.setting.BooleanComponent;
+import me.gavin.notorious.gui.setting.KeybindComponent;
+import me.gavin.notorious.gui.setting.ModeComponent;
 import me.gavin.notorious.hack.Hack;
+import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.setting.Setting;
 import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -17,12 +23,31 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
     public Button(Hack hack, int x, int y, int width, int height) {
         super(hack, x, y, width, height);
         this.hack = hack;
+        for (Setting setting : hack.getSettings()) {
+            if (setting instanceof BooleanSetting) {
+                components.add(new BooleanComponent((BooleanSetting) setting, x, y, width, height));
+            } else if (setting instanceof ModeSetting) {
+                components.add(new ModeComponent((ModeSetting) setting, x, y, width, height));
+            }
+        }
+
+        components.add(new KeybindComponent(hack, x, y, width, height));
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
         Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? Color.RED : Color.WHITE);
+
+        if (open) {
+            int renderYOffset = height;
+            for (SettingComponent component : components) {
+                component.x = this.x;
+                component.y = this.y + renderYOffset;
+                renderYOffset += component.height;
+                component.render(mouseX, mouseY, partialTicks);
+            }
+        }
     }
 
     @Override
@@ -56,6 +81,14 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
 
     @Override
     public int getTotalHeight() {
-        return 0;
+        if (open) {
+            int h = 0;
+            for (SettingComponent component : components) {
+                h += component.height;
+            }
+            return height + h;
+        } else {
+            return height;
+        }
     }
 }

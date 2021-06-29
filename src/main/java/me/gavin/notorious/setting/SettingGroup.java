@@ -1,7 +1,5 @@
 package me.gavin.notorious.setting;
 
-import me.gavin.notorious.hack.Hack;
-
 import java.util.ArrayList;
 
 public class SettingGroup {

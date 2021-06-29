@@ -21,7 +21,6 @@ public class EventProcessor {
     @SubscribeEvent
     public void onKey(InputEvent.KeyInputEvent event) {
         if (Keyboard.getEventKeyState()) {
-            //System.out.println("Pressed key: " + Keyboard.getEventKey() + " - " + Keyboard.getKeyName(Keyboard.getEventKey()) + " APPS: " + Keyboard.KEY_APPS + " - " + Keyboard.getKeyName(Keyboard.KEY_APPS));
             for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
                 if (hack.getBind() == Keyboard.getEventKey()) {
                     hack.toggle();

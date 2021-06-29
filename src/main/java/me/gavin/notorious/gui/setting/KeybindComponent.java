@@ -38,15 +38,14 @@ public class KeybindComponent extends SettingComponent {
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-
     }
 
     @Override
     public void keyTyped(char keyChar, int keyCode) {
         if (listening) {
+            listening = false;
             if (keyCode == Keyboard.KEY_DELETE || keyCode == Keyboard.KEY_BACK) {
-                setting.setBind(Keyboard.KEY_NONE);
-                listening = false;
+                setting.setBind(0);
                 return;
             }
 

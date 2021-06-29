@@ -16,6 +16,7 @@ public class RenderUtil implements IMinecraft {
 
     public static void prepare() {
         GlStateManager.pushMatrix();
+        GlStateManager.disableLighting();
         GlStateManager.enableBlend();
         GlStateManager.disableDepth();
         GlStateManager.disableCull();
@@ -33,6 +34,7 @@ public class RenderUtil implements IMinecraft {
         GlStateManager.enableDepth();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.enableLighting();
         GlStateManager.popMatrix();
     }
 
@@ -112,8 +114,7 @@ public class RenderUtil implements IMinecraft {
         left.draw(0.14f, 10, 20);
         GL11.glColor4f(1.35f, 0.0f, 0.0f, 1.0f);
         GL11.glTranslated(-0.07000000074505806, 0.0, 0.589999952316284);
-        final
-        Sphere tip = new Sphere();
+        final Sphere tip = new Sphere();
         tip.setDrawStyle(100013);
         tip.draw(0.13f, 15, 20);
         GL11.glDepthMask(true);
