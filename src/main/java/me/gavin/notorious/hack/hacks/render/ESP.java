@@ -21,7 +21,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 @RegisterHack(name = "ESP", description = "Draws a box around entities.", category = Hack.Category.Render)

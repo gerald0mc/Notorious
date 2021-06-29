@@ -5,7 +5,6 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.InventoryUtil;
@@ -13,11 +12,17 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
+
+/**
+ * @author gerald0mc
+ * @since like 6/10/21
+ */
 
 @RegisterHack(name = "SmartOffhand", description = "Automates offhand use.", category = Hack.Category.Combat)
 public class SmartOffhand extends Hack {
 
+    @RegisterSetting
+    public final ModeSetting mode = new ModeSetting("Mode", "Strict", "Strict", "Smart");
     @RegisterSetting
     public final ModeSetting offhandMode = new ModeSetting("OffhandMode", "Crystal",  "Crystal", "Totem", "Gapple");
     @RegisterSetting
@@ -37,15 +42,15 @@ public class SmartOffhand extends Hack {
         if(mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) {
             heldItem = "Totem";
         }
-        return " [" + ChatFormatting.GRAY + "Mode: " + offhandMode.getMode() + " | Holding: " + heldItem + ChatFormatting.RESET + "]";
+        return " [" + ChatFormatting.GRAY + "Mode: " + mode.getMode() + " | Holding: " + heldItem + ChatFormatting.RESET + "]";
     }
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
-        if(offhandMode.getMode().equals("Crystal")) {
+        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
             doTheThing(Items.END_CRYSTAL);
         }
-        if(offhandMode.getMode().equals("Totem")) {
+        if(offhandMode.getMode().equals("Totem") && mode.getMode().equals("Smart")) {
             if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
                 slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
                 if (slot != -1 && mc.player.getHealth() >= 0.1f) {
@@ -53,8 +58,17 @@ public class SmartOffhand extends Hack {
                 }
             }
         }
-        if(offhandMode.getMode().equals("Gapple")) {
+        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart")) {
             doTheThing(Items.GOLDEN_APPLE);
+        }
+        if(mode.getMode().equals("Strict")) {
+            slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
+            if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
+                slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
+                if (slot != -1) {
+                    switchToShit();
+                }
+            }
         }
     }
 

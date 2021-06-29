@@ -26,7 +26,7 @@ public class ChatModifications extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla");
     @RegisterSetting
-    public final BooleanSetting colorChat = new BooleanSetting("ColorChat", true);
+    public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
     @RegisterSetting
     public final ModeSetting chatColor = new ModeSetting("ChatColor", "Green", "Green", "Red", "Cyan");
     @RegisterSetting

@@ -10,6 +10,7 @@
     "ModelPlayerMixin",
     "NetworkManagerMixin",
     "accessor.IEntityPlayerSPMixin",
-    "accessor.IMinecraftMixin"
+    "accessor.IMinecraftMixin",
+    "accessor.IRenderGlobal"
   ]
 }

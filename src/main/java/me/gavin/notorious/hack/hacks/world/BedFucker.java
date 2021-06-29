@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.world;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.event.events.PlayerModelRotationEvent;
 import me.gavin.notorious.event.events.PlayerWalkingUpdateEvent;
@@ -37,13 +38,16 @@ public class BedFucker extends Hack {
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 5f, 0f, 6f, 0.5f);
     @RegisterSetting
-    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Box", "Outline");
-    @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
     @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
 
     private BlockPos targetedBlock = null;
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + range.getValue() + ChatFormatting.RESET + "]";
+    }
 
     @SubscribeEvent
     public void onLivingUpdate(PlayerWalkingUpdateEvent.Pre event) {

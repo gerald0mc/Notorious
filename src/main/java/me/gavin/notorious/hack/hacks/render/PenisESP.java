@@ -2,6 +2,8 @@ package me.gavin.notorious.hack.hacks.render;
 
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
+import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;

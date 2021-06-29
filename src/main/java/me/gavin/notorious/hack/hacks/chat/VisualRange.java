@@ -20,13 +20,13 @@ public class VisualRange extends Hack {
         players.clear();
     }
 
-//    @SubscribeEvent
-//    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
-//        for(Entity e : mc.world.loadedEntityList){
-//            if(!(e instanceof EntityPlayer) || players.contains(e))
-//                continue;
-//            notorious.messageManager.sendMessage(ChatFormatting.RED + e.getName() + ChatFormatting.RESET + " has entered your range at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
-//            players.add(e);
-//        }
-//    }
+    @SubscribeEvent
+    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
+        for(Entity e : mc.world.loadedEntityList){
+            if(!(e instanceof EntityPlayer) || players.contains(e))
+                continue;
+            notorious.messageManager.sendMessage(ChatFormatting.RED + e.getName() + ChatFormatting.RESET + " has entered your range at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
+            players.add(e);
+        }
+    }
 }
