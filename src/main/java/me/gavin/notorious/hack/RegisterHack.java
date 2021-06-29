@@ -18,8 +18,4 @@ public @interface RegisterHack {
     String description();
 
     Hack.Category category();
-
-    int bind() default 0;
-
-    String metaData() default " ";
 }

@@ -25,7 +25,7 @@ import java.util.List;
  * @skidded literally just phobos anvilAura but changed so it drops a anvil on your head and disables instead of dropping on other players and not toggling.
  */
 
-@RegisterHack(name = "AnvilBurrow", description = "Drops a anvil inside of you to act as a burrow.", category = Hack.Category.Combat, bind = Keyboard.KEY_G)
+@RegisterHack(name = "AnvilBurrow", description = "Drops a anvil inside of you to act as a burrow.", category = Hack.Category.Combat)
 public class AnvilBurrow extends Hack {
 
     @RegisterSetting

@@ -7,9 +7,11 @@ import me.gavin.notorious.gui.api.Toggleable;
 import me.gavin.notorious.gui.setting.BooleanComponent;
 import me.gavin.notorious.gui.setting.KeybindComponent;
 import me.gavin.notorious.gui.setting.ModeComponent;
+import me.gavin.notorious.gui.setting.SliderComponent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.setting.Setting;
 import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.client.gui.Gui;
@@ -28,6 +30,8 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
                 components.add(new BooleanComponent((BooleanSetting) setting, x, y, width, height));
             } else if (setting instanceof ModeSetting) {
                 components.add(new ModeComponent((ModeSetting) setting, x, y, width, height));
+            } else if (setting instanceof NumSetting) {
+                components.add(new SliderComponent((NumSetting) setting, x, y, width, height));
             }
         }
 

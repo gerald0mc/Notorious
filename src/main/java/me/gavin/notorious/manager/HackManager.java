@@ -3,7 +3,9 @@ package me.gavin.notorious.manager;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.setting.Setting;
+import org.lwjgl.input.Keyboard;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
@@ -70,7 +72,7 @@ public class HackManager {
                 hack.setName(registerAnnotation.name());
                 hack.setDescription(registerAnnotation.description());
                 hack.setCategory(registerAnnotation.category());
-                hack.setBind(registerAnnotation.bind());
+                hack.setBind(hack.getClass() == ClickGUI.class ? Keyboard.KEY_U : Keyboard.KEY_NONE);
 
                 for (Field field : clazz.getDeclaredFields()) {
                     if (Setting.class.isAssignableFrom(field.getType()) && field.isAnnotationPresent(RegisterSetting.class)) {

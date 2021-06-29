@@ -30,7 +30,7 @@ public class ModeSetting extends Setting {
             if (modeIndex == 0) {
                 modeIndex = modes.length - 1;
             } else {
-                modeIndex++;
+                modeIndex--;
             }
         }
     }
