@@ -100,13 +100,13 @@ public abstract class Hack implements Toggleable, Bindable, IMinecraft {
     }
 
     public enum Category {
-        Chat,
-        Client,
         Combat,
-        Misc,
-        Movement,
         Player,
+        Movement,
         Render,
-        World
+        Misc,
+        World,
+        Chat,
+        Client
     }
 }

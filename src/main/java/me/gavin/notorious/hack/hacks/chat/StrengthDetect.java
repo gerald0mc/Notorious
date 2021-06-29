@@ -14,8 +14,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
+
 import java.awt.*;
 import java.util.Collections;
 import java.util.Set;
@@ -26,8 +25,6 @@ public class StrengthDetect extends Hack {
 
     @RegisterSetting
     public final BooleanSetting render = new BooleanSetting("Render", true);
-    @RegisterSetting
-    public final NumSetting lineWidth = new NumSetting("LineWidth", 4f, 0.1f, 5f, 0.1f);
 
     private final Set<EntityPlayer> str = Collections.newSetFromMap(new WeakHashMap<>());
 
@@ -57,10 +54,9 @@ public class StrengthDetect extends Hack {
         for(Entity e : mc.world.loadedEntityList) {
             AxisAlignedBB bb = e.getEntityBoundingBox();
             Color red = new Color(255, 0, 0, 255);
-            if(str.equals(e)) {
-                GL11.glLineWidth(lineWidth.getValue());
+            str.forEach(entityPlayer -> {
                 RenderUtil.renderOutlineBB(bb, red);
-            }
+            });
         }
     }
 }

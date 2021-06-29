@@ -23,25 +23,14 @@ import org.lwjgl.input.Keyboard;
 @RegisterHack(name = "ChestStealer", description = "Steals items out of chests", category = Hack.Category.Player)
 public class ChestStealer extends Hack {
 
-    @RegisterSetting
-    public final NumSetting delaySetting = new NumSetting("Delay", 500, 1, 1000, 1);
-
-    public Timer timer = new Timer();
-
-    @Override
-    public String getMetaData() {
-        return " [" + ChatFormatting.GRAY + delaySetting.getValue() + ChatFormatting.RESET + "]";
-    }
-
     @SubscribeEvent
     public void onEvent(PlayerLivingUpdateEvent event) {
         if(mc.player.openContainer instanceof ContainerChest) {
             final ContainerChest chest = (ContainerChest) mc.player.openContainer;
             for(int i = 0; i < chest.getLowerChestInventory().getSizeInventory(); i++) {
                 final ItemStack stack = chest.getLowerChestInventory().getStackInSlot(i);
-                if(stack != null && timer.passed(delaySetting.getValue())) {
+                if(stack != null) {
                     mc.playerController.windowClick(chest.windowId, i, 0, ClickType.QUICK_MOVE, mc.player);
-                    timer.reset();
                 }
                 if(isChestEmpty(chest))
                     mc.player.closeScreen();

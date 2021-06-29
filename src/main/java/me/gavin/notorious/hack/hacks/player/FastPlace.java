@@ -22,7 +22,7 @@ public class FastPlace extends Hack {
     @RegisterSetting
     public final BooleanSetting crystals = new BooleanSetting("Crystals", true);
     @RegisterSetting
-    public final BooleanSetting all = new BooleanSetting("All", true);
+    public final BooleanSetting all = new BooleanSetting("All", false);
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {

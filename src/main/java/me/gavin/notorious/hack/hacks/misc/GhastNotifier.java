@@ -10,8 +10,6 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.init.SoundEvents;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Keyboard;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,26 +24,21 @@ public class GhastNotifier extends Hack {
     private Set<Entity> ghasts = new HashSet<Entity>();
 
     @Override
-    public String getMetaData() {
-        return " [" + ChatFormatting.GRAY + ghasts.toString() + ChatFormatting.RESET + "]";
-    }
-
-    @Override
     public void onEnable() {
         ghasts.clear();
     }
 
-//    @SubscribeEvent
-//    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
-//        for(Entity e : mc.world.loadedEntityList) {
-//            if(!(e instanceof EntityGhast) || ghasts.contains(e))
-//                continue;
-//            notorious.messageManager.sendMessage("Ghast detected at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
-//            ghasts.add(e);
-//            if(playSound.isEnabled())
-//                mc.player.playSound(SoundEvents.BLOCK_ANVIL_DESTROY, 1.0f, 1.0f);
-//            if(glow.isEnabled())
-//                e.setGlowing(true);
-//        }
-//    }
+    @SubscribeEvent
+    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
+        for(Entity e : mc.world.loadedEntityList) {
+            if(!(e instanceof EntityGhast) || ghasts.contains(e))
+                continue;
+            notorious.messageManager.sendMessage("Ghast detected at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
+            ghasts.add(e);
+            if(playSound.isEnabled())
+                mc.player.playSound(SoundEvents.BLOCK_ANVIL_DESTROY, 1.0f, 1.0f);
+            if(glow.isEnabled())
+                e.setGlowing(true);
+        }
+    }
 }

@@ -8,7 +8,8 @@ import me.gavin.notorious.setting.BooleanSetting;
 import net.minecraft.init.MobEffects;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
+
+import java.awt.*;
 
 @RegisterHack(name = "PotionAlert", description = "Tells you in chat when you are hit by a arrow.", category = Hack.Category.Chat)
 public class PotionAlert extends Hack {
@@ -17,6 +18,23 @@ public class PotionAlert extends Hack {
     public final BooleanSetting weakness = new BooleanSetting("Weakness", true);
     @RegisterSetting
     public final BooleanSetting slowness = new BooleanSetting("Slowness", true);
+
+    @Override
+    public String getMetaData() {
+        String weakness;
+        String slowness;
+        if(mc.player.isPotionActive(MobEffects.WEAKNESS)) {
+            weakness = ChatFormatting.GREEN + "Weakness";
+        }else {
+            weakness = ChatFormatting.GRAY + "Weakness";
+        }
+        if(mc.player.isPotionActive(MobEffects.SLOWNESS)) {
+            slowness = ChatFormatting.GREEN + "Slowness";
+        }else {
+            slowness = ChatFormatting.GRAY + "Slowness";
+        }
+        return " [" + weakness + ChatFormatting.GRAY + " | " + slowness + ChatFormatting.RESET + "]";
+    }
 
     private boolean hasAnnouncedWeakness = false;
     private boolean hasAnnouncedSlowness = false;

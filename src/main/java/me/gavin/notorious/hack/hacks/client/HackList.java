@@ -55,7 +55,7 @@ public class HackList extends Hack {
                     color = rgb.getAsColor().getRGB();
                 }
                 double x;
-                if (hack.isEnabled()) {
+                if(hack.isEnabled()) {
                     x = -(startPos) + ((startPos + 1) * MathHelper.clamp(AnimationUtil.getSmooth2Animation(250, System.currentTimeMillis() - hack.lastEnabledTime), 0.0, 1.0));
                 } else {
                     x = ((startPos) * -MathHelper.clamp(AnimationUtil.getSmooth2Animation(250, System.currentTimeMillis() - hack.lastDisabledTime), 0.0, 1.0));

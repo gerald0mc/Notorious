@@ -25,6 +25,9 @@ public class AutoRespawn extends Hack {
     @SubscribeEvent
     public void onDeath(GuiOpenEvent event) {
         if (event.getGui() instanceof GuiGameOver) {
+            int x = mc.player.getPosition().getX();
+            int y = mc.player.getPosition().getY();
+            int z = mc.player.getPosition().getZ();
             hasAnnounced = false;
             if (antiDeathScreen.isEnabled())
                 event.setCanceled(true);
@@ -32,11 +35,11 @@ public class AutoRespawn extends Hack {
                 mc.player.respawnPlayer();
             if(deathCoords.isEnabled() && !hasAnnounced) {
                 if (mc.player.dimension == -1)
-                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  mc.player.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getZ() + ChatFormatting.RESET + " Dimension: " + ChatFormatting.RED + ChatFormatting.BOLD + "Nether");
+                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.RED + ChatFormatting.BOLD + "Nether");
                 if (mc.player.dimension == 0)
-                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getZ() + ChatFormatting.RESET + " Dimension: " + ChatFormatting.GREEN + ChatFormatting.BOLD + "Overworld");
+                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.GREEN + ChatFormatting.BOLD + "Overworld");
                 if (mc.player.dimension == 1)
-                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + mc.player.getPosition().getZ() + ChatFormatting.RESET + " Dimension: " + ChatFormatting.DARK_PURPLE + ChatFormatting.BOLD + "End");
+                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.DARK_PURPLE + ChatFormatting.BOLD + "End");
                 hasAnnounced = true;
             }
         }

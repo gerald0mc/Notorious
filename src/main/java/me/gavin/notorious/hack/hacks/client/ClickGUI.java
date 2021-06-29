@@ -1,10 +1,11 @@
 package me.gavin.notorious.hack.hacks.client;
 
+import me.gavin.notorious.gui.ClickGuiScreen;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import org.lwjgl.input.Keyboard;
 
-@RegisterHack(name = "ClickGUI", description = "Opens the click gui", category = Hack.Category.Client)
+@RegisterHack(name = "ClickGUI", description = "Opens the click gui", category = Hack.Category.Client, bind = Keyboard.KEY_I)
 public class ClickGUI extends Hack {
 
     @Override

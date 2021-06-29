@@ -1,11 +1,11 @@
 package me.gavin.notorious.hack.hacks.world;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.ColorSetting;
-import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.util.NColor;
@@ -14,8 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -27,11 +25,16 @@ public class ShulkerJew extends Hack {
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 5f, 0f, 6f, 0.5f);
     @RegisterSetting
-    public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 255));
+    public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
     @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
 
     private BlockPos targetedBlock = null;
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + range.getValue() + ChatFormatting.RESET + "]";
+    }
 
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
