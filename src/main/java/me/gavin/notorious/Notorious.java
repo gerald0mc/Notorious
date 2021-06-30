@@ -2,6 +2,7 @@ package me.gavin.notorious;
 
 import me.gavin.notorious.event.EventProcessor;
 import me.gavin.notorious.gui.ClickGuiScreen;
+import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.manager.HackManager;
 import me.gavin.notorious.manager.MessageManager;
 import me.gavin.notorious.manager.RotationManager;
@@ -20,7 +21,7 @@ public class Notorious {
     public static Notorious INSTANCE;
 
     public final HackManager hackManager;
-    public final ClickGuiScreen clickGui;
+    public final ClickGuiScreen clickGuiScreen;
     public final CFontRenderer fontRenderer;
     public final MessageManager messageManager;
     public final RotationManager rotationManager;
@@ -30,7 +31,7 @@ public class Notorious {
 
         hackManager = new HackManager();
         fontRenderer = new CFontRenderer(CFontLoader.HELVETICA, true, true);
-        clickGui = new ClickGuiScreen();
+        clickGuiScreen = new ClickGuiScreen();
         messageManager = new MessageManager();
         rotationManager = new RotationManager();
 

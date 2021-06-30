@@ -3,17 +3,18 @@ package me.gavin.notorious.gui;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.AbstractToggleContainer;
 import me.gavin.notorious.gui.api.SettingComponent;
-import me.gavin.notorious.gui.api.Toggleable;
 import me.gavin.notorious.gui.setting.BooleanComponent;
 import me.gavin.notorious.gui.setting.KeybindComponent;
 import me.gavin.notorious.gui.setting.ModeComponent;
 import me.gavin.notorious.gui.setting.SliderComponent;
 import me.gavin.notorious.hack.Hack;
+import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.setting.Setting;
 import me.gavin.notorious.stuff.IMinecraft;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.gui.Gui;
 
 import java.awt.*;
@@ -35,16 +36,21 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
             }
         }
 
-        components.add(new KeybindComponent(hack, x, y, width, height));
+        components.add(new KeybindComponent(hack, x + 5, y, width, height));
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        int renderYOffset = height;
+        int color = ColorUtil.getRainbow(8f, 0.6f);
         Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
-        Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? Color.RED : Color.WHITE);
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? Color.RED : Color.WHITE);
+        }else {
+            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? new Color(255, 0, 0).getRGB() : new Color(255, 255, 255).getRGB());
+        }
 
         if (open) {
-            int renderYOffset = height;
             for (SettingComponent component : components) {
                 component.x = this.x;
                 component.y = this.y + renderYOffset;

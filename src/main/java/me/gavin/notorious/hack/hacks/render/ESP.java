@@ -48,6 +48,9 @@ public class ESP extends Hack {
         return " [" + ChatFormatting.GRAY + renderMode.getMode() + ChatFormatting.RESET + "]";
     }
 
+    boolean outline = false;
+    boolean fill = false;
+
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         for(Entity e : mc.world.loadedEntityList) {
@@ -58,16 +61,16 @@ public class ESP extends Hack {
             AxisAlignedBB bb = new AxisAlignedBB(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y, box.maxZ + z);
             if(e == mc.player && mc.gameSettings.thirdPersonView == 0)
                 continue;
-            boolean outline = false;
-            boolean fill = false;
-            if(renderMode.getMode().equals("Both"))
+            if(renderMode.getMode().equals("Both")) {
                 outline = true;
                 fill = true;
-            if(renderMode.getMode().equals("Outline"))
+            }else if(renderMode.getMode().equals("Outline")) {
                 outline = true;
-            if(renderMode.getMode().equals("Box"))
+                fill = false;
+            }else {
                 fill = true;
-
+                outline = false;
+            }
             if(e instanceof EntityPlayer && players.isEnabled()) {
                 render(e);
             } else if(e instanceof EntityAnimal && animals.isEnabled()) {

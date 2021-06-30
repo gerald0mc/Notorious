@@ -3,6 +3,8 @@ package me.gavin.notorious.gui;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.*;
 import me.gavin.notorious.hack.Hack;
+import me.gavin.notorious.hack.hacks.client.ClickGUI;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 import java.awt.*;
@@ -27,7 +29,11 @@ public class Panel extends AbstractDragComponent {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         Gui.drawRect(x, y, x + width, y + height, 0xFFFF0000);
-        Notorious.INSTANCE.fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, Color.WHITE);
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, Color.WHITE);
+        }else {
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, new Color(255, 255, 255).getRGB());
+        }
 
         int yOffset = height;
         for (AbstractToggleContainer button : buttons) {

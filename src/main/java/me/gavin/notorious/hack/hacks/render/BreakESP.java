@@ -34,15 +34,30 @@ public class BreakESP extends Hack {
         return " [" + ChatFormatting.GRAY + mode.getMode() + ChatFormatting.RESET + "]";
     }
 
+    boolean outline = false;
+    boolean fill = false;
+
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         ((IRenderGlobal) mc.renderGlobal).getDamagedBlocks().forEach((integer, destroyBlockProgress) -> {
+            if(mode.getMode().equals("Both")) {
+                outline = true;
+                fill = true;
+            }else if(mode.getMode().equals("Outline")) {
+                outline = true;
+                fill = false;
+            }else {
+                fill = true;
+                outline = false;
+            }
             if(destroyBlockProgress.getPosition().getDistance((int) mc.player.posX,(int)  mc.player.posY,(int)  mc.player.posZ) <= range.getValue()) {
                 AxisAlignedBB pos = mc.world.getBlockState(destroyBlockProgress.getPosition()).getSelectedBoundingBox(mc.world, destroyBlockProgress.getPosition());
                 if (fade.isEnabled())
                     pos = pos.shrink((3 - (destroyBlockProgress.getPartialBlockDamage()) / (2.0 + (2.0 / 3.0))) / 9.0);
-                RenderUtil.renderFilledBB(pos, boxColor.getAsColor());
-                RenderUtil.renderOutlineBB(pos, outlineColor.getAsColor());
+                if(outline)
+                    RenderUtil.renderOutlineBB(pos, outlineColor.getAsColor());
+                if(fill)
+                    RenderUtil.renderFilledBB(pos, boxColor.getAsColor());
             }
         });
     }

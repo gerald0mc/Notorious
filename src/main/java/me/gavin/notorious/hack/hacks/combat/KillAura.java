@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -32,7 +33,6 @@ public class KillAura extends Hack {
 
     @RegisterSetting
     public final BooleanSetting attackDelay = new BooleanSetting("1.9 Delay", true);
-
     @RegisterSetting
     public final BooleanSetting players = new BooleanSetting("Players", true);
     @RegisterSetting
@@ -81,7 +81,7 @@ public class KillAura extends Hack {
                     mc.playerController.attackEntity(mc.player, entity);
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                 }
-            } else {
+            }else {
                 if (mc.player.ticksExisted % attackSpeed.getValue() == 0.0) {
                     mc.playerController.attackEntity(mc.player, entity);
                     mc.player.swingArm(EnumHand.MAIN_HAND);
@@ -92,5 +92,9 @@ public class KillAura extends Hack {
 
     private boolean shouldAttack(EntityLivingBase entity) {
         return entity.getDistance(mc.player) <= range.getValue() && entity.getHealth() > 0;
+    }
+
+    private boolean isHoldingSword() {
+        return mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD;
     }
 }

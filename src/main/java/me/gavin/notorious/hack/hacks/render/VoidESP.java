@@ -39,6 +39,9 @@ public class VoidESP extends Hack {
         return " [" + ChatFormatting.GRAY + range.getValue() + ChatFormatting.RESET + "]";
     }
 
+    boolean outline = false;
+    boolean fill = false;
+
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
         if (mc.player == null) return;
@@ -61,10 +64,22 @@ public class VoidESP extends Hack {
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
+        if(mode.getMode().equals("Both")) {
+            outline = true;
+            fill = true;
+        }else if(mode.getMode().equals("Outline")) {
+            outline = true;
+            fill = false;
+        }else {
+            fill = true;
+            outline = false;
+        }
         new ArrayList<>(voidBlocks).forEach(blockPos -> {
             AxisAlignedBB bb = mc.world.getBlockState(blockPos).getSelectedBoundingBox(mc.world, blockPos);
-            RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
-            RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+            if(outline)
+                RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+            if(fill)
+                RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
         });
     }
 

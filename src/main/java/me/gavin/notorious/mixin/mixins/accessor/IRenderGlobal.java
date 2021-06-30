@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Mixin(RenderGlobal.class)
 public interface IRenderGlobal {
+
     @Accessor("damagedBlocks")
     Map<Integer, DestroyBlockProgress> getDamagedBlocks();
 }

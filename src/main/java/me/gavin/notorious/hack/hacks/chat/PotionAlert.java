@@ -33,7 +33,7 @@ public class PotionAlert extends Hack {
         }else {
             slowness = ChatFormatting.GRAY + "Slowness";
         }
-        return " [" + weakness + ChatFormatting.GRAY + " | " + slowness + ChatFormatting.RESET + "]";
+        return " [" + weakness + ChatFormatting.GRAY + ChatFormatting.RESET + " | " + ChatFormatting.GRAY + slowness + ChatFormatting.RESET + "]";
     }
 
     private boolean hasAnnouncedWeakness = false;

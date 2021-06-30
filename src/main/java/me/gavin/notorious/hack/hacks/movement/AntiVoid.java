@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.movement;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -7,11 +8,16 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@RegisterHack(name = "AntiVoid", description = "ez", category = Hack.Category.Combat)
+@RegisterHack(name = "AntiVoid", description = "ez", category = Hack.Category.Movement)
 public class AntiVoid extends Hack {
 
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "TP", "TP", "Strict");
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + mode.getMode() + ChatFormatting.RESET + "]";
+    }
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {

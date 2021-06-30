@@ -39,7 +39,7 @@ public class StorageESP extends Hack {
     public final NumSetting lineWidth = new NumSetting("LineWidth", 2f, 0.1f, 4f, 0.1f);
 
     private boolean outline = false;
-    private boolean box = false;
+    private boolean fill = false;
 
     public final Color chestOutlineStatic = new Color(139, 69, 19, 255);
     public final Color chestBoxStatic = new Color(205, 133, 63, 125);
@@ -59,28 +59,29 @@ public class StorageESP extends Hack {
     public void onRender(RenderWorldLastEvent event) {
         for(TileEntity e : mc.world.loadedTileEntityList) {
             AxisAlignedBB bb = new AxisAlignedBB(e.getPos());
-            if(renderMode.getMode().equals("Both"))
+            if(renderMode.getMode().equals("Both")) {
                 outline = true;
-                box = true;
-            if(renderMode.getMode().equals("Outline"))
+                fill = true;
+            }else if(renderMode.getMode().equals("Outline")) {
                 outline = true;
-                box = false;
-            if(renderMode.getMode().equals("Box"))
+                fill = false;
+            }else {
+                fill = true;
                 outline = false;
-                box = true;
+            }
             if(e instanceof TileEntityChest) {
                 if(colorMode.getMode().equals("Custom")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
                 }
                 if(colorMode.getMode().equals("Static")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, chestOutlineStatic);
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, chestBoxStatic);
                 }
             }
@@ -89,7 +90,7 @@ public class StorageESP extends Hack {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
                 }
                 if(colorMode.getMode().equals("Static")) {
@@ -97,7 +98,7 @@ public class StorageESP extends Hack {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, enderChestOutlineStatic);
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, enderChestBoxStatic);
                 }
             }
@@ -106,14 +107,14 @@ public class StorageESP extends Hack {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
               }
                 if(colorMode.getMode().equals("Static")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, hopperOutlineStatic);
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, hopperBoxStatic);
                 }
             }
@@ -122,14 +123,14 @@ public class StorageESP extends Hack {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
                 }
                 if(colorMode.getMode().equals("Static")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
                         RenderUtil.renderOutlineBB(bb, shulkerOutlineStatic);
-                    if(box)
+                    if(fill)
                         RenderUtil.renderFilledBB(bb, shulkerBoxStatic);
                 }
             }

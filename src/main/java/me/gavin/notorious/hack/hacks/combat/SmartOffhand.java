@@ -12,6 +12,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 /**
  * @author gerald0mc
@@ -42,18 +43,18 @@ public class SmartOffhand extends Hack {
         if(mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) {
             heldItem = "Totem";
         }
-        return " [" + ChatFormatting.GRAY + "Mode: " + mode.getMode() + " | Holding: " + heldItem + ChatFormatting.RESET + "]";
+        return " [" + ChatFormatting.GRAY + "Mode: " + mode.getMode() + ChatFormatting.RESET + " | " + ChatFormatting.GRAY + "Holding: " + heldItem + ChatFormatting.RESET + "]";
     }
 
     @SubscribeEvent
-    public void onUpdate(PlayerLivingUpdateEvent event) {
+    public void onUpdate(TickEvent event) {
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
             doTheThing(Items.END_CRYSTAL);
         }
         if(offhandMode.getMode().equals("Totem") && mode.getMode().equals("Smart")) {
             if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
                 slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-                if (slot != -1 && mc.player.getHealth() >= 0.1f) {
+                if (slot != -1 && mc.player.getHealth() > 0.1f) {
                     switchToShit();
                 }
             }
@@ -75,13 +76,13 @@ public class SmartOffhand extends Hack {
     public void doTheThing(Item item) {
         if(mc.player.getHeldItemOffhand().getItem() != item) {
             slot = InventoryUtil.getItemSlot(item);
-            if (slot != -1 && mc.player.getHealth() >= health.getValue()) {
+            if (slot != -1 && mc.player.getHealth() > health.getValue()) {
                 switchToShit();
             }
         }
         if(mc.player.getHeldItemOffhand().getItem() == item) {
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-            if (slot != -1 && mc.player.getHealth() <= health.getValue()) {
+            if (slot != -1 && mc.player.getHealth() < health.getValue()) {
                 switchToShit();
             }
         }
