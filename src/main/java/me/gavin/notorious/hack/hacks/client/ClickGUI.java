@@ -3,7 +3,6 @@ package me.gavin.notorious.hack.hacks.client;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
@@ -11,8 +10,6 @@ import me.gavin.notorious.setting.NumSetting;
 @RegisterHack(name = "ClickGUI", description = "Opens the click gui", category = Hack.Category.Client)
 public class ClickGUI extends Hack {
 
-    @RegisterSetting
-    public final BooleanSetting customFont = new BooleanSetting("CustomFont", true);
     @RegisterSetting
     public final ModeSetting colorMode = new ModeSetting("ColorMode", "Rainbow", "Rainbow", "RGB");
     @RegisterSetting

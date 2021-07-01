@@ -3,6 +3,7 @@ package me.gavin.notorious.gui.setting;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.SettingComponent;
 import me.gavin.notorious.hack.hacks.client.ClickGUI;
+import me.gavin.notorious.hack.hacks.client.Font;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.Minecraft;
@@ -38,7 +39,7 @@ public class SliderComponent extends SettingComponent {
         }
         Gui.drawRect(x, y, x + width, y + height, 0xCF000000);
         Gui.drawRect(x, y, x + (int) sliderWidth, y + height, color);
-        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
+        if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 5f, Color.WHITE);
         }else {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());

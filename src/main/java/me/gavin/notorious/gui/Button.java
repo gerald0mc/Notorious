@@ -9,6 +9,7 @@ import me.gavin.notorious.gui.setting.ModeComponent;
 import me.gavin.notorious.gui.setting.SliderComponent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.hacks.client.ClickGUI;
+import me.gavin.notorious.hack.hacks.client.Font;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
@@ -57,7 +58,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
             intRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
         Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
-        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
+        if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, hack.isEnabled() ? colorRainbow : Color.WHITE);
         }else {
             mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, hack.isEnabled() ? intRainbow : new Color(255, 255, 255).getRGB());

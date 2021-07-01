@@ -1,6 +1,7 @@
 package me.gavin.notorious.hack.hacks.client;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.Notorious;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -65,10 +66,19 @@ public class HackList extends Hack {
                     x = ((startPos) * -MathHelper.clamp(AnimationUtil.getSmooth2Animation(250, System.currentTimeMillis() - hack.lastDisabledTime), 0.0, 1.0));
                 }
                 double y = yOffset;
+                if(((WaterMark)Notorious.INSTANCE.hackManager.getHack(WaterMark.class)).isEnabled()) {
+                    y = yOffset + 8;
+                }else {
+                    y = yOffset;
+                }
                 Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
                 Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), color);
                 //Gui.drawRect((int)(x + startPos), (int)y - 2, (int)(x + startPos + 2), (int)(y + notorious.fontRenderer.getHeight() + 2), color);
-                notorious.fontRenderer.drawStringWithShadow(name, x + 2, y, new Color(color));
+                if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
+                    notorious.fontRenderer.drawStringWithShadow(name, x + 2, y, new Color(color));
+                }else {
+                    mc.fontRenderer.drawStringWithShadow(name,(int) x + 2,(int) y, color);
+                }
                 yOffset += notorious.fontRenderer.getHeight() + 4;
             }
         }

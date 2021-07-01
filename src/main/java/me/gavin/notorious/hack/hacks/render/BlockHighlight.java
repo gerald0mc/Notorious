@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.render;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -22,6 +23,11 @@ public class BlockHighlight extends Hack {
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255));
     @RegisterSetting
     public final NumSetting lineWidth = new NumSetting("Line Width", 2, 0.1f, 10, 0.1f);
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + lineWidth.getValue() + ChatFormatting.RESET + "]";
+    }
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {

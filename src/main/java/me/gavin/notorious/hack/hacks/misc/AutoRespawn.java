@@ -16,7 +16,7 @@ import org.lwjgl.input.Keyboard;
 public class AutoRespawn extends Hack {
 
     @RegisterSetting
-    public final BooleanSetting antiDeathScreen = new BooleanSetting("AntiDeathScreen", true);
+    public final BooleanSetting antiDeathScreen = new BooleanSetting("Respawn", true);
     @RegisterSetting
     public final BooleanSetting deathCoords = new BooleanSetting("DeathCoords", true);
 
