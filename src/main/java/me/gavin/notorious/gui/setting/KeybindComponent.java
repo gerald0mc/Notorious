@@ -4,6 +4,7 @@ import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.Bindable;
 import me.gavin.notorious.gui.api.SettingComponent;
 import me.gavin.notorious.hack.hacks.client.ClickGUI;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.input.Keyboard;
@@ -23,19 +24,27 @@ public class KeybindComponent extends SettingComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
+        float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
+        int color;
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+            color = ColorUtil.getRainbow(time, saturation);
+        }else {
+            color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
+        }
         Gui.drawRect(x, y, x + width, y + height, 0xCF000000);
-        Gui.drawRect(x, y, x + 2, y + height, new Color(255, 0, 0, 255).getRGB());
+        Gui.drawRect(x, y, x + 2, y + height, color);
         if (listening) {
             if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 3f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 5f, Color.WHITE);
             }else {
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 3f, new Color(255, 255, 255).getRGB());
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
             }
         } else {
             if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 3f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 5f, Color.WHITE);
             }else {
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 3f, new Color(255, 255, 255).getRGB());
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
             }
         }
     }

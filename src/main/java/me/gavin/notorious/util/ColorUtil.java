@@ -14,6 +14,11 @@ public class ColorUtil {
         return Color.HSBtoRGB(hue, saturation, 1f);
     }
 
+    public static Color colorRainbow(float delay, float saturation) {
+        float hue = (System.currentTimeMillis() % (delay * 1000)) / (delay * 1000);
+        return Color.getHSBColor(hue, saturation, 1f);
+    }
+
     public static Color normalizedFade(float value) {
         final float green = (1f - value);
         return new Color((value), green, 0f);

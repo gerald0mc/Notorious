@@ -4,6 +4,7 @@ import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.SettingComponent;
 import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -27,12 +28,20 @@ public class SliderComponent extends SettingComponent {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         updateSliderLogic(mouseX, mouseY);
-        Gui.drawRect(x, y, x + width, y + height, 0xCF000000);
-        Gui.drawRect(x, y, x + (int) sliderWidth, y + height, 0xFFFF0000);
-        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 3f, Color.WHITE);
+        float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
+        float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
+        int color;
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+            color = ColorUtil.getRainbow(time, saturation);
         }else {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 3f, new Color(255, 255, 255).getRGB());
+            color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
+        }
+        Gui.drawRect(x, y, x + width, y + height, 0xCF000000);
+        Gui.drawRect(x, y, x + (int) sliderWidth, y + height, color);
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 5f, Color.WHITE);
+        }else {
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
         }
     }
 

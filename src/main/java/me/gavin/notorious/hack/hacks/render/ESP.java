@@ -27,8 +27,6 @@ import org.lwjgl.opengl.GL11;
 public class ESP extends Hack {
 
     @RegisterSetting
-    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Box");
-    @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
@@ -45,11 +43,8 @@ public class ESP extends Hack {
 
     @Override
     public String getMetaData() {
-        return " [" + ChatFormatting.GRAY + renderMode.getMode() + ChatFormatting.RESET + "]";
+        return " [" + ChatFormatting.GRAY + lineWidth.getValue() + ChatFormatting.RESET + "]";
     }
-
-    boolean outline = false;
-    boolean fill = false;
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
@@ -61,16 +56,6 @@ public class ESP extends Hack {
             AxisAlignedBB bb = new AxisAlignedBB(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y, box.maxZ + z);
             if(e == mc.player && mc.gameSettings.thirdPersonView == 0)
                 continue;
-            if(renderMode.getMode().equals("Both")) {
-                outline = true;
-                fill = true;
-            }else if(renderMode.getMode().equals("Outline")) {
-                outline = true;
-                fill = false;
-            }else {
-                fill = true;
-                outline = false;
-            }
             if(e instanceof EntityPlayer && players.isEnabled()) {
                 render(e);
             } else if(e instanceof EntityAnimal && animals.isEnabled()) {
@@ -84,7 +69,6 @@ public class ESP extends Hack {
     }
 
     private void render(Entity entity) {
-        GL11.glLineWidth(lineWidth.getValue());
         GlStateManager.pushMatrix();
         final AxisAlignedBB b = entity.getEntityBoundingBox().offset(-mc.getRenderManager().viewerPosX, -mc.getRenderManager().viewerPosY, -mc.getRenderManager().viewerPosZ);
         double x = ((b.maxX - b.minX) / 2) + b.minX;
@@ -93,7 +77,7 @@ public class ESP extends Hack {
         GL11.glTranslated(x, y, z);
         GL11.glRotated(-MathHelper.clampedLerp(entity.prevRotationYaw, entity.rotationYaw, mc.getRenderPartialTicks()), 0.0, 1.0, 0.0);
         GL11.glTranslated(-(x), -y, -z);
-        RenderUtil.entityESPBox(entity, boxColor.getAsColor());
+        RenderUtil.entityESPBox(entity, boxColor.getAsColor(), outlineColor.getAsColor(), (int) lineWidth.getValue());
         GlStateManager.popMatrix();
     }
 }

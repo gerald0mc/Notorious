@@ -61,7 +61,7 @@ public class RenderUtil implements IMinecraft {
         release();
     }
 
-    public static void entityESPBox(Entity entity, Color c) {
+    public static void entityESPBox(Entity entity, Color boxC, Color outlineC, int lineWidth) {
         final AxisAlignedBB ebox = entity.getEntityBoundingBox();
 
         final double lerpX = MathUtil.lerp(mc.getRenderPartialTicks(), entity.lastTickPosX, entity.posX);
@@ -78,9 +78,9 @@ public class RenderUtil implements IMinecraft {
         );
 
         prepare();
-        GL11.glLineWidth(1.0f);
-        RenderGlobal.renderFilledBox(lerpBox, c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f);
-        RenderGlobal.drawSelectionBoundingBox(lerpBox, c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f);
+        GL11.glLineWidth(lineWidth);
+        RenderGlobal.renderFilledBox(lerpBox, boxC.getRed() / 255f, boxC.getGreen() / 255f, boxC.getBlue() / 255f, boxC.getAlpha() / 255f);
+        RenderGlobal.drawSelectionBoundingBox(lerpBox, outlineC.getRed() / 255f, outlineC.getGreen() / 255f, outlineC.getBlue() / 255f, outlineC.getAlpha() / 255f);
         release();
     }
 

@@ -4,6 +4,7 @@ import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.*;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.hacks.client.ClickGUI;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -28,7 +29,15 @@ public class Panel extends AbstractDragComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        Gui.drawRect(x, y, x + width, y + height, 0xFFFF0000);
+        float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
+        float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
+        int color;
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+            color = ColorUtil.getRainbow(time, saturation);
+        }else {
+            color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
+        }
+        Gui.drawRect(x, y, x + width, y + height, color);
         if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, Color.WHITE);
         }else {

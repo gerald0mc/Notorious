@@ -42,12 +42,25 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         int renderYOffset = height;
-        int color = ColorUtil.getRainbow(8f, 0.6f);
+        Color colorRainbow;
+        int intRainbow;
+        float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
+        float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+            colorRainbow = ColorUtil.colorRainbow(time, saturation);
+        }else {
+            colorRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor();
+        }
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+            intRainbow = ColorUtil.getRainbow(time, saturation);
+        }else {
+            intRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
+        }
         Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
         if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).customFont.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? Color.RED : Color.WHITE);
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, hack.isEnabled() ? colorRainbow : Color.WHITE);
         }else {
-            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? new Color(255, 0, 0).getRGB() : new Color(255, 255, 255).getRGB());
+            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, hack.isEnabled() ? intRainbow : new Color(255, 255, 255).getRGB());
         }
 
         if (open) {

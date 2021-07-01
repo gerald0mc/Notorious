@@ -27,6 +27,10 @@ public class HackList extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB");
     @RegisterSetting
+    public final NumSetting length = new NumSetting("Length", 8f, 1f, 15f, 1f);
+    @RegisterSetting
+    public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
+    @RegisterSetting
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255);
 
     public HackList() {
@@ -50,7 +54,7 @@ public class HackList extends Hack {
                 final double startPos = (notorious.fontRenderer.getStringWidth(name) + 2);
                 final int color;
                 if(mode.getMode().equals("Flow")) {
-                    color = ColorUtil.getRGBWave(8f, 0.6f, yOffset * 20L);
+                    color = ColorUtil.getRGBWave(length.getValue(), saturation.getValue(), yOffset * 20L);
                 }else {
                     color = rgb.getAsColor().getRGB();
                 }
