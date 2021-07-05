@@ -22,10 +22,6 @@ public class WaterMark extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Rainbow", "Rainbow", "RGB");
     @RegisterSetting
-    public final NumSetting length = new NumSetting("Length", 8f, 1f, 15f, 1f);
-    @RegisterSetting
-    public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
-    @RegisterSetting
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255);
 
     @SubscribeEvent
@@ -34,23 +30,29 @@ public class WaterMark extends Hack {
         int yOffset = 2;
         double y = yOffset;
         final String watermark = NotoriousMod.NAME_VERSION;
+        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         Color colorRainbow;
         int intRainbow;
-        float time = length.getValue();
-        float bruh = saturation.getValue();
+        float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
+        float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
         if(mode.getMode().equals("Rainbow")) {
-            colorRainbow = ColorUtil.colorRainbow(time, bruh);
+            colorRainbow = ColorUtil.colorRainbow((int) time, saturation, 1f);
         }else {
             colorRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor();
         }
         if(mode.getMode().equals("Rainbow")) {
-            intRainbow = ColorUtil.getRainbow(time, bruh);
+            intRainbow = ColorUtil.getRainbow(time, saturation);
         }else {
             intRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
-        Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
-        Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), intRainbow);
-        if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
+        if(font.isEnabled()) {
+            Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
+            Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), intRainbow);
+        }else {
+            Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + 1), (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), 0x90000000);
+            Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), intRainbow);
+        }
+        if(font.isEnabled()) {
             notorious.fontRenderer.drawStringWithShadow(watermark, x + 2, y, colorRainbow);
         }else {
             mc.fontRenderer.drawStringWithShadow(watermark, (int) x + 2, (int) y, intRainbow);

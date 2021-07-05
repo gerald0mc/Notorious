@@ -42,26 +42,22 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         int renderYOffset = height;
-        Color colorRainbow;
         int intRainbow;
         float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
         float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
-        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
-            colorRainbow = ColorUtil.colorRainbow(time, saturation);
-        }else {
-            colorRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor();
-        }
         if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
             intRainbow = ColorUtil.getRainbow(time, saturation);
         }else {
             intRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
         Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
-        if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, hack.isEnabled() ? colorRainbow : Color.WHITE);
+        Gui.drawRect(x, y, x + width, y + height, hack.isEnabled() ? intRainbow : 0xCC000000);
+        if(font.isEnabled()) {
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, Color.WHITE);
         }else {
-            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, hack.isEnabled() ? intRainbow : new Color(255, 255, 255).getRGB());
+            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, new Color(255, 255, 255).getRGB());
         }
 
         if (open) {
@@ -79,7 +75,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
         if (isMouseInside(mouseX, mouseY)) {
             if (mouseButton == 0) {
                 hack.toggle();
-            } else if (mouseButton == 1) {
+            }else if (mouseButton == 1) {
                 open = !open;
             }
         }

@@ -23,6 +23,7 @@ public class ModeComponent extends SettingComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
         float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
         int color;
@@ -33,7 +34,7 @@ public class ModeComponent extends SettingComponent {
         }
         Gui.drawRect(x, y, x + width, y + height, 0xCF000000);
         Gui.drawRect(x, y, x + 2, y + height, color);
-        if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
+        if(font.isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getMode() + ">", x + 9f, y + 5f, Color.WHITE);
         }else {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getMode() + ">", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
@@ -45,7 +46,7 @@ public class ModeComponent extends SettingComponent {
         if (isMouseInside(mouseX, mouseY)) {
             if (mouseButton == 0) {
                 setting.cycle(false);
-            } else if (mouseButton == 1) {
+            }else if (mouseButton == 1) {
                 setting.cycle(true);
             }
         }

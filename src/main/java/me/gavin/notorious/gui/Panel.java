@@ -30,6 +30,7 @@ public class Panel extends AbstractDragComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
         float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
         int color;
@@ -39,7 +40,7 @@ public class Panel extends AbstractDragComponent {
             color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
         Gui.drawRect(x, y, x + width, y + height, color);
-        if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
+        if(font.isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, Color.WHITE);
         }else {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, new Color(255, 255, 255).getRGB());

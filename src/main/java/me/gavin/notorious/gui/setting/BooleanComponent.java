@@ -24,15 +24,17 @@ public class BooleanComponent extends SettingComponent {
     public void render(int mouseX, int mouseY, float partialTicks) {
         float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
         float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
+        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         int color;
+        int yOffset = 2;
         if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
-            color = ColorUtil.getRainbow(time, saturation);
+            color = ColorUtil.getRGBWave(time, saturation, yOffset * 20L);
         }else {
             color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
         Gui.drawRect(x, y, x + width, y + height, setting.isEnabled() ? color : 0xCF000000);
         Gui.drawRect(x, y, x + 2, y + height, color);
-        if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
+        if(font.isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName(), x + 9f, y + 5f, Color.WHITE);
         }else {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName(), x + 9f, y + 5f, new Color(255, 255, 255).getRGB());

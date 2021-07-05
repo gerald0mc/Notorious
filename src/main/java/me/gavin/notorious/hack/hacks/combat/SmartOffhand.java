@@ -47,7 +47,7 @@ public class SmartOffhand extends Hack {
     }
 
     @SubscribeEvent
-    public void onUpdate(TickEvent event) {
+    public void onUpdate(PlayerLivingUpdateEvent event) {
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
             doTheThing(Items.END_CRYSTAL);
         }
@@ -66,7 +66,7 @@ public class SmartOffhand extends Hack {
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
             if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
                 slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-                if (slot != -1) {
+                if(slot != -1) {
                     switchToShit();
                 }
             }
@@ -82,7 +82,7 @@ public class SmartOffhand extends Hack {
         }
         if(mc.player.getHeldItemOffhand().getItem() == item) {
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-            if (slot != -1 && mc.player.getHealth() < health.getValue()) {
+            if(slot != -1 && mc.player.getHealth() < health.getValue()) {
                 switchToShit();
             }
         }

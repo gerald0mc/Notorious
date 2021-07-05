@@ -52,8 +52,14 @@ public class HackList extends Hack {
                 final String n = hack.getName();
                 final String md = hack.getMetaData();
                 final String name = n + md;
-                final double startPos = (notorious.fontRenderer.getStringWidth(name) + 2);
+                Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
+                final double startPos;
                 final int color;
+                if(font.isEnabled()) {
+                    startPos = (notorious.fontRenderer.getStringWidth(name) + 2);
+                }else {
+                    startPos = (mc.fontRenderer.getStringWidth(name) + 2);
+                }
                 if(mode.getMode().equals("Flow")) {
                     color = ColorUtil.getRGBWave(length.getValue(), saturation.getValue(), yOffset * 20L);
                 }else {
@@ -71,15 +77,24 @@ public class HackList extends Hack {
                 }else {
                     y = yOffset;
                 }
-                Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
-                Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), color);
+                if(font.isEnabled()) {
+                    Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
+                    Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), color);
+                }else {
+                    Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), 0x90000000);
+                    Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), color);
+                }
                 //Gui.drawRect((int)(x + startPos), (int)y - 2, (int)(x + startPos + 2), (int)(y + notorious.fontRenderer.getHeight() + 2), color);
-                if(((Font)Notorious.INSTANCE.hackManager.getHack(Font.class)).isEnabled()) {
+                if(font.isEnabled()) {
                     notorious.fontRenderer.drawStringWithShadow(name, x + 2, y, new Color(color));
                 }else {
                     mc.fontRenderer.drawStringWithShadow(name,(int) x + 2,(int) y, color);
                 }
-                yOffset += notorious.fontRenderer.getHeight() + 4;
+                if(font.isEnabled()) {
+                    yOffset += notorious.fontRenderer.getHeight() + 4;
+                }else {
+                    yOffset += mc.fontRenderer.FONT_HEIGHT + 4;
+                }
             }
         }
     }
