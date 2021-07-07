@@ -17,7 +17,7 @@ public class CopyIP extends Hack {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(data.serverIP), null);
             notorious.messageManager.sendMessage("Copied IP " + ChatFormatting.GRAY + "[" + ChatFormatting.GREEN + data + ChatFormatting.GRAY + "]" + ChatFormatting.RESET + "to clipboard");
         } else {
-            notorious.messageManager.sendError("Unable to copy server IP");
+            notorious.messageManager.sendError("Unable to copy server IP.");
         }
         disable();
     }

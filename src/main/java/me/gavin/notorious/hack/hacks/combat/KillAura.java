@@ -39,7 +39,6 @@ public class KillAura extends Hack {
     public final BooleanSetting animals = new BooleanSetting("Animals", false);
     @RegisterSetting
     public final BooleanSetting mobs = new BooleanSetting("Mobs", false);
-
     @RegisterSetting
     public final NumSetting attackSpeed = new NumSetting("Attack Speed", 10, 2, 18, 1);
     @RegisterSetting

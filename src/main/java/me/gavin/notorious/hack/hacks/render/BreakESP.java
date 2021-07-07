@@ -9,11 +9,12 @@ import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import java.awt.*;
 
 @RegisterHack(name = "BreakESP", description = "ez", category = Hack.Category.Render)
 public class BreakESP extends Hack {
@@ -24,6 +25,12 @@ public class BreakESP extends Hack {
     public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 125);
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("BoxColor", 255, 255, 255, 125);
+    @RegisterSetting
+    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
+    @RegisterSetting
+    public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
+    @RegisterSetting
+    public final NumSetting time = new NumSetting("RainbowLength", 8, 1, 15, 1);
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 15, 1, 20, 1);
     @RegisterSetting
@@ -40,6 +47,7 @@ public class BreakESP extends Hack {
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         ((IRenderGlobal) mc.renderGlobal).getDamagedBlocks().forEach((integer, destroyBlockProgress) -> {
+            Color rainbowColor = ColorUtil.colorRainbow((int) time.getValue(), saturation.getValue(), 1f);
             if(mode.getMode().equals("Both")) {
                 outline = true;
                 fill = true;
@@ -55,9 +63,17 @@ public class BreakESP extends Hack {
                 if (fade.isEnabled())
                     pos = pos.shrink((3 - (destroyBlockProgress.getPartialBlockDamage()) / (2.0 + (2.0 / 3.0))) / 9.0);
                 if(outline)
-                    RenderUtil.renderOutlineBB(pos, outlineColor.getAsColor());
+                    if(rainbow.isEnabled()) {
+                        RenderUtil.renderOutlineBB(pos, rainbowColor);
+                    }else {
+                        RenderUtil.renderOutlineBB(pos, outlineColor.getAsColor());
+                    }
                 if(fill)
-                    RenderUtil.renderFilledBB(pos, boxColor.getAsColor());
+                    if(rainbow.isEnabled()) {
+                        RenderUtil.renderFilledBB(pos, rainbowColor);
+                    }else {
+                        RenderUtil.renderFilledBB(pos, boxColor.getAsColor());
+                    }
             }
         });
     }

@@ -25,7 +25,7 @@ public class SmartOffhand extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Strict", "Strict", "Smart");
     @RegisterSetting
-    public final ModeSetting offhandMode = new ModeSetting("OffhandMode", "Crystal",  "Crystal", "Totem", "Gapple");
+    public final ModeSetting offhandMode = new ModeSetting("OffhandMode", "Crystal",  "Crystal", "Gapple");
     @RegisterSetting
     public final NumSetting health = new NumSetting("HealthToSwitch", 14.0f, 0.5f, 36.0f, 0.5f);
 
@@ -47,17 +47,9 @@ public class SmartOffhand extends Hack {
     }
 
     @SubscribeEvent
-    public void onUpdate(PlayerLivingUpdateEvent event) {
+    public void onUpdate(TickEvent event) {
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
             doTheThing(Items.END_CRYSTAL);
-        }
-        if(offhandMode.getMode().equals("Totem") && mode.getMode().equals("Smart")) {
-            if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
-                slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-                if (slot != -1 && mc.player.getHealth() > 0.1f) {
-                    switchToShit();
-                }
-            }
         }
         if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart")) {
             doTheThing(Items.GOLDEN_APPLE);

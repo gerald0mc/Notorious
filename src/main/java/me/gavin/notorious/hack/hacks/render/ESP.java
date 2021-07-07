@@ -8,6 +8,7 @@ import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import me.gavin.notorious.util.NColor;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
@@ -23,6 +24,8 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 @RegisterHack(name = "ESP", description = "Draws a box around entities.", category = Hack.Category.Render)
 public class ESP extends Hack {
 
@@ -30,6 +33,12 @@ public class ESP extends Hack {
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
+    @RegisterSetting
+    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", false);
+    @RegisterSetting
+    public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
+    @RegisterSetting
+    public final NumSetting time = new NumSetting("RainbowLength", 8, 1, 15, 1);
     @RegisterSetting
     public final NumSetting lineWidth = new NumSetting("LineWidth", 2f, 0.1f, 4f, 0.1f);
     @RegisterSetting
@@ -77,7 +86,7 @@ public class ESP extends Hack {
         GL11.glTranslated(x, y, z);
         GL11.glRotated(-MathHelper.clampedLerp(entity.prevRotationYaw, entity.rotationYaw, mc.getRenderPartialTicks()), 0.0, 1.0, 0.0);
         GL11.glTranslated(-(x), -y, -z);
-        RenderUtil.entityESPBox(entity, boxColor.getAsColor(), outlineColor.getAsColor(), (int) lineWidth.getValue());
+        RenderUtil.entityESPBox(entity, boxColor.getAsColor(), outlineColor.getAsColor(), (int) lineWidth.getValue(), rainbow.getValue(), (int) time.getValue(), saturation.getValue());
         GlStateManager.popMatrix();
     }
 }

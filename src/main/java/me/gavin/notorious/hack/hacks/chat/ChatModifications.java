@@ -1,6 +1,8 @@
 package me.gavin.notorious.hack.hacks.chat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.Notorious;
+import me.gavin.notorious.NotoriousMod;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -20,11 +22,9 @@ import java.util.Date;
 public class ChatModifications extends Hack {
 
     @RegisterSetting
-    public final BooleanSetting chatNotifications = new BooleanSetting("ChatNotifications", true);
-    @RegisterSetting
     public final BooleanSetting chatSuffix = new BooleanSetting("ChatSuffix", true);
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla");
+    public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla", "UnicodeVersion");
     @RegisterSetting
     public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
     @RegisterSetting
@@ -42,7 +42,7 @@ public class ChatModifications extends Hack {
         MinecraftForge.EVENT_BUS.unregister(this);
     }
 
-    public String suffix = " ";
+    public String suffix = "";
     public String color = "";
 
     @SubscribeEvent
@@ -51,8 +51,10 @@ public class ChatModifications extends Hack {
         if(chatSuffix.isEnabled()) {
             if(mode.getMode().equals("Vanilla")) {
                 suffix = " | Notorious";
-            }else {
+            }else if(mode.getMode().equals("Unicode")){
                 suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D1C\uA731";
+            }else {
+                suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D1C\uA731 " + NotoriousMod.VERSION;
             }
             if(event.getMessage().startsWith("!")) return;
             if(event.getMessage().startsWith(".")) return;

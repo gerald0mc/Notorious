@@ -73,7 +73,7 @@ public class HackList extends Hack {
                 }
                 double y = yOffset;
                 if(((WaterMark)Notorious.INSTANCE.hackManager.getHack(WaterMark.class)).isEnabled()) {
-                    y = yOffset + 8;
+                    y = yOffset + 9;
                 }else {
                     y = yOffset;
                 }

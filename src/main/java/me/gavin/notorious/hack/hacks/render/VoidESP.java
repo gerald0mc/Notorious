@@ -5,19 +5,19 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import me.gavin.notorious.util.RenderUtil;
-import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
+import java.awt.*;
 import java.util.ArrayList;
 
 @RegisterHack(name = "VoidESP", description = "ez", category = Hack.Category.Render)
@@ -31,6 +31,12 @@ public class VoidESP extends Hack {
     public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 125);
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("BoxColor", 255, 255, 255, 125);
+    @RegisterSetting
+    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
+    @RegisterSetting
+    public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
+    @RegisterSetting
+    public final NumSetting time = new NumSetting("RainbowLength", 8, 1, 15, 1);
 
     public final ArrayList<BlockPos> voidBlocks = new ArrayList<>();
 
@@ -76,10 +82,19 @@ public class VoidESP extends Hack {
         }
         new ArrayList<>(voidBlocks).forEach(blockPos -> {
             AxisAlignedBB bb = mc.world.getBlockState(blockPos).getSelectedBoundingBox(mc.world, blockPos);
+            Color rainbowColor = ColorUtil.colorRainbow((int) time.getValue(), saturation.getValue(), 1f);
             if(outline)
-                RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+                if(rainbow.isEnabled()) {
+                    RenderUtil.renderOutlineBB(bb, rainbowColor);
+                }else {
+                    RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+                }
             if(fill)
-                RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+                if(rainbow.isEnabled()) {
+                    RenderUtil.renderFilledBB(bb, rainbowColor);
+                }else {
+                    RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+                }
         });
     }
 

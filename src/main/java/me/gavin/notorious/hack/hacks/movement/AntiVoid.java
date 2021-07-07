@@ -25,7 +25,7 @@ public class AntiVoid extends Hack {
         if(mode.getMode().equals("TP")) {
             if(yLevel <= .5) {
                 mc.player.jump();
-                notorious.messageManager.sendMessage("Attempting to jump out of void hole.");
+                notorious.messageManager.sendMessage("Attempting to TP out of void hole.");
             }
         }else {
             if(yLevel <= .9) {

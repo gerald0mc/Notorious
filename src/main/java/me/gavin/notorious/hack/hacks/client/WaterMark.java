@@ -27,7 +27,7 @@ public class WaterMark extends Hack {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Text event) {
         double x = 0;
-        int yOffset = 2;
+        int yOffset = 1;
         double y = yOffset;
         final String watermark = NotoriousMod.NAME_VERSION;
         Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
@@ -44,13 +44,6 @@ public class WaterMark extends Hack {
             intRainbow = ColorUtil.getRainbow(time, saturation);
         }else {
             intRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
-        }
-        if(font.isEnabled()) {
-            Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
-            Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), intRainbow);
-        }else {
-            Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + 1), (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), 0x90000000);
-            Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), intRainbow);
         }
         if(font.isEnabled()) {
             notorious.fontRenderer.drawStringWithShadow(watermark, x + 2, y, colorRainbow);

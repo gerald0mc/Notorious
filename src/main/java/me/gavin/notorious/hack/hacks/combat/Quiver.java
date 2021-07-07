@@ -30,20 +30,26 @@ public class Quiver extends Hack{
         return " [" + ChatFormatting.GRAY + tickDelay.getValue() + ChatFormatting.RESET + "]";
     }
 
+    @Override
+    public void onEnable() {
+        notorious.messageManager.sendMessage("When you try to use the bow let go quickly.");
+    }
+
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
-        slot = InventoryUtil.getItemSlot(Items.TIPPED_ARROW);
         if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBow && mc.player.getItemInUseMaxCount() >= 3) {
             if(autoEffect.isEnabled()) {
-                switchToShit();
+                switchToArrow();
             }
             mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.cameraYaw, -90f, true));
             mc.player.connection.sendPacket(new CPacketPlayerTryUseItem());
             toggle();
+            mc.player.stopActiveHand();
         }
     }
 
-    public void switchToShit() {
+    public void switchToArrow() {
+        slot = InventoryUtil.getItemSlot(Items.TIPPED_ARROW);
         mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
         mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 9, 0, ClickType.PICKUP, mc.player);
         mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
