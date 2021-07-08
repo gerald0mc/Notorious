@@ -101,8 +101,6 @@ public class VoidESP extends Hack {
     public boolean is_void_hole(BlockPos blockPos) {
         if (blockPos.getY() != 0)
             return false;
-        if (mc.world.getBlockState(blockPos).getBlock() != Blocks.AIR)
-            return false;
-        return true;
+        return mc.world.getBlockState(blockPos).getBlock() == Blocks.AIR;
     }
 }

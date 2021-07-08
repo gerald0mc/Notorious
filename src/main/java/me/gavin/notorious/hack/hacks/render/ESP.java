@@ -34,12 +34,6 @@ public class ESP extends Hack {
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
     @RegisterSetting
-    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", false);
-    @RegisterSetting
-    public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
-    @RegisterSetting
-    public final NumSetting time = new NumSetting("RainbowLength", 8, 1, 15, 1);
-    @RegisterSetting
     public final NumSetting lineWidth = new NumSetting("LineWidth", 2f, 0.1f, 4f, 0.1f);
     @RegisterSetting
     public final BooleanSetting players = new BooleanSetting("Players", true);
@@ -86,7 +80,7 @@ public class ESP extends Hack {
         GL11.glTranslated(x, y, z);
         GL11.glRotated(-MathHelper.clampedLerp(entity.prevRotationYaw, entity.rotationYaw, mc.getRenderPartialTicks()), 0.0, 1.0, 0.0);
         GL11.glTranslated(-(x), -y, -z);
-        RenderUtil.entityESPBox(entity, boxColor.getAsColor(), outlineColor.getAsColor(), (int) lineWidth.getValue(), rainbow.getValue(), (int) time.getValue(), saturation.getValue());
+        RenderUtil.entityESPBox(entity, boxColor.getAsColor(), outlineColor.getAsColor(), (int) lineWidth.getValue());
         GlStateManager.popMatrix();
     }
 }

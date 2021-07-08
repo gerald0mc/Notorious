@@ -5,9 +5,11 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.BlockUtil;
+import me.gavin.notorious.util.InventoryUtil;
 import me.gavin.notorious.util.NColor;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
@@ -38,22 +40,22 @@ public class ShulkerJew extends Hack {
 
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
-        if (targetedBlock == null) {
-            for (BlockPos pos : BlockUtil.getSurroundingBlocks(5, true)) {
+        if(targetedBlock == null) {
+            for(BlockPos pos : BlockUtil.getSurroundingBlocks(5, true)) {
                 final Block block = mc.world.getBlockState(pos).getBlock();
 
-                if (block instanceof BlockShulkerBox && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_PICKAXE) {
+                if(block instanceof BlockShulkerBox && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_PICKAXE) {
                     targetedBlock = pos;
                     break;
                 }
             }
-        } else {
-            if (mc.world.getBlockState(targetedBlock).getBlock() == Blocks.AIR) {
+        }else {
+            if(mc.world.getBlockState(targetedBlock).getBlock() == Blocks.AIR) {
                 targetedBlock = null;
                 return;
             }
 
-            if (targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > range.getValue()) {
+            if(targetedBlock.getDistance(mc.player.getPosition().getX(), mc.player.getPosition().getY(), mc.player.getPosition().getZ()) > range.getValue()) {
                 targetedBlock = null;
                 return;
             }
@@ -64,7 +66,7 @@ public class ShulkerJew extends Hack {
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
-        if (targetedBlock != null) {
+        if(targetedBlock != null) {
             final AxisAlignedBB bb = new AxisAlignedBB(targetedBlock);
             RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
             RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());

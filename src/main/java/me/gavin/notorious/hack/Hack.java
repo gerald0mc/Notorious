@@ -1,10 +1,8 @@
 package me.gavin.notorious.hack;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.Bindable;
 import me.gavin.notorious.gui.api.Toggleable;
-import me.gavin.notorious.hack.hacks.chat.ChatModifications;
 import me.gavin.notorious.setting.Setting;
 import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraftforge.common.MinecraftForge;

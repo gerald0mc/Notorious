@@ -37,6 +37,14 @@ public class StorageESP extends Hack {
     public final ColorSetting boxColor = new ColorSetting("Box", new Color(255, 255, 255, 125));
     @RegisterSetting
     public final NumSetting lineWidth = new NumSetting("LineWidth", 2f, 0.1f, 4f, 0.1f);
+    @RegisterSetting
+    public final BooleanSetting chest = new BooleanSetting("Chest", true);
+    @RegisterSetting
+    public final BooleanSetting enderChest = new BooleanSetting("EnderChest", true);
+    @RegisterSetting
+    public final BooleanSetting hopper = new BooleanSetting("Hopper", true);
+    @RegisterSetting
+    public final BooleanSetting shulkerBox = new BooleanSetting("ShulkerBox", true);
 
     private boolean outline = false;
     private boolean fill = false;
@@ -69,7 +77,7 @@ public class StorageESP extends Hack {
                 fill = true;
                 outline = false;
             }
-            if(e instanceof TileEntityChest) {
+            if(e instanceof TileEntityChest && chest.isEnabled()) {
                 if(colorMode.getMode().equals("Custom")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
@@ -85,7 +93,7 @@ public class StorageESP extends Hack {
                         RenderUtil.renderFilledBB(bb, chestBoxStatic);
                 }
             }
-            if(e instanceof TileEntityEnderChest) {
+            if(e instanceof TileEntityEnderChest && enderChest.isEnabled()) {
                 if(colorMode.getMode().equals("Custom")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
@@ -102,7 +110,7 @@ public class StorageESP extends Hack {
                         RenderUtil.renderFilledBB(bb, enderChestBoxStatic);
                 }
             }
-            if(e instanceof TileEntityHopper) {
+            if(e instanceof TileEntityHopper && hopper.isEnabled()) {
                 if(colorMode.getMode().equals("Custom")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
@@ -118,7 +126,7 @@ public class StorageESP extends Hack {
                         RenderUtil.renderFilledBB(bb, hopperBoxStatic);
                 }
             }
-            if(e instanceof TileEntityShulkerBox) {
+            if(e instanceof TileEntityShulkerBox && shulkerBox.isEnabled()) {
                 if(colorMode.getMode().equals("Custom")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)

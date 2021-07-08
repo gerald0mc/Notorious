@@ -27,10 +27,15 @@ public class WaterMark extends Hack {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Text event) {
         double x = 0;
-        int yOffset = 1;
+        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
+        int yOffset;
+        if(font.isEnabled()) {
+            yOffset = 2;
+        }else {
+            yOffset = 1;
+        }
         double y = yOffset;
         final String watermark = NotoriousMod.NAME_VERSION;
-        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         Color colorRainbow;
         int intRainbow;
         float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();

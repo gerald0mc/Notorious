@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class AntiVoid extends Hack {
 
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("Mode", "TP", "TP", "Strict");
+    public final ModeSetting mode = new ModeSetting("Mode", "TP", "TP", "Jump");
 
     @Override
     public String getMetaData() {
@@ -24,7 +24,7 @@ public class AntiVoid extends Hack {
         Double yLevel = mc.player.posY;
         if(mode.getMode().equals("TP")) {
             if(yLevel <= .5) {
-                mc.player.jump();
+                mc.player.setPosition(mc.player.posX, mc.player.posY + 2, mc.player.posZ);
                 notorious.messageManager.sendMessage("Attempting to TP out of void hole.");
             }
         }else {

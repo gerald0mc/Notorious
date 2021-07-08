@@ -34,49 +34,44 @@ public class SmartOffhand extends Hack {
     @Override
     public String getMetaData() {
         String heldItem = "";
-        if(mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL) {
+        if(mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL)
             heldItem = "EndCrystal";
-        }
-        if(mc.player.getHeldItemOffhand().getItem() == Items.GOLDEN_APPLE) {
+        if(mc.player.getHeldItemOffhand().getItem() == Items.GOLDEN_APPLE)
             heldItem = "Gapple";
-        }
-        if(mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) {
+        if(mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING)
             heldItem = "Totem";
-        }
         return " [" + ChatFormatting.GRAY + "Mode: " + mode.getMode() + ChatFormatting.RESET + " | " + ChatFormatting.GRAY + "Holding: " + heldItem + ChatFormatting.RESET + "]";
     }
 
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
-        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
+        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart"))
             doTheThing(Items.END_CRYSTAL);
-        }
-        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart")) {
+        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart"))
             doTheThing(Items.GOLDEN_APPLE);
-        }
         if(mode.getMode().equals("Strict")) {
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
             if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
                 slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-                if(slot != -1) {
+                if(slot != -1)
                     switchToShit();
-                }
             }
         }
+        slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
+        if(mc.player.inventory.currentItem != slot && mc.player.getHealth() > mc.player.getHealth())
+            switchToShit();
     }
 
     public void doTheThing(Item item) {
         if(mc.player.getHeldItemOffhand().getItem() != item) {
             slot = InventoryUtil.getItemSlot(item);
-            if (slot != -1 && mc.player.getHealth() > health.getValue()) {
+            if (slot != -1 && mc.player.getHealth() >= health.getValue())
                 switchToShit();
-            }
         }
         if(mc.player.getHeldItemOffhand().getItem() == item) {
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-            if(slot != -1 && mc.player.getHealth() < health.getValue()) {
+            if(slot != -1 && mc.player.getHealth() <= health.getValue())
                 switchToShit();
-            }
         }
     }
 

@@ -6,6 +6,7 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
+import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.ColorUtil;
 import me.gavin.notorious.util.NColor;
@@ -23,7 +24,11 @@ public class BlockHighlight extends Hack {
 
 
     @RegisterSetting
+    public final ModeSetting mode = new ModeSetting("Mode", "Both", "Both", "Outline", "Box");
+    @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255));
+    @RegisterSetting
+    public final ColorSetting boxColor = new ColorSetting("BoxColor", 255, 255, 255, 125);
     @RegisterSetting
     public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
     @RegisterSetting
@@ -32,6 +37,9 @@ public class BlockHighlight extends Hack {
     public final NumSetting time = new NumSetting("RainbowLength", 8, 1, 15, 1);
     @RegisterSetting
     public final NumSetting lineWidth = new NumSetting("Line Width", 2, 0.1f, 10, 0.1f);
+
+    boolean outline = false;
+    boolean fill = false;
 
     @Override
     public String getMetaData() {
@@ -42,14 +50,30 @@ public class BlockHighlight extends Hack {
     public void onRender(RenderWorldLastEvent event) {
         RayTraceResult result = mc.objectMouseOver;
         Color rainbowColor = ColorUtil.colorRainbow((int) time.getValue(), saturation.getValue(), 1f);
+        if(mode.getMode().equals("Both")) {
+            outline = true;
+            fill = true;
+        }else if(mode.getMode().equals("Outline")) {
+            outline = true;
+            fill = false;
+        }else {
+            fill = true;
+            outline = false;
+        }
         if(result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
             AxisAlignedBB box = mc.world.getBlockState(result.getBlockPos()).getSelectedBoundingBox(mc.world, result.getBlockPos());
             if(result.typeOfHit == RayTraceResult.Type.BLOCK && mc.world.getBlockState(result.getBlockPos()).getBlock() != Blocks.AIR) {
                 GL11.glLineWidth(lineWidth.getValue());
                 if(rainbow.isEnabled()) {
-                    RenderUtil.renderOutlineBB(box, rainbowColor);
+                    if(outline)
+                        RenderUtil.renderOutlineBB(box, rainbowColor);
+                    if(fill)
+                        RenderUtil.renderFilledBB(box, rainbowColor);
                 }else {
-                    RenderUtil.renderOutlineBB(box, outlineColor.getAsColor());
+                    if(outline)
+                        RenderUtil.renderOutlineBB(box, outlineColor.getAsColor());
+                    if(fill)
+                        RenderUtil.renderFilledBB(box, boxColor.getAsColor());
                 }
             }
         }
