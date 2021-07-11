@@ -8,6 +8,7 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -15,6 +16,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -82,13 +84,6 @@ public class ChatModifications extends Hack {
             String time = new SimpleDateFormat("k:mm").format(new Date());
             TextComponentString text = new TextComponentString(ChatFormatting.GRAY + "<" + time + ">" + " " + ChatFormatting.RESET);
             event.setMessage(text.appendSibling(event.getMessage()));
-        }
-    }
-
-    @SubscribeEvent
-    public void onUpdate(TickEvent.ClientTickEvent event) {
-        for(Hack h : notorious.hackManager.getHacks()) {
-
         }
     }
 }

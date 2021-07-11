@@ -6,7 +6,6 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
-import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,10 +33,9 @@ public class StrengthDetect extends Hack {
             if(e instanceof EntityPlayer) {
                 if(e.equals(mc.player))
                     continue;
-                if(((EntityPlayer) e).isPotionActive(MobEffects.STRENGTH) && !str.contains(e)) {
+                if(((EntityPlayer) e).isPotionActive(MobEffects.STRENGTH) && !str.contains(e))
                     notorious.messageManager.sendMessage("The player " + ChatFormatting.RED + ((EntityPlayer) e).getDisplayNameString() + ChatFormatting.RESET + " now has " + ChatFormatting.RED + "STRENGTH" + ChatFormatting.RESET + "!");
                     this.str.add((EntityPlayer) e);
-                }
                 if(!str.contains(e))
                     continue;
                 if(((EntityPlayer) e).isPotionActive(MobEffects.STRENGTH))

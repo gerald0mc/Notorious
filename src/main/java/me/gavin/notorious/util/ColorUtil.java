@@ -10,7 +10,7 @@ public class ColorUtil {
     }
 
     public static int getRGBWave(float seconds, float saturation, long index) {
-        float hue = (float)((System.currentTimeMillis() + index) % (long)((int)(seconds * 1000.0F))) / (seconds * 1000.0F);
+        float hue = (float) ((System.currentTimeMillis() + index) % (long) ((int) (seconds * 1000.0F))) / (seconds * 1000.0F);
         return Color.HSBtoRGB(hue, saturation, 1f);
     }
 

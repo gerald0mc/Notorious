@@ -28,12 +28,12 @@ public class PenisESP extends Hack {
         for (final Object o : mc.world.loadedEntityList) {
             if (o instanceof EntityPlayer) {
                 final EntityPlayer player = (EntityPlayer)o;
-                final double n = player.lastTickPosX + (player.posX - player.lastTickPosX) * mc.getRenderPartialTicks();
-                final double x = n - mc.getRenderManager().viewerPosX;
-                final double n2 = player.lastTickPosY + (player.posY - player.lastTickPosY) * mc.getRenderPartialTicks();
-                final double y = n2 - mc.getRenderManager().viewerPosY;
-                final double n3 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * mc.getRenderPartialTicks();
-                final double z = n3 - mc.getRenderManager().viewerPosZ;
+                final double x2 = player.lastTickPosX + (player.posX - player.lastTickPosX) * mc.getRenderPartialTicks();
+                final double x = x2 - mc.getRenderManager().viewerPosX;
+                final double y2 = player.lastTickPosY + (player.posY - player.lastTickPosY) * mc.getRenderPartialTicks();
+                final double y = y2 - mc.getRenderManager().viewerPosY;
+                final double z2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * mc.getRenderPartialTicks();
+                final double z = z2 - mc.getRenderManager().viewerPosZ;
                 GL11.glPushMatrix();
                 RenderHelper.disableStandardItemLighting();
                 RenderUtil.drawPenis(player, x, y, z, pspin, pcumsize, pamount);

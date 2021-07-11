@@ -54,6 +54,19 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
         }
         Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
         Gui.drawRect(x, y, x + width, y + height, hack.isEnabled() ? intRainbow : 0xCC000000);
+        if(open) {
+            if(font.isEnabled()) {
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 5f, Color.WHITE);
+            }else {
+                mc.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 5f, new Color(255, 255, 255).getRGB());
+            }
+        }else {
+            if(font.isEnabled()) {
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("+", x + width - 8f, y + 5f, Color.WHITE);
+            }else {
+                mc.fontRenderer.drawStringWithShadow("+", x + width - 8f, y + 5f, new Color(255, 255, 255).getRGB());
+            }
+        }
         if(font.isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, Color.WHITE);
         }else {

@@ -52,6 +52,26 @@ public class BlockUtil implements IMinecraft {
         return posList;
     }
 
+    public static ArrayList<BlockPos> getSurroundingBlocksOtherPlayers(int radius, boolean motion) {
+        for(Entity e : mc.world.loadedEntityList) {
+            final ArrayList<BlockPos> posList = new ArrayList<>();
+            BlockPos playerPos = e.getPosition().add(0, 1, 0);
+            if (motion)
+                playerPos.add(e.motionX, e.motionY, e.motionZ);
+
+            for (int x = -radius; x < radius; x++) {
+                for (int y = -radius; y < radius; y++) {
+                    for (int z = -radius; z < radius; z++) {
+                        posList.add(new BlockPos(x, y, z).add(playerPos));
+                    }
+                }
+            }
+
+            return posList;
+        }
+        return null;
+    }
+
     public static void damageBlock(BlockPos position, boolean packet, boolean rotations) {
         damageBlock(position, EnumFacing.getDirectionFromEntityLiving(position, mc.player), packet, rotations);
     }

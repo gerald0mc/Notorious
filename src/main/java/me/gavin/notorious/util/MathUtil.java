@@ -13,9 +13,9 @@ public class MathUtil implements IMinecraft {
     }
 
     public static float[] calculateLookAt(double x, double y, double z, EntityPlayer me) {
-        double dirx = lerp(mc.getRenderPartialTicks(),me.lastTickPosX, me.posX) - x;
-        double diry = lerp(mc.getRenderPartialTicks(),me.lastTickPosY, me.posY) + me.getEyeHeight() - y;
-        double dirz = lerp(mc.getRenderPartialTicks(),me.lastTickPosZ, me.posZ) - z;
+        double dirx = lerp(mc.getRenderPartialTicks(), me.lastTickPosX, me.posX) - x;
+        double diry = lerp(mc.getRenderPartialTicks(), me.lastTickPosY, me.posY) + me.getEyeHeight() - y;
+        double dirz = lerp(mc.getRenderPartialTicks(), me.lastTickPosZ, me.posZ) - z;
 
         double distance = Math.sqrt(dirx * dirx + diry * diry + dirz * dirz);
 
@@ -31,7 +31,7 @@ public class MathUtil implements IMinecraft {
 
         yaw += 90.0f;
 
-        return new float[] {yaw, pitch};
+        return new float[]{yaw, pitch};
     }
 
     private static float[] getLegitRotations(Vec3d vec) {
@@ -40,9 +40,9 @@ public class MathUtil implements IMinecraft {
         double diffY = vec.y - eyesPos.y;
         double diffZ = vec.z - eyesPos.z;
         double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-        float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90.0F;
-        float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
-        return new float[] { mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw), mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - mc.player.rotationPitch) };
+        float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90.0F;
+        float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
+        return new float[]{mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw), mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - mc.player.rotationPitch)};
     }
 
     private static Vec3d getEyesPos() {
@@ -67,6 +67,10 @@ public class MathUtil implements IMinecraft {
 
     public static double square(double input) {
         return input * input;
+    }
+
+    public static int clamp(int num, int min, int max) {
+        return (num < min) ? min : Math.min(num, max);
     }
 
 }
