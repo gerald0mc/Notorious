@@ -1,4 +1,4 @@
-package me.gavin.notorious.gui.setting;
+package me.gavin.notorious.util;
 
 public class TrannyCockLickerUtil {
     public static void ejaculateOnChest() {

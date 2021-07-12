@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
@@ -50,6 +51,47 @@ public class BlockUtil implements IMinecraft {
         }
 
         return posList;
+    }
+
+    public static BlockPos isCityable(final EntityPlayer player, final boolean end_crystal) {
+
+        BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
+
+        if (mc.world.getBlockState(pos.north()).getBlock() == Blocks.OBSIDIAN) {
+            if (end_crystal) {
+                return pos.north();
+            }
+            else if (mc.world.getBlockState(pos.north().north()).getBlock() == Blocks.AIR) {
+                return pos.north();
+            }
+        }
+        if (mc.world.getBlockState(pos.east()).getBlock() == Blocks.OBSIDIAN) {
+            if (end_crystal) {
+                return pos.east();
+            }
+            else if (mc.world.getBlockState(pos.east().east()).getBlock() == Blocks.AIR) {
+                return pos.east();
+            }
+        }
+        if (mc.world.getBlockState(pos.south()).getBlock() == Blocks.OBSIDIAN) {
+            if (end_crystal) {
+                return pos.south();
+            }
+            else if (mc.world.getBlockState(pos.south().south()).getBlock() == Blocks.AIR) {
+                return pos.south();
+            }
+
+        }
+        if (mc.world.getBlockState(pos.west()).getBlock() == Blocks.OBSIDIAN) {
+            if (end_crystal) {
+                return pos.west();
+            }
+            else if (mc.world.getBlockState(pos.west().west()).getBlock() == Blocks.AIR) {
+                return pos.west();
+            }
+        }
+
+        return null;
     }
 
     public static ArrayList<BlockPos> getSurroundingBlocksOtherPlayers(int radius, boolean motion) {

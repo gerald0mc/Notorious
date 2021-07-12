@@ -3,17 +3,11 @@ package me.gavin.notorious.gui;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.AbstractToggleContainer;
 import me.gavin.notorious.gui.api.SettingComponent;
-import me.gavin.notorious.gui.setting.BooleanComponent;
-import me.gavin.notorious.gui.setting.KeybindComponent;
-import me.gavin.notorious.gui.setting.ModeComponent;
-import me.gavin.notorious.gui.setting.SliderComponent;
+import me.gavin.notorious.gui.setting.*;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.hack.hacks.client.Font;
-import me.gavin.notorious.setting.BooleanSetting;
-import me.gavin.notorious.setting.ModeSetting;
-import me.gavin.notorious.setting.NumSetting;
-import me.gavin.notorious.setting.Setting;
+import me.gavin.notorious.setting.*;
 import me.gavin.notorious.stuff.IMinecraft;
 import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.gui.Gui;
@@ -30,10 +24,12 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
         for (Setting setting : hack.getSettings()) {
             if (setting instanceof BooleanSetting) {
                 components.add(new BooleanComponent((BooleanSetting) setting, x, y, width, height));
-            } else if (setting instanceof ModeSetting) {
+            }else if (setting instanceof ModeSetting) {
                 components.add(new ModeComponent((ModeSetting) setting, x, y, width, height));
-            } else if (setting instanceof NumSetting) {
+            }else if (setting instanceof NumSetting) {
                 components.add(new SliderComponent((NumSetting) setting, x, y, width, height));
+            }else if (setting instanceof ColorSetting) {
+                components.add(new ColorComponent((ColorSetting) setting, x, y, width, height));
             }
         }
 
@@ -85,7 +81,13 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         if (isMouseInside(mouseX, mouseY)) {
+            if(font.isEnabled()) {
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getDescription(), mouseX + 2f, mouseY + 2f, Color.WHITE);
+            }else {
+                mc.fontRenderer.drawStringWithShadow(hack.getDescription(), mouseX + 2f, mouseY + 2f, new Color(255, 255, 255).getRGB());
+            }
             if (mouseButton == 0) {
                 hack.toggle();
             }else if (mouseButton == 1) {
