@@ -21,6 +21,9 @@ public class EventProcessor {
     @SubscribeEvent
     public void onKey(InputEvent.KeyInputEvent event) {
         if (Keyboard.getEventKeyState()) {
+            if (Keyboard.getEventKey() == 0)
+                return;
+
             for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
                 if (hack.getBind() == Keyboard.getEventKey()) {
                     hack.toggle();

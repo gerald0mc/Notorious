@@ -93,22 +93,28 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
             }
         }
 
-        for (SettingComponent component : components) {
-            component.mouseClicked(mouseX, mouseY, mouseButton);
+        if (open) {
+            for (SettingComponent component : components) {
+                component.mouseClicked(mouseX, mouseY, mouseButton);
+            }
         }
     }
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        for (SettingComponent component : components) {
-            component.mouseReleased(mouseX, mouseY, mouseButton);
+        if (open) {
+            for (SettingComponent component : components) {
+                component.mouseReleased(mouseX, mouseY, mouseButton);
+            }
         }
     }
 
     @Override
     public void keyTyped(char keyChar, int keyCode) {
-        for (SettingComponent component : components) {
-            component.keyTyped(keyChar, keyCode);
+        if (open) {
+            for (SettingComponent component : components) {
+                component.keyTyped(keyChar, keyCode);
+            }
         }
     }
 
