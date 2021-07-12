@@ -60,13 +60,11 @@ public class AnvilBurrow extends Hack {
     }
 
     public void placeAnvil(BlockPos pos) {
-        if (this.rotate.isEnabled()) {
-            this.rotateToPos(pos);
-        }
+        rotateToPos(pos);
         if (this.switchToAnvil.isEnabled() && !isHoldingAnvil()) {
             this.switchToAnvil();
         }
-        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, false, packet.isEnabled(), mc.player.isSneaking());
+        BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), packet.isEnabled(), mc.player.isSneaking());
     }
 
     private boolean isHoldingAnvil() {

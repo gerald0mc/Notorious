@@ -22,8 +22,9 @@ public class Step extends Hack {
 
     @Override
     public String getMetaData() {
-        return " [" + ChatFormatting.GRAY + stepType.getMode() + ChatFormatting.RESET + "]";
+        return " [" + ChatFormatting.GRAY + stepType.getMode() + ChatFormatting.RESET + " | " + ChatFormatting.GRAY + stepHeight.getValue() + ChatFormatting.RESET + "]";
     }
+
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
         if(stepType.getMode().equals("NCP")) {

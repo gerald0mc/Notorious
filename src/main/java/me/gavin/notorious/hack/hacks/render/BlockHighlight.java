@@ -26,7 +26,7 @@ public class BlockHighlight extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Both", "Both", "Outline", "Box");
     @RegisterSetting
-    public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255));
+    public final ColorSetting outlineColor = new ColorSetting("OutlineColor", new NColor(255, 255, 255));
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("BoxColor", 255, 255, 255, 125);
     @RegisterSetting

@@ -14,9 +14,10 @@ import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import java.awt.*;
 
-@RegisterHack(name = "BreakESP", description = "cum", category = Hack.Category.Render)
+@RegisterHack(name = "BreakESP", description = "shows break progress", category = Hack.Category.Player)
 public class BreakESP extends Hack {
 
     @RegisterSetting

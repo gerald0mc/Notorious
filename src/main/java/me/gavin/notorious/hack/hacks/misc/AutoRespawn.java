@@ -25,7 +25,7 @@ public class AutoRespawn extends Hack {
         return " [" + ChatFormatting.GRAY + deathCoords + ChatFormatting.RESET + "]";
     }
 
-    String deathCoords = "Haven't died yet";
+    String deathCoords = "X:0 Y:0 Z:0";
 
     @SubscribeEvent
     public void onDeath(GuiOpenEvent event) {
