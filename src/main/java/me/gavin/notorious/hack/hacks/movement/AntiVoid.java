@@ -23,7 +23,7 @@ public class AntiVoid extends Hack {
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
-        Double yLevel = mc.player.posY;
+        double yLevel = mc.player.posY;
         if(mode.getMode().equals("TP")) {
             if(yLevel <= .5) {
                 mc.player.setPosition(mc.player.posX, mc.player.posY + 2, mc.player.posZ);
