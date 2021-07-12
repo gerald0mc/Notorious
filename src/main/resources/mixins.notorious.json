@@ -9,6 +9,7 @@
     "EntityRendererMixin",
     "ModelPlayerMixin",
     "NetworkManagerMixin",
+    "WorldMixin",
     "accessor.IEntityPlayerSPMixin",
     "accessor.IMinecraftMixin",
     "accessor.IRenderGlobal"

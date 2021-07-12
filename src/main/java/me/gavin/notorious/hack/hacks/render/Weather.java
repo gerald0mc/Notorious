@@ -12,11 +12,5 @@ public class Weather extends Hack {
 
     @RegisterSetting
     public final NumSetting rainStrength = new NumSetting("RainStrength", 0f, 0f, 3f, 1f);
-
-    @SubscribeEvent
-    public void onUpdate(TickEvent event) {
-        if(mc.world.isRaining())
-            mc.world.setRainStrength(rainStrength.getValue());
-    }
 }
 

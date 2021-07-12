@@ -3,10 +3,16 @@ package me.gavin.notorious.manager;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.hack.hacks.client.ClickGUI;
+import me.gavin.notorious.hack.hacks.chat.*;
+import me.gavin.notorious.hack.hacks.client.*;
+import me.gavin.notorious.hack.hacks.combat.*;
+import me.gavin.notorious.hack.hacks.misc.*;
+import me.gavin.notorious.hack.hacks.movement.*;
+import me.gavin.notorious.hack.hacks.player.*;
+import me.gavin.notorious.hack.hacks.render.*;
+import me.gavin.notorious.hack.hacks.world.*;
 import me.gavin.notorious.setting.Setting;
 import org.lwjgl.input.Keyboard;
-import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,11 +31,61 @@ public class HackManager {
         hacks = new ArrayList<>();
         sortedHacks = new ArrayList<>();
 
-        try {
-            loadHacks();
-        } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
+        // chat
+        addHack(new AutoSuicide());
+        addHack(new ChatModifications());
+        addHack(new PotionAlert());
+        addHack(new VisualRange());
+
+        // client
+        addHack(new ClickGUI());
+        addHack(new Font());
+        addHack(new HackList());
+        addHack(new WaterMark());
+
+        // combat
+        addHack(new AnvilBurrow());
+        addHack(new AutoCrystal());
+        addHack(new KillAura());
+        addHack(new Quiver());
+        addHack(new SmartOffhand());
+
+        // misc
+        addHack(new AutoLog());
+        addHack(new AutoRespawn());
+        addHack(new CopyIP());
+        addHack(new FakePlayer());
+        addHack(new GhastNotifier());
+        addHack(new WeaknessLog());
+
+        // movement
+        addHack(new AntiVoid());
+        addHack(new Sprint());
+        addHack(new Step());
+        addHack(new Strafe());
+        addHack(new Velocity());
+
+        // player
+        addHack(new ChestStealer());
+        addHack(new FastPlace());
+
+        // render
+        addHack(new AntiFog());
+        addHack(new BlockHighlight());
+        addHack(new BreakESP());
+        addHack(new ESP());
+        addHack(new Fullbright());
+        addHack(new HellenKeller());
+        addHack(new PenisESP());
+        addHack(new StorageESP());
+        addHack(new ViewModel());
+        addHack(new VoidESP());
+        addHack(new Weather());
+
+        // world
+        addHack(new BedFucker());
+        addHack(new Lawnmower());
+        addHack(new ShulkerJew());
 
         hacks.sort(this::sortABC);
         sortedHacks.addAll(hacks);
@@ -61,28 +117,27 @@ public class HackManager {
         return tempList;
     }
 
-    private void loadHacks() throws IllegalAccessException, InstantiationException {
-        final Reflections reflections = new Reflections("me.gavin.notorious.hack.hacks");
+    private void addHack(Hack hack) {
+        if (!hack.getClass().isAnnotationPresent(RegisterHack.class))
+            return;
 
-        for (Class<? extends Hack> clazz : reflections.getSubTypesOf(Hack.class)) {
-            if (clazz.isAnnotationPresent(RegisterHack.class)) {
-                final RegisterHack registerAnnotation = clazz.getAnnotation(RegisterHack.class);
+        final RegisterHack annotation = hack.getClass().getAnnotation(RegisterHack.class);
+        hack.setName(annotation.name());
+        hack.setDescription(annotation.description());
+        hack.setCategory(annotation.category());
+        hack.setBind(hack.getClass() == ClickGUI.class ? Keyboard.KEY_U : Keyboard.KEY_NONE);
+        for (Field field : hack.getClass().getDeclaredFields()) {
+            if (!field.isAccessible())
+                field.setAccessible(true);
 
-                final Hack hack = clazz.newInstance();
-                hack.setName(registerAnnotation.name());
-                hack.setDescription(registerAnnotation.description());
-                hack.setCategory(registerAnnotation.category());
-                hack.setBind(hack.getClass() == ClickGUI.class ? Keyboard.KEY_U : Keyboard.KEY_NONE);
-
-                for (Field field : clazz.getDeclaredFields()) {
-                    if (Setting.class.isAssignableFrom(field.getType()) && field.isAnnotationPresent(RegisterSetting.class)) {
-                        hack.getSettings().add((Setting) field.get(hack));
-                    }
-                }
-
-                hacks.add(hack);
+            if (Setting.class.isAssignableFrom(field.getType()) && field.isAnnotationPresent(RegisterSetting.class)) {
+                try {
+                    hack.getSettings().add((Setting) field.get(hack));
+                } catch (Exception e) { e.printStackTrace(); }
             }
         }
+
+        hacks.add(hack);
     }
 
     private int sortABC(Hack hack1, Hack hack2) {

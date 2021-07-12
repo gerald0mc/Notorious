@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
 import java.util.ArrayList;
 
-@RegisterHack(name = "VoidESP", description = "shows void holes", category = Hack.Category.Player)
+@RegisterHack(name = "VoidESP", description = "shows void holes", category = Hack.Category.Render)
 public class VoidESP extends Hack {
 
     @RegisterSetting

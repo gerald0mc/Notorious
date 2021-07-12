@@ -31,7 +31,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -45,21 +44,27 @@ public class AutoCrystal extends Hack {
 
     @RegisterSetting
     private NumSetting attackDistance = new NumSetting("AttackRange", 4f, 1f, 6f, 1f);
+
     @RegisterSetting
     private NumSetting placeDistance = new NumSetting("PlaceRange", 4f, 1f, 6f, 1f);
+
     @RegisterSetting
     private NumSetting minDmg = new NumSetting("MinDmg", 4f, 0.1f, 10.0f, 1f);
+
     @RegisterSetting
     private NumSetting maxSelfDmg = new NumSetting("MaxSelfDmg", 15f, 1f, 30f, 1f);
+
     @RegisterSetting
     private NumSetting breakDelay = new NumSetting("BreakDelay", 2f, 0f, 20f, 1f);
+
     @RegisterSetting
     private NumSetting placeDelay = new NumSetting("PlaceDelay", 2f, 0f, 20f, 1f);
+
     @RegisterSetting
     private BooleanSetting setDead = new BooleanSetting("SetDead", true);
+
     @RegisterSetting
     private BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
-
 
     private final TickTimer breakTickTimer = new TickTimer();
     private final TickTimer placeTickTimer = new TickTimer();
@@ -105,6 +110,9 @@ public class AutoCrystal extends Hack {
                 .filter(this::canAttackCrystal)
                 .findFirst().orElse(null);
 
+        if (targetCrystal == null)
+            return;
+
         if (canAttackCrystal(targetCrystal) && breakTickTimer.hasTicksPassed((long) breakDelay.getValue())) {
             mc.player.swingArm(EnumHand.MAIN_HAND);
             mc.player.connection.sendPacket(new CPacketUseEntity(targetCrystal));
@@ -126,12 +134,12 @@ public class AutoCrystal extends Hack {
 
         BlockPos crystalPosition = null;
 
-        for (Entity e : mc.world.loadedEntityList) {
-            if (e instanceof EntityPlayer && e.getDistance(mc.player) <= placeDistance.getValue()) {
+        for (EntityPlayer e : mc.world.playerEntities) {
+            if (e.getDistance(mc.player) <= placeDistance.getValue()) {
                 if (e.equals(mc.player))
                     continue;
 
-                targetPlayer = (EntityPlayer) e;
+                targetPlayer = e;
 
                 double bestDamage = Double.MIN_VALUE;
                 BlockPos bestPos = null;

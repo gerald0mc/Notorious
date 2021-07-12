@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 
-@RegisterHack(name = "BreakESP", description = "shows break progress", category = Hack.Category.Player)
+@RegisterHack(name = "BreakESP", description = "shows break progress", category = Hack.Category.Render)
 public class BreakESP extends Hack {
 
     @RegisterSetting
