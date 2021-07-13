@@ -7,8 +7,11 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.NColor;
+import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.TickTimer;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -60,6 +63,12 @@ public class AutoCrystal extends Hack {
     @RegisterSetting
     private ModeSetting logic = new ModeSetting("Logic", "PlaceBreak", "PlaceBreak", "BreakPlace");
     @RegisterSetting
+    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
+    @RegisterSetting
+    public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
+    @RegisterSetting
+    public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
+    @RegisterSetting
     private BooleanSetting setDead = new BooleanSetting("SetDead", true);
     @RegisterSetting
     private BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
@@ -76,9 +85,9 @@ public class AutoCrystal extends Hack {
 
     private EntityEnderCrystal targetCrystal;
     private BlockPos lastPlacedPos;
-
+    private boolean outline = false;
+    private boolean fill = false;
     private BlockPos targetedBlock = null;
-
     private String targetName = "";
 
     @SubscribeEvent
@@ -95,6 +104,28 @@ public class AutoCrystal extends Hack {
         }else {
             doBreakLogic();
             doPlaceLogic();
+        }
+        targetedBlock = null;
+    }
+
+    @SubscribeEvent
+    public void onUpdate(RenderWorldLastEvent event) {
+        if(renderMode.getMode().equals("Both")) {
+            outline = true;
+            fill = true;
+        }else if(renderMode.getMode().equals("Outline")) {
+            outline = true;
+            fill = false;
+        }else {
+            fill = true;
+            outline = false;
+        }
+        if(targetedBlock != null) {
+            final AxisAlignedBB bb = new AxisAlignedBB(targetedBlock);
+            if(fill)
+                RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+            if(outline)
+                RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
         }
     }
 
@@ -166,6 +197,7 @@ public class AutoCrystal extends Hack {
                         if (targetDamage > bestDamage) {
                             bestDamage = targetDamage;
                             bestPos = pos;
+                            targetedBlock = pos;
                         }
                     }
                 }
