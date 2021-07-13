@@ -1,11 +1,13 @@
 package me.gavin.notorious.hack.hacks.combat;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.TickTimer;
 import net.minecraft.block.Block;
@@ -31,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -44,27 +47,27 @@ public class AutoCrystal extends Hack {
 
     @RegisterSetting
     private NumSetting attackDistance = new NumSetting("AttackRange", 4f, 1f, 6f, 1f);
-
     @RegisterSetting
     private NumSetting placeDistance = new NumSetting("PlaceRange", 4f, 1f, 6f, 1f);
-
     @RegisterSetting
     private NumSetting minDmg = new NumSetting("MinDmg", 4f, 0.1f, 10.0f, 1f);
-
     @RegisterSetting
     private NumSetting maxSelfDmg = new NumSetting("MaxSelfDmg", 15f, 1f, 30f, 1f);
-
     @RegisterSetting
     private NumSetting breakDelay = new NumSetting("BreakDelay", 2f, 0f, 20f, 1f);
-
     @RegisterSetting
     private NumSetting placeDelay = new NumSetting("PlaceDelay", 2f, 0f, 20f, 1f);
-
+    @RegisterSetting
+    private ModeSetting logic = new ModeSetting("Logic", "PlaceBreak", "PlaceBreak", "BreakPlace");
     @RegisterSetting
     private BooleanSetting setDead = new BooleanSetting("SetDead", true);
-
     @RegisterSetting
     private BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + targetName + ChatFormatting.RESET + "]";
+    }
 
     private final TickTimer breakTickTimer = new TickTimer();
     private final TickTimer placeTickTimer = new TickTimer();
@@ -76,6 +79,8 @@ public class AutoCrystal extends Hack {
 
     private BlockPos targetedBlock = null;
 
+    private String targetName = "";
+
     @SubscribeEvent
     public void onTick(TickEvent event) {
         if (fastPlace.getValue()) {
@@ -84,8 +89,13 @@ public class AutoCrystal extends Hack {
             }
         }
 
-        doPlaceLogic();
-        doBreakLogic();
+        if(logic.getMode().equals("PlaceBreak")) {
+            doPlaceLogic();
+            doBreakLogic();
+        }else {
+            doBreakLogic();
+            doPlaceLogic();
+        }
     }
 
     @SubscribeEvent
@@ -140,6 +150,8 @@ public class AutoCrystal extends Hack {
                     continue;
 
                 targetPlayer = e;
+
+                targetName = e.getDisplayNameString();
 
                 double bestDamage = Double.MIN_VALUE;
                 BlockPos bestPos = null;
