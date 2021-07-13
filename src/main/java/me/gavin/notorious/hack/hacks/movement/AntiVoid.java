@@ -36,7 +36,7 @@ public class AntiVoid extends Hack {
             }
         }else {
             // skidded from zware :trol:
-            if (!mc.player.noClip && yLevel <= 0.0D) {
+            if (!mc.player.noClip && yLevel <= 0.5D) {
                 RayTraceResult trace = mc.world.rayTraceBlocks(mc.player.getPositionVector(), new Vec3d(mc.player.posX, 0.0D, mc.player.posZ), false, false, false);
                 if (trace != null && trace.typeOfHit == RayTraceResult.Type.BLOCK)
                     return;

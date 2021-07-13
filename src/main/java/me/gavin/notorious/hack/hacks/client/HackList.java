@@ -26,11 +26,13 @@ import java.awt.*;
 public class HackList extends Hack {
 
     @RegisterSetting
+    public final ModeSetting listMode = new ModeSetting("ListMode", "Pretty", "Pretty", "Basic");
+    @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB");
     @RegisterSetting
-    public final NumSetting length = new NumSetting("Length", 8f, 1f, 15f, 1f);
+    public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
     @RegisterSetting
-    public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
+    public final NumSetting saturation = new NumSetting("Saturation", 0.5f, 0.1f, 1f, 0.1f);
     @RegisterSetting
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255);
 
@@ -78,11 +80,15 @@ public class HackList extends Hack {
                     y = yOffset;
                 }
                 if(font.isEnabled()) {
-                    Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
-                    Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), color);
+                    if(listMode.getMode().equals("Pretty")) {
+                        Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + notorious.fontRenderer.getHeight() + 2), 0x90000000);
+                        Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + notorious.fontRenderer.getHeight() + 2), color);
+                    }
                 }else {
-                    Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), 0x90000000);
-                    Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), color);
+                    if(listMode.getMode().equals("Pretty")) {
+                        Gui.drawRect((int) x - 3, (int) y - 2, (int) (x + startPos + 1), (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), 0x90000000);
+                        Gui.drawRect((int) x - 4, (int) y - 2, (int) x + 1, (int) (y + mc.fontRenderer.FONT_HEIGHT + 2), color);
+                    }
                 }
                 //Gui.drawRect((int)(x + startPos), (int)y - 2, (int)(x + startPos + 2), (int)(y + notorious.fontRenderer.getHeight() + 2), color);
                 if(font.isEnabled()) {

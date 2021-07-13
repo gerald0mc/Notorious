@@ -63,10 +63,6 @@ public class ColorComponent extends SettingComponent {
                 Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName(), x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
                 Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 5f, new Color(255, 255, 255).getRGB());
             }
-            redSlider.render(mouseX, mouseY, partialTicks);
-            greenSlider.render(mouseX, mouseY, partialTicks);
-            blueSlider.render(mouseX, mouseY, partialTicks);
-            alphaSlider.render(mouseX, mouseY, partialTicks);
         }
     }
 

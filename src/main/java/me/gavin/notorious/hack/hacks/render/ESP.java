@@ -30,6 +30,8 @@ import java.awt.*;
 public class ESP extends Hack {
 
     @RegisterSetting
+    public final ModeSetting espMode = new ModeSetting("ESPMode", "RotateBox", "RotateBox", "Glow");
+    @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
@@ -60,13 +62,29 @@ public class ESP extends Hack {
             if(e == mc.player && mc.gameSettings.thirdPersonView == 0)
                 continue;
             if(e instanceof EntityPlayer && players.isEnabled()) {
-                render(e);
+                if(espMode.getMode().equals("RotateBox")) {
+                    render(e);
+                }else {
+                    e.setGlowing(true);
+                }
             } else if(e instanceof EntityAnimal && animals.isEnabled()) {
-                render(e);
+                if(espMode.getMode().equals("RotateBox")) {
+                    render(e);
+                }else {
+                    e.setGlowing(true);
+                }
             } else if((e instanceof EntityMob || e instanceof EntitySlime) && mobs.isEnabled()) {
-                render(e);
+                if(espMode.getMode().equals("RotateBox")) {
+                    render(e);
+                }else {
+                    e.setGlowing(true);
+                }
             } else if(e instanceof EntityItem && items.isEnabled()) {
-                render(e);
+                if(espMode.getMode().equals("RotateBox")) {
+                    render(e);
+                }else {
+                    e.setGlowing(true);
+                }
             }
         }
     }
