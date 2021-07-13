@@ -52,4 +52,9 @@ public class BooleanComponent extends SettingComponent {
 
     @Override
     public void keyTyped(char keyChar, int keyCode) { }
+
+    @Override
+    public int getTotalHeight() {
+        return height;
+    }
 }

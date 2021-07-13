@@ -89,7 +89,16 @@ public class SliderComponent extends SettingComponent {
         return bd.floatValue();
     }
 
-       ; ; ; ; ;
+    @Override
+    public int getTotalHeight() {
+        return height;
+    }
+
+    // what gerald0mc eats for breakfast
+    // |
+    // V
+
+       ; ; ; ;
      ;           ;
     ;         ; ; ; ; ; ; ; ; ; ; ; ; ; ;
     ;                                  ; ;

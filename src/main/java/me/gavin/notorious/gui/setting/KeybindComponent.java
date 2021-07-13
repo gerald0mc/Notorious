@@ -74,4 +74,9 @@ public class KeybindComponent extends SettingComponent {
             setting.setBind(keyCode);
         }
     }
+
+    @Override
+    public int getTotalHeight() {
+        return height;
+    }
 }

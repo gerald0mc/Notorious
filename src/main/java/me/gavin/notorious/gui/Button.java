@@ -73,7 +73,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
             for (SettingComponent component : components) {
                 component.x = this.x;
                 component.y = this.y + renderYOffset;
-                renderYOffset += component.height;
+                renderYOffset += component.getTotalHeight();
                 component.render(mouseX, mouseY, partialTicks);
             }
         }
@@ -125,7 +125,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
         if (open) {
             int h = 0;
             for (SettingComponent component : components) {
-                h += component.height;
+                h += component.getTotalHeight();
             }
             return height + h;
         } else {

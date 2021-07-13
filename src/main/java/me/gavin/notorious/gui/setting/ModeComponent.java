@@ -57,4 +57,9 @@ public class ModeComponent extends SettingComponent {
 
     @Override
     public void keyTyped(char keyChar, int keyCode) { }
+
+    @Override
+    public int getTotalHeight() {
+        return height;
+    }
 }
