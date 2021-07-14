@@ -4,6 +4,7 @@ import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.mixin.mixins.accessor.IEntityMixin;
 import me.gavin.notorious.setting.NumSetting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
@@ -26,7 +27,7 @@ public class PlayerFinder extends Hack {
 
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
-        if (mc.player.inPortal && mc.player.getRidingEntity() instanceof EntityBoat) {
+        if (((IEntityMixin)mc.player).inPortalAccessor() && mc.player.getRidingEntity() instanceof EntityBoat) {
             if (mc.player.inventory.getCurrentItem().getItem().equals(Items.MAP))
                 mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(mc.player.getPosition(), EnumFacing.UP, EnumHand.MAIN_HAND, 0, -1337.77f, 0));
             for (int i = 0; i < amountPerTick.getValue(); i++) {
