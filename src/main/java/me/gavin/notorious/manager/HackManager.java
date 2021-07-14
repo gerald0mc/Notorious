@@ -68,6 +68,7 @@ public class HackManager {
         // player
         addHack(new ChestStealer());
         addHack(new FastPlace());
+        addHack(new MiddleClickXP());
 
         // render
         addHack(new AntiFog());
