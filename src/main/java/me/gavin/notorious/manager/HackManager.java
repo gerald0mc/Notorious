@@ -39,6 +39,7 @@ public class HackManager {
 
         // client
         addHack(new ClickGUI());
+        addHack(new DiscordRPC());
         addHack(new Font());
         addHack(new HackList());
         addHack(new WaterMark());

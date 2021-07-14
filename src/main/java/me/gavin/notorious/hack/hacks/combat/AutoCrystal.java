@@ -7,8 +7,12 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.InventoryUtil;
+import me.gavin.notorious.util.NColor;
+import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.TickTimer;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -20,6 +24,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemEndCrystal;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSoundEffect;
@@ -60,6 +66,14 @@ public class AutoCrystal extends Hack {
     @RegisterSetting
     private ModeSetting logic = new ModeSetting("Logic", "PlaceBreak", "PlaceBreak", "BreakPlace");
     @RegisterSetting
+    private ModeSetting switchMode = new ModeSetting("SwitchMode", "Silent", "Silent", "Normal", "None");
+    @RegisterSetting
+    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
+    @RegisterSetting
+    public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
+    @RegisterSetting
+    public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
+    @RegisterSetting
     private BooleanSetting setDead = new BooleanSetting("SetDead", true);
     @RegisterSetting
     private BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
@@ -76,17 +90,44 @@ public class AutoCrystal extends Hack {
 
     private EntityEnderCrystal targetCrystal;
     private BlockPos lastPlacedPos;
-
+    private boolean outline = false;
+    private boolean fill = false;
     private BlockPos targetedBlock = null;
-
     private String targetName = "";
+    private int oldSlot;
+
+    @Override
+    public void onEnable() {
+        oldSlot = mc.player.inventory.currentItem;
+    }
+
+    @Override
+    public void onDisable() {
+        if(switchMode.getMode().equals("Normal")) {
+            InventoryUtil.switchToSlot(oldSlot);
+        }
+    }
 
     @SubscribeEvent
     public void onTick(TickEvent event) {
+        int oldSlot = mc.player.inventory.currentItem;
         if (fastPlace.getValue()) {
             if (mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL) {
                 ((IMinecraftMixin)mc).setRightClickDelayTimerAccessor(0);
             }
+        }
+
+        int slot = InventoryUtil.getItemSlot(Items.END_CRYSTAL);
+        EnumHand hand = null;
+        if (switchMode.getMode().equals("Silent")) {
+            if (slot != -1) {
+                if (mc.player.isHandActive()) {
+                    hand = mc.player.getActiveHand();
+                }
+                mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
+            }
+        }else if (switchMode.getMode().equals("Normal")) {
+            InventoryUtil.switchToSlot(slot);
         }
 
         if(logic.getMode().equals("PlaceBreak")) {
@@ -95,6 +136,28 @@ public class AutoCrystal extends Hack {
         }else {
             doBreakLogic();
             doPlaceLogic();
+        }
+        targetedBlock = null;
+    }
+
+    @SubscribeEvent
+    public void onUpdate(RenderWorldLastEvent event) {
+        if(renderMode.getMode().equals("Both")) {
+            outline = true;
+            fill = true;
+        }else if(renderMode.getMode().equals("Outline")) {
+            outline = true;
+            fill = false;
+        }else {
+            fill = true;
+            outline = false;
+        }
+        if(targetedBlock != null) {
+            final AxisAlignedBB bb = new AxisAlignedBB(targetedBlock);
+            if(fill)
+                RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+            if(outline)
+                RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
         }
     }
 
@@ -166,6 +229,7 @@ public class AutoCrystal extends Hack {
                         if (targetDamage > bestDamage) {
                             bestDamage = targetDamage;
                             bestPos = pos;
+                            targetedBlock = pos;
                         }
                     }
                 }
