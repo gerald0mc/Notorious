@@ -1,7 +1,6 @@
 package me.gavin.notorious.hack.hacks.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -10,7 +9,6 @@ import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.InventoryUtil;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -19,8 +17,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
  * @since like 6/10/21
  */
 
-@RegisterHack(name = "SmartOffhand", description = "Automates offhand use.", category = Hack.Category.Combat)
-public class SmartOffhand extends Hack {
+@RegisterHack(name = "Offhand", description = "Automates offhand use.", category = Hack.Category.Combat)
+public class Offhand extends Hack {
 
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Strict", "Strict", "Smart");
@@ -45,33 +43,35 @@ public class SmartOffhand extends Hack {
 
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
-        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart"))
-            doTheThing(Items.END_CRYSTAL);
-        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart"))
-            doTheThing(Items.GOLDEN_APPLE);
-        if(mode.getMode().equals("Strict")) {
+        String itemName;
+        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
+            slot = InventoryUtil.getItemSlot(Items.END_CRYSTAL);
+        }else if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
+            slot = InventoryUtil.getItemSlot(Items.GOLDEN_APPLE);
+        }else if(mc.player.getHealth() < health.getValue() || mode.getMode().equals("Strict")){
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-            if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
-                slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
+        }
+        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart"))
+            if(mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL && mc.player.getHealth() > health.getValue()) {
+                if (slot != -1)
+                    switchToShit();
+            }else if(mc.player.getHealth() < health.getValue()) {
                 if(slot != -1)
                     switchToShit();
             }
-        }
-        slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-        if(mc.player.inventory.currentItem != slot && mc.player.getHealth() > mc.player.getHealth())
-            switchToShit();
-    }
-
-    public void doTheThing(Item item) {
-        if(mc.player.getHeldItemOffhand().getItem() != item) {
-            slot = InventoryUtil.getItemSlot(item);
-            if (slot != -1 && mc.player.getHealth() >= health.getValue())
-                switchToShit();
-        }
-        if(mc.player.getHeldItemOffhand().getItem() == item) {
-            slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-            if(slot != -1 && mc.player.getHealth() <= health.getValue())
-                switchToShit();
+        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart"))
+            if(mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL && mc.player.getHealth() > health.getValue()) {
+                if (slot != -1)
+                    switchToShit();
+            }else if(mc.player.getHealth() < health.getValue()) {
+                if(slot != -1)
+                    switchToShit();
+            }
+        if(mode.getMode().equals("Strict")) {
+            if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
+                if(slot != -1)
+                    switchToShit();
+            }
         }
     }
 

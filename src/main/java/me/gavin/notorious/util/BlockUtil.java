@@ -53,6 +53,16 @@ public class BlockUtil implements IMinecraft {
         return posList;
     }
 
+    public static boolean isBurrowed(Entity entity) {
+        BlockPos entityPos = new BlockPos(MathUtil.roundValueToCenter(entity.posX), entity.posY + .2, MathUtil.roundValueToCenter(entity.posZ));
+
+        if (mc.world.getBlockState(entityPos).getBlock() == Blocks.OBSIDIAN || mc.world.getBlockState(entityPos).getBlock() == Blocks.ENDER_CHEST) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static BlockPos isCityable(final EntityPlayer player, final boolean end_crystal) {
 
         BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);

@@ -3,11 +3,15 @@ package me.gavin.notorious.hack.hacks.player;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
+import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.manager.RotationManager;
 import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
+import me.gavin.notorious.setting.BooleanSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
@@ -17,6 +21,9 @@ import org.lwjgl.input.Mouse;
 
 @RegisterHack(name = "MiddleClickXP", description = "Throws xp when you middle click", category = Hack.Category.Player)
 public class MiddleClickXP extends Hack {
+
+    @RegisterSetting
+    public final BooleanSetting footXP = new BooleanSetting("FootXP", true);
 
     private boolean mouseHolding = false;
     private int serverSlot = -1;
@@ -47,10 +54,11 @@ public class MiddleClickXP extends Hack {
                     if (mc.player.inventory.getStackInSlot(serverSlot).getItem() != Items.EXPERIENCE_BOTTLE) {
                         serverSlot = -1;
                     } else {
-                        if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == RayTraceResult.Type.BLOCK) {
-                            ((IMinecraftMixin) mc).setRightClickDelayTimerAccessor(0);
-                            mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
+                        if(footXP.isEnabled()) {
+                            mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.rotationYaw, 90.0f, mc.player.onGround));
                         }
+                        ((IMinecraftMixin) mc).setRightClickDelayTimerAccessor(0);
+                        mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.MAIN_HAND));
                     }
                 }
             }

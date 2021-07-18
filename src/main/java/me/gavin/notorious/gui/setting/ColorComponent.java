@@ -2,8 +2,10 @@ package me.gavin.notorious.gui.setting;
 
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.SettingComponent;
+import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.hack.hacks.client.Font;
 import me.gavin.notorious.setting.ColorSetting;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -32,9 +34,17 @@ public class ColorComponent extends SettingComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-
+        int color;
+        int shit = 2;
+        float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
+        float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+            color = ColorUtil.getRGBWave(time, saturation, shit * 20L);
+        }else {
+            color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
+        }
         Gui.drawRect(x, y, x + width, y + height, setting.getAsColor().getRGB());
-
+        Gui.drawRect(x, y, x + 2, y + height, color);
         if (font.isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName(), x + 3, y + 3, Color.WHITE);
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(open ? "-" : "+", x + width - 8, y + 3, Color.WHITE);
@@ -42,7 +52,6 @@ public class ColorComponent extends SettingComponent {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName(), x + 3, y + 3, -1);
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(open ? "-" : "+", x + width - 8, y + 3, -1);
         }
-
         if (open) {
             int yOffset = y + height;
             for (SliderComponent component : sliderComponents) {

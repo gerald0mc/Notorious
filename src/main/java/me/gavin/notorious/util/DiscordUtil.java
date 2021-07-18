@@ -7,7 +7,7 @@ import me.gavin.notorious.NotoriousMod;
 
 public class DiscordUtil {
 
-    private static String discordID = "864316915505037352";
+    private static String discordID = "866094794517643265";
     private static DiscordRichPresence discordRichPresence = new DiscordRichPresence();
     private static DiscordRPC discordRPC = DiscordRPC.INSTANCE;
 
@@ -21,8 +21,10 @@ public class DiscordUtil {
 
         discordRichPresence.startTimestamp = System.currentTimeMillis() / 1000L;
         discordRichPresence.details = clientVersion;
-        discordRichPresence.largeImageKey = "logo";
+        discordRichPresence.largeImageKey = "big-pap";
         discordRichPresence.largeImageText = "discord.gg/nPBPJRcuqP";
+        discordRichPresence.smallImageKey = "jerking_off";
+        discordRichPresence.smallImageText = "I'm gonna bust a nut.";
         discordRichPresence.state = null;
         discordRPC.Discord_UpdatePresence(discordRichPresence);
     }

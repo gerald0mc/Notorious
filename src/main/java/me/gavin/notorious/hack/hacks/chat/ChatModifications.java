@@ -8,6 +8,7 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
@@ -24,13 +25,13 @@ import java.util.Date;
 public class ChatModifications extends Hack {
 
     @RegisterSetting
-    public final BooleanSetting chatSuffix = new BooleanSetting("ChatSuffix", true);
-    @RegisterSetting
     public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla", "UnicodeVersion");
     @RegisterSetting
-    public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
-    @RegisterSetting
     public final ModeSetting chatColor = new ModeSetting("ChatColor", "Green", "Green", "Red", "Cyan");
+    @RegisterSetting
+    public final BooleanSetting chatSuffix = new BooleanSetting("ChatSuffix", true);
+    @RegisterSetting
+    public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
     @RegisterSetting
     public final BooleanSetting chatTimestamps = new BooleanSetting("ChatTimestamps", true);
 

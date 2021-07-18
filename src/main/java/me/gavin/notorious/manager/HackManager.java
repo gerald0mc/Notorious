@@ -47,9 +47,10 @@ public class HackManager {
         // combat
         addHack(new AnvilBurrow());
         addHack(new AutoCrystal());
+        addHack(new Burrow());
         addHack(new KillAura());
         addHack(new Quiver());
-        addHack(new SmartOffhand());
+        addHack(new Offhand());
 
         // misc
         addHack(new AutoLog());
@@ -57,6 +58,7 @@ public class HackManager {
         addHack(new CopyIP());
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
+        addHack(new PlayerFinder());
         addHack(new WeaknessLog());
 
         // movement
@@ -75,10 +77,12 @@ public class HackManager {
         addHack(new AntiFog());
         addHack(new BlockHighlight());
         addHack(new BreakESP());
+        addHack(new EnchantGlint());
         addHack(new ESP());
         addHack(new Fullbright());
         addHack(new HellenKeller());
         addHack(new PenisESP());
+        addHack(new PopESP());
         addHack(new StorageESP());
         addHack(new ViewModel());
         addHack(new VoidESP());

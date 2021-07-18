@@ -45,6 +45,18 @@ public class MathUtil implements IMinecraft {
         return new float[]{mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw), mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - mc.player.rotationPitch)};
     }
 
+    public static double roundValueToCenter(double inputVal) {
+        double roundVal = Math.round(inputVal);
+
+        if (roundVal > inputVal) {
+            roundVal -= 0.5;
+        } else if (roundVal <= inputVal) {
+            roundVal += 0.5;
+        }
+
+        return roundVal;
+    }
+
     private static Vec3d getEyesPos() {
         return new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ);
     }
