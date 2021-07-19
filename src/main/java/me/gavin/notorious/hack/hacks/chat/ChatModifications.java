@@ -87,15 +87,4 @@ public class ChatModifications extends Hack {
             event.setMessage(text.appendSibling(event.getMessage()));
         }
     }
-
-    @SubscribeEvent
-    public void onUpdate(TickEvent event) {
-        for(Hack h : notorious.hackManager.getHacks()) {
-            if(h.lastEnabledTime < 10) {
-                notorious.messageManager.sendMessage(ChatFormatting.GREEN + h.getName() + ChatFormatting.RESET + " has been " + ChatFormatting.GREEN + "ENABLED" + ChatFormatting.RESET + "!");
-            }else if(h.lastDisabledTime < 10) {
-                notorious.messageManager.sendMessage(ChatFormatting.RED + h.getName() + ChatFormatting.RESET + " has been " + ChatFormatting.RED + "DISABLED" + ChatFormatting.RESET + "!");
-            }
-        }
-    }
 }

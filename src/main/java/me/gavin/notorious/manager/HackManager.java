@@ -77,6 +77,7 @@ public class HackManager {
         addHack(new AntiFog());
         addHack(new BlockHighlight());
         addHack(new BreakESP());
+        addHack(new BurrowESP());
         addHack(new EnchantGlint());
         addHack(new ESP());
         addHack(new Fullbright());
