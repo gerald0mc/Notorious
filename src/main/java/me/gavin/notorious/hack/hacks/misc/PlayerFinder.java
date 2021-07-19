@@ -25,6 +25,11 @@ public class PlayerFinder extends Hack {
     @RegisterSetting
     public final NumSetting amountPerTick = new NumSetting("AmountPerTick", 2, 0, 5, 1);
 
+    @Override
+    public void onEnable() {
+        notorious.messageManager.sendMessage("For this to work you need to be on a boat and ride it into a portal.");
+    }
+
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
         if (((IEntityMixin)mc.player).inPortalAccessor() && mc.player.getRidingEntity() instanceof EntityBoat) {

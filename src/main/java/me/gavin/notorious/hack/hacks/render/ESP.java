@@ -51,6 +51,13 @@ public class ESP extends Hack {
         return " [" + ChatFormatting.GRAY + lineWidth.getValue() + ChatFormatting.RESET + "]";
     }
 
+    @Override
+    public void onDisable() {
+        for(Entity e : mc.world.loadedEntityList) {
+            e.setGlowing(false);
+        }
+    }
+
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         for(Entity e : mc.world.loadedEntityList) {

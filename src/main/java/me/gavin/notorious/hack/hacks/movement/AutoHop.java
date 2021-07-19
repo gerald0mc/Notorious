@@ -11,8 +11,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * :troll:
  */
 
-@RegisterHack(name = "AutoHop", description = "ching chong strafe", category = Hack.Category.Movement)
-public class Strafe extends Hack {
+@RegisterHack(name = "AutoHop", description = "ching chong autohop", category = Hack.Category.Movement)
+public class AutoHop extends Hack {
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {

@@ -31,9 +31,9 @@ public class ChatModifications extends Hack {
     @RegisterSetting
     public final BooleanSetting chatSuffix = new BooleanSetting("ChatSuffix", true);
     @RegisterSetting
-    public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
-    @RegisterSetting
     public final BooleanSetting chatTimestamps = new BooleanSetting("ChatTimestamps", true);
+    @RegisterSetting
+    public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
 
     @Override
     public void onEnable() {
@@ -85,6 +85,17 @@ public class ChatModifications extends Hack {
             String time = new SimpleDateFormat("k:mm").format(new Date());
             TextComponentString text = new TextComponentString(ChatFormatting.GRAY + "<" + time + ">" + " " + ChatFormatting.RESET);
             event.setMessage(text.appendSibling(event.getMessage()));
+        }
+    }
+
+    @SubscribeEvent
+    public void onUpdate(TickEvent event) {
+        for(Hack h : notorious.hackManager.getHacks()) {
+            if(h.lastEnabledTime < 10) {
+                notorious.messageManager.sendMessage(ChatFormatting.GREEN + h.getName() + ChatFormatting.RESET + " has been " + ChatFormatting.GREEN + "ENABLED" + ChatFormatting.RESET + "!");
+            }else if(h.lastDisabledTime < 10) {
+                notorious.messageManager.sendMessage(ChatFormatting.RED + h.getName() + ChatFormatting.RESET + " has been " + ChatFormatting.RED + "DISABLED" + ChatFormatting.RESET + "!");
+            }
         }
     }
 }

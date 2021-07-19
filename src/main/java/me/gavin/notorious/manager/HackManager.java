@@ -65,7 +65,7 @@ public class HackManager {
         addHack(new AntiVoid());
         addHack(new Sprint());
         addHack(new Step());
-        addHack(new Strafe());
+        addHack(new AutoHop());
         addHack(new Velocity());
 
         // player

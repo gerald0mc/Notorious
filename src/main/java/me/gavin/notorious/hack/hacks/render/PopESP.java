@@ -49,13 +49,4 @@ public class PopESP extends Hack {
             }
         }
     }
-
-    @SubscribeEvent
-    public void onUpdate(TickEvent event) {
-        if(System.currentTimeMillis() - startTime <= timeToDisappear.getValue()) {
-            mc.world.addEntityToWorld(-7777, player);
-        }else if(System.currentTimeMillis() - startTime >= timeToDisappear.getValue()){
-            mc.world.removeEntityFromWorld(-7777);
-        }
-    }
 }

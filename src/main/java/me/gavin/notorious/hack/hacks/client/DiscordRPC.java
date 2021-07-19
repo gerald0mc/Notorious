@@ -11,12 +11,12 @@ public class DiscordRPC extends Hack {
     @Override
     public void onEnable() {
         DiscordUtil.startRPC();
-        notorious.messageManager.sendMessage("Starting " + ChatFormatting.GREEN + "RPC" + ChatFormatting.RESET + "!");
+        notorious.messageManager.sendMessage("Starting " + ChatFormatting.GREEN + ChatFormatting.BOLD + "RPC" + ChatFormatting.RESET + "!");
     }
 
     @Override
     public void onDisable() {
         DiscordUtil.stopRPC();
-        notorious.messageManager.sendMessage("Stopping " + ChatFormatting.RED + "RPC" + ChatFormatting.RESET + "!");
+        notorious.messageManager.sendMessage("Stopping " + ChatFormatting.RED + ChatFormatting.BOLD + "RPC" + ChatFormatting.RESET + "!");
     }
 }
