@@ -26,7 +26,7 @@ public class VoidESP extends Hack {
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 15, 1, 20, 1);
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("Mode", "Both", "Both", "Outline", "Box");
+    public final ModeSetting mode = new ModeSetting("Mode", "Outline", "Both", "Outline", "Box");
     @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 125);
     @RegisterSetting

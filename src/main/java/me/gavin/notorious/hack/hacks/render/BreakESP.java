@@ -21,7 +21,7 @@ import java.awt.*;
 public class BreakESP extends Hack {
 
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("Mode", "Both", "Both", "Outline", "Box");
+    public final ModeSetting mode = new ModeSetting("Mode", "Outline", "Both", "Outline", "Box");
     @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 125);
     @RegisterSetting

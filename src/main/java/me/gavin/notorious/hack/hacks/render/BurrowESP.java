@@ -3,6 +3,7 @@ package me.gavin.notorious.hack.hacks.render;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.util.RenderUtil;
@@ -33,6 +34,14 @@ public class BurrowESP extends Hack {
     public final ColorSetting outlineColor = new ColorSetting("Outline", new Color(255, 255, 255, 255));
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("Box", new Color(255, 255, 255, 125));
+    @RegisterSetting
+    public final BooleanSetting self = new BooleanSetting("Self", true);
+    @RegisterSetting
+    public final BooleanSetting obsidian = new BooleanSetting("Obsidian", true);
+    @RegisterSetting
+    public final BooleanSetting echest = new BooleanSetting("EChest", true);
+    @RegisterSetting
+    public final BooleanSetting skull = new BooleanSetting("Skull", true);
 
     public BlockPos pos;
     public boolean fill;
@@ -43,8 +52,10 @@ public class BurrowESP extends Hack {
     public void onTick(TickEvent event) {
         burrowedEntities.clear();
         for(EntityPlayer e : mc.world.playerEntities) {
-            pos = new BlockPos(e.posX, e.posY, e.posZ);
-            if(mc.world.getBlockState(pos).getBlock() == Blocks.OBSIDIAN) {
+            if(e.equals(mc.player) && !self.isEnabled())
+                return;
+            pos = new BlockPos(e.posX, e.posY + 0.2D, e.posZ);
+            if(mc.world.getBlockState(pos).getBlock() == Blocks.OBSIDIAN && obsidian.isEnabled() || mc.world.getBlockState(pos).getBlock() == Blocks.ENDER_CHEST && echest.isEnabled() || mc.world.getBlockState(pos).getBlock() == Blocks.SKULL && skull.isEnabled()) {
                 burrowedEntities.add(pos);
             }
         }
