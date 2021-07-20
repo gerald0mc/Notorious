@@ -23,4 +23,8 @@ public class MessageManager implements IMinecraft {
     public void sendError(String message) {
         sendRawMessage(errorPrefix + message);
     }
+
+    public void sendRemovableMessage(String message, int id) {
+        mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentString(messagePrefix + message), id);
+    }
 }

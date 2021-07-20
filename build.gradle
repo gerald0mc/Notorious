@@ -22,7 +22,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'me.gavin'
-version = '1.0'
+version = '0.4'
 archivesBaseName = 'notorious'
 
 sourceCompatibility = targetCompatibility = '1.8'

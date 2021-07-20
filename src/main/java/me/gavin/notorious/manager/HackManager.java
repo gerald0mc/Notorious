@@ -35,6 +35,7 @@ public class HackManager {
         addHack(new AutoSuicide());
         addHack(new ChatModifications());
         addHack(new PotionAlert());
+        addHack(new TotemPopCounter());
         addHack(new VisualRange());
 
         // client
