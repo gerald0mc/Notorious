@@ -51,35 +51,28 @@ public class AnvilBurrow extends Hack {
 
     private void doAnvilBurrow() {
         finalTarget = mc.player;
-        if(finalTarget != null) {
+        if(finalTarget != null)
             placeTarget = getTargetPos(finalTarget);
-        }
-        if(placeTarget != null && finalTarget != null) {
+        if(placeTarget != null && finalTarget != null)
             placeAnvil(placeTarget);
-        }
     }
 
     public void placeAnvil(BlockPos pos) {
         rotateToPos(pos);
-        if (this.switchToAnvil.isEnabled() && !isHoldingAnvil()) {
+        if (this.switchToAnvil.isEnabled() && !isHoldingAnvil())
             this.switchToAnvil();
-        }
         BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), packet.isEnabled(), mc.player.isSneaking());
     }
 
     private boolean isHoldingAnvil() {
-        if(mc.player.getHeldItemMainhand().getItem() == anvil)
-            return true;
-        else
-            return false;
+        return mc.player.getHeldItemMainhand().getItem() == anvil;
     }
 
     private void switchToAnvil() {
         slot = InventoryUtil.getItemSlot(anvil);
         if(mc.player.getHeldItemMainhand().getItem() != anvil) {
-            if(slot != -1) {
+            if (slot != -1)
                 InventoryUtil.switchToSlot(slot);
-            }
         }
     }
 
@@ -87,9 +80,8 @@ public class AnvilBurrow extends Hack {
         BlockPos pos;
         BlockPos playerPos = new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
         ArrayList<BlockPos> positions = new ArrayList<BlockPos>();
-        for (int i = (int)Math.floor(mc.player.posY + 2.0); i <= 256 && BlockUtil.isPositionPlaceable(pos = new BlockPos(Math.floor(mc.player.posX), (double)i, Math.floor(mc.player.posZ)), false) != 0 && BlockUtil.isPositionPlaceable(pos, false) != -1 && BlockUtil.isPositionPlaceable(pos, false) != 2; ++i) {
+        for (int i = (int)Math.floor(mc.player.posY + 2.0); i <= 256 && BlockUtil.isPositionPlaceable(pos = new BlockPos(Math.floor(mc.player.posX), (double)i, Math.floor(mc.player.posZ)), false) != 0 && BlockUtil.isPositionPlaceable(pos, false) != -1 && BlockUtil.isPositionPlaceable(pos, false) != 2; ++i)
             positions.add(pos);
-        }
         return positions;
     }
 
@@ -97,7 +89,8 @@ public class AnvilBurrow extends Hack {
         double distance = -1.0;
         BlockPos finalPos = null;
         for (BlockPos pos : this.getPlaceableBlocksAboveEntity(target)) {
-            if (distance != -1.0 && !(mc.player.getDistanceSq(pos) < MathUtil.square(distance))) continue;
+            if (distance != -1.0 && !(mc.player.getDistanceSq(pos) < MathUtil.square(distance)))
+                continue;
             finalPos = pos;
             distance = mc.player.getDistance((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
         }
@@ -110,7 +103,7 @@ public class AnvilBurrow extends Hack {
             float f1 = (float)(vec.y - (double)pos.getY());
             float f2 = (float)(vec.z - (double)pos.getZ());
             mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, direction, hand, f, f1, f2));
-        } else {
+        }else {
             mc.playerController.processRightClickBlock(mc.player, mc.world, pos, direction, vec, hand);
         }
         mc.player.swingArm(EnumHand.MAIN_HAND);

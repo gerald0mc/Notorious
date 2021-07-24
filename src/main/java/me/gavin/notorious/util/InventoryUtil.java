@@ -38,6 +38,20 @@ public class InventoryUtil {
         Minecraft.getMinecraft().playerController.updateController();
     }
 
+    public static void switchToHotbarSlot(int slot, boolean silent) {
+        if (Minecraft.getMinecraft().player.inventory.currentItem == slot || slot < 0) {
+            return;
+        }
+        if (silent) {
+            Minecraft.getMinecraft().player.connection.sendPacket(new CPacketHeldItemChange(slot));
+            Minecraft.getMinecraft().playerController.updateController();
+        } else {
+            Minecraft.getMinecraft().player.connection.sendPacket(new CPacketHeldItemChange(slot));
+            Minecraft.getMinecraft().player.inventory.currentItem = slot;
+            Minecraft.getMinecraft().playerController.updateController();
+        }
+    }
+
     public static boolean isChestEmpty(final ContainerChest c) {
         for (int i = 0; i < c.getLowerChestInventory().getSizeInventory(); ++i) {
             final ItemStack slot = c.getLowerChestInventory().getStackInSlot(i);

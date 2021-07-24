@@ -6,6 +6,7 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.setting.NumSetting;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,6 +16,8 @@ public class AntiVoid extends Hack {
 
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "TP", "TP", "Jump", "Freeze");
+    @RegisterSetting
+    public final NumSetting yOffset = new NumSetting("YOffset", 0.5f, 0.1f, 1f, 0.1f);
 
     @Override
     public String getMetaData() {
@@ -25,18 +28,18 @@ public class AntiVoid extends Hack {
     public void onUpdate(PlayerLivingUpdateEvent event) {
         double yLevel = mc.player.posY;
         if(mode.getMode().equals("TP")) {
-            if(yLevel <= .5) {
+            if(yLevel <= (int) yOffset.getValue()) {
                 mc.player.setPosition(mc.player.posX, mc.player.posY + 2, mc.player.posZ);
                 notorious.messageManager.sendMessage("Attempting to TP out of void hole.");
             }
         }else if(mode.getMode().equals("Jump")){
-            if(yLevel <= .9) {
+            if(yLevel <= (int) yOffset.getValue()) {
                 mc.player.jump();
                 notorious.messageManager.sendMessage("Attempting to jump out of void hole.");
             }
         }else {
             // skidded from zware :trol:
-            if (!mc.player.noClip && yLevel <= 0.5D) {
+            if (!mc.player.noClip && yLevel <= (double) yOffset.getValue()) {
                 RayTraceResult trace = mc.world.rayTraceBlocks(mc.player.getPositionVector(), new Vec3d(mc.player.posX, 0.0D, mc.player.posZ), false, false, false);
                 if (trace != null && trace.typeOfHit == RayTraceResult.Type.BLOCK)
                     return;

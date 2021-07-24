@@ -38,7 +38,7 @@ public class PopESP extends Hack {
     public void onPacket(PacketEvent event){
         if (event.getPacket() instanceof SPacketEntityStatus){
             SPacketEntityStatus packet = ((SPacketEntityStatus) event.getPacket());
-            if (packet.getOpCode() == 35 && packet.getEntity(mc.world) != null){
+            if (packet.getOpCode() == 35 && packet.getEntity(mc.world) != null) {
                 if (self.getValue() || packet.getEntity(mc.world).getEntityId() != mc.player.getEntityId()) {
                     GameProfile profile = new GameProfile(mc.player.getUniqueID(), "");
                     player = new EntityOtherPlayerMP(FakePlayer.mc.world, profile);

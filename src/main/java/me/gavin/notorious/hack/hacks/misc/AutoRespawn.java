@@ -39,11 +39,11 @@ public class AutoRespawn extends Hack {
                 mc.player.respawnPlayer();
             if(deathCoord.isEnabled()) {
                 if (mc.player.dimension == -1)
-                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.RED + ChatFormatting.BOLD + "Nether");
+                    notorious.messageManager.sendRemovableMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.RED + ChatFormatting.BOLD + "Nether", 1);
                 if (mc.player.dimension == 0)
-                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.GREEN + ChatFormatting.BOLD + "Overworld");
+                    notorious.messageManager.sendRemovableMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.GREEN + ChatFormatting.BOLD + "Overworld", 2);
                 if (mc.player.dimension == 1)
-                    notorious.messageManager.sendMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.DARK_PURPLE + ChatFormatting.BOLD + "End");
+                    notorious.messageManager.sendRemovableMessage("You died at X: " + ChatFormatting.RED + ChatFormatting.BOLD + x + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD + y + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + z + ChatFormatting.RESET + " Dimension: " + ChatFormatting.DARK_PURPLE + ChatFormatting.BOLD + "End", 3);
             }
             deathCoords = "X:" + x + " Y:" + y + " Z:" + z;
         }

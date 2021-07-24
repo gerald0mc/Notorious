@@ -1,6 +1,7 @@
 package me.gavin.notorious.hack.hacks.misc;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
@@ -22,6 +23,7 @@ public class FakePlayer extends Hack {
             fakePlayer.copyLocationAndAnglesFrom(mc.player);
             fakePlayer.inventory.copyInventory(mc.player.inventory);
             mc.world.addEntityToWorld(-7777, fakePlayer);
+            notorious.messageManager.sendMessage("Added a " + ChatFormatting.GREEN + "Fake Player" + ChatFormatting.RESET + " to your world.");
         }
     }
 
@@ -29,6 +31,7 @@ public class FakePlayer extends Hack {
     protected void onDisable() {
         if (fakePlayer != null && mc.world != null) {
             mc.world.removeEntityFromWorld(-7777);
+            notorious.messageManager.sendMessage("Removed a " + ChatFormatting.RED + "Fake Player" + ChatFormatting.RESET + " from your world.");
             fakePlayer = null;
         }
     }
