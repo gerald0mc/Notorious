@@ -209,7 +209,11 @@ public class BlockUtil implements IMinecraft {
     }
 
     public static boolean isRightClickableBlock(BlockPos pos) {
-        if(pos)
+        if(pos.equals(rightclickableBlocks)) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public static boolean canBeClicked(BlockPos pos) {

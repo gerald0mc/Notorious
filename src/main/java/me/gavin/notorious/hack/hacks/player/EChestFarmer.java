@@ -54,7 +54,7 @@ public class EChestFarmer extends Hack {
             toggle();
             return;
         }
-        if(BlockUtil.canBeClicked(result) && mc.player.getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.ENDER_CHEST)) {
+        if(BlockUtil.isRightClickableBlock(result) && mc.player.getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.ENDER_CHEST)) {
             BlockUtil.placeBlock(result, EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), true);
         }
         for(BlockPos pos : BlockUtil.getSurroundingBlocks(5, true)) {
