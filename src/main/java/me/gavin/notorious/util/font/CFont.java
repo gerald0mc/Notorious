@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-public class CFont {
+public class    CFont {
 
     private final float imgSize = 512;
     protected CharData[] charData = new CharData[256];

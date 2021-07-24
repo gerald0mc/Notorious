@@ -32,7 +32,6 @@ public class HackManager {
         sortedHacks = new ArrayList<>();
 
         // chat
-        addHack(new AutoSuicide());
         addHack(new ChatModifications());
         addHack(new PotionAlert());
         addHack(new TotemPopCounter());
@@ -50,8 +49,9 @@ public class HackManager {
         addHack(new AutoCrystal());
         addHack(new Burrow());
         addHack(new KillAura());
-        addHack(new Quiver());
         addHack(new Offhand());
+        addHack(new Quiver());
+        addHack(new WebAura());
 
         // misc
         addHack(new AutoLog());
@@ -70,7 +70,9 @@ public class HackManager {
         addHack(new Velocity());
 
         // player
+        addHack(new AutoSuicide());
         addHack(new ChestStealer());
+        addHack(new EChestFarmer());
         addHack(new FastPlace());
         addHack(new MiddleClickXP());
 
@@ -81,6 +83,7 @@ public class HackManager {
         addHack(new BurrowESP());
         addHack(new EnchantGlint());
         addHack(new ESP());
+        addHack(new FuckedDetector());
         addHack(new Fullbright());
         addHack(new HellenKeller());
         addHack(new PenisESP());
@@ -88,7 +91,6 @@ public class HackManager {
         addHack(new StorageESP());
         addHack(new ViewModel());
         addHack(new VoidESP());
-        addHack(new Weather());
 
         // world
         addHack(new BedFucker());

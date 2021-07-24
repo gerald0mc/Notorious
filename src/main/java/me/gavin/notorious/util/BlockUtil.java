@@ -63,47 +63,6 @@ public class BlockUtil implements IMinecraft {
         return false;
     }
 
-    public static BlockPos isCityable(final EntityPlayer player, final boolean end_crystal) {
-
-        BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
-
-        if (mc.world.getBlockState(pos.north()).getBlock() == Blocks.OBSIDIAN) {
-            if (end_crystal) {
-                return pos.north();
-            }
-            else if (mc.world.getBlockState(pos.north().north()).getBlock() == Blocks.AIR) {
-                return pos.north();
-            }
-        }
-        if (mc.world.getBlockState(pos.east()).getBlock() == Blocks.OBSIDIAN) {
-            if (end_crystal) {
-                return pos.east();
-            }
-            else if (mc.world.getBlockState(pos.east().east()).getBlock() == Blocks.AIR) {
-                return pos.east();
-            }
-        }
-        if (mc.world.getBlockState(pos.south()).getBlock() == Blocks.OBSIDIAN) {
-            if (end_crystal) {
-                return pos.south();
-            }
-            else if (mc.world.getBlockState(pos.south().south()).getBlock() == Blocks.AIR) {
-                return pos.south();
-            }
-
-        }
-        if (mc.world.getBlockState(pos.west()).getBlock() == Blocks.OBSIDIAN) {
-            if (end_crystal) {
-                return pos.west();
-            }
-            else if (mc.world.getBlockState(pos.west().west()).getBlock() == Blocks.AIR) {
-                return pos.west();
-            }
-        }
-
-        return null;
-    }
-
     public static ArrayList<BlockPos> getSurroundingBlocksOtherPlayers(int radius, boolean motion) {
         for(Entity e : mc.world.loadedEntityList) {
             final ArrayList<BlockPos> posList = new ArrayList<>();
@@ -247,6 +206,10 @@ public class BlockUtil implements IMinecraft {
 
     public static boolean rayTracePlaceCheck(BlockPos pos, boolean shouldCheck, float height) {
         return !shouldCheck || BlockUtil.mc.world.rayTraceBlocks(new Vec3d(BlockUtil.mc.player.posX, BlockUtil.mc.player.posY + (double) BlockUtil.mc.player.getEyeHeight(), BlockUtil.mc.player.posZ), new Vec3d(pos.getX(), (float) pos.getY() + height, pos.getZ()), false, true, false) == null;
+    }
+
+    public static boolean isRightClickableBlock(BlockPos pos) {
+        if(pos)
     }
 
     public static boolean canBeClicked(BlockPos pos) {

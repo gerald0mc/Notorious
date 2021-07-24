@@ -7,7 +7,10 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.util.RenderUtil;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -26,32 +29,22 @@ import java.util.List;
  * #TODO fix the echest shit
  */
 
-@RegisterHack(name = "BurrowESP", description = "ez", category = Hack.Category.Render)
-public class BurrowESP extends Hack {
+@RegisterHack(name = "FuckedDetector", description = "ez", category = Hack.Category.Render)
+public class FuckedDetector extends Hack {
 
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Both", "Both", "Outline", "Box");
     @RegisterSetting
-    public final ColorSetting outlineColor = new ColorSetting("Outline", new Color(117, 0, 255, 255));
+    public final ColorSetting outlineColor = new ColorSetting("Outline", new Color(255, 255, 255, 255));
     @RegisterSetting
-    public final ColorSetting boxColor = new ColorSetting("Box", new Color(117, 0, 255, 65));
+    public final ColorSetting boxColor = new ColorSetting("Box", new Color(255, 255, 255, 125));
     @RegisterSetting
     public final BooleanSetting self = new BooleanSetting("Self", true);
-    @RegisterSetting
-    public final BooleanSetting obsidian = new BooleanSetting("Obsidian", true);
-    @RegisterSetting
-    public final BooleanSetting echest = new BooleanSetting("EChest", true);
-    @RegisterSetting
-    public final BooleanSetting skull = new BooleanSetting("Skull", true);
-    @RegisterSetting
-    public final BooleanSetting sand = new BooleanSetting("Sand", false);
-    @RegisterSetting
-    public final BooleanSetting anvil = new BooleanSetting("Anvil", true);
 
     public BlockPos pos;
     public boolean fill;
     public boolean outline;
-    public List<BlockPos> burrowedEntities = new ArrayList<>();
+    public List<BlockPos> fuckedEntities = new ArrayList<>();
 
     @Override
     public String getMetaData() {
@@ -60,18 +53,13 @@ public class BurrowESP extends Hack {
 
     @SubscribeEvent
     public void onTick(TickEvent event) {
-        burrowedEntities.clear();
+        fuckedEntities.clear();
         for(EntityPlayer e : mc.world.playerEntities) {
             if(e.equals(mc.player) && !self.isEnabled())
                 return;
-            pos = new BlockPos(e.posX, e.posY + 0.2D, e.posZ);
-            if(mc.world.getBlockState(pos).getBlock() == Blocks.OBSIDIAN && obsidian.isEnabled()
-                    || mc.world.getBlockState(pos).getBlock() == Blocks.ENDER_CHEST && echest.isEnabled()
-                    || mc.world.getBlockState(pos).getBlock() == Blocks.SKULL && skull.isEnabled()
-                    || mc.world.getBlockState(pos).getBlock() == Blocks.ANVIL && anvil.isEnabled()
-                    || mc.world.getBlockState(pos).getBlock() == Blocks.SAND && sand.isEnabled()) {
-                burrowedEntities.add(pos);
-            }
+            pos = new BlockPos(e.posX, e.posY, e.posZ);
+            if(canPlaceCrystal(pos))
+                fuckedEntities.add(pos);
         }
     }
 
@@ -87,11 +75,24 @@ public class BurrowESP extends Hack {
             fill = true;
             outline = false;
         }
-        for(BlockPos blockPos : burrowedEntities) {
+        for(BlockPos blockPos : fuckedEntities) {
             if(outline)
                 RenderUtil.renderOutlineBB(new AxisAlignedBB(blockPos), outlineColor.getAsColor());
             if(fill)
                 RenderUtil.renderFilledBB(new AxisAlignedBB(blockPos), boxColor.getAsColor());
         }
+    }
+
+    //This was taken from w+2 because I couldn't figure out how to do this
+    public boolean canPlaceCrystal(BlockPos pos) {
+        Block block = mc.world.getBlockState(pos).getBlock();
+        if (block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) {
+            Block floor = mc.world.getBlockState(pos.add(0, 1, 0)).getBlock();
+            Block ceil = mc.world.getBlockState(pos.add(0, 2, 0)).getBlock();
+            if (floor == Blocks.AIR && ceil == Blocks.AIR && mc.world.getEntitiesWithinAABBExcludingEntity((Entity)null, new AxisAlignedBB(pos.add(0, 1, 0))).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity((Entity)null, new AxisAlignedBB(pos.add(0, 2, 0))).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.misc;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -25,11 +26,6 @@ public class PlayerFinder extends Hack {
     @RegisterSetting
     public final NumSetting amountPerTick = new NumSetting("AmountPerTick", 2, 0, 5, 1);
 
-    @Override
-    public void onEnable() {
-        notorious.messageManager.sendMessage("For this to work you need to be on a boat and ride it into a portal.");
-    }
-
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
         if (((IEntityMixin)mc.player).inPortalAccessor() && mc.player.getRidingEntity() instanceof EntityBoat) {
@@ -40,9 +36,9 @@ public class PlayerFinder extends Hack {
                 mc.player.connection.sendPacket(new CPacketSteerBoat(false, true));
             }
         }
-        for (Entity entity : mc.world.playerEntities) {
-            if (!entity.getName().equalsIgnoreCase(mc.player.getName())) {
-                notorious.messageManager.sendMessage("Found a play at " + entity.getPosition());
+        for (Entity e : mc.world.playerEntities) {
+            if (!e.getName().equalsIgnoreCase(mc.player.getName())) {
+                notorious.messageManager.sendMessage("Player detected at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
             }
         }
     }

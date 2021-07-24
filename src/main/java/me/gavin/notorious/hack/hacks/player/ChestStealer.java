@@ -32,8 +32,10 @@ public class ChestStealer extends Hack {
                 if(stack != null) {
                     mc.playerController.windowClick(chest.windowId, i, 0, ClickType.QUICK_MOVE, mc.player);
                 }
-                if(isChestEmpty(chest))
+                if(isChestEmpty(chest)) {
                     mc.player.closeScreen();
+                    mc.player.openContainer = null;
+                }
             }
         }
     }

@@ -55,9 +55,9 @@ public class ChatModifications extends Hack {
             if(mode.getMode().equals("Vanilla")) {
                 suffix = " | Notorious";
             }else if(mode.getMode().equals("Unicode")){
-                suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D1C\uA731";
+                suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D0F\u1D1C\uA731";
             }else {
-                suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D1C\uA731 " + NotoriousMod.VERSION;
+                suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D0F\u1D1C\uA731\u1D0F " + NotoriousMod.VERSION;
             }
             if(event.getMessage().startsWith("!")) return;
             if(event.getMessage().startsWith(".")) return;

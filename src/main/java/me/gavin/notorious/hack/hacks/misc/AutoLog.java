@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.misc;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -16,6 +17,11 @@ public class AutoLog extends Hack {
 
     @RegisterSetting
     public final NumSetting health = new NumSetting("HealthToLog", 16f, 1f, 36f, 1f);
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + health.getValue() + ChatFormatting.RESET + "]";
+    }
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
