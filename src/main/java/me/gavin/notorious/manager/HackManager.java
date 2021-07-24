@@ -94,6 +94,7 @@ public class HackManager {
         addHack(new BedFucker());
         addHack(new Lawnmower());
         addHack(new ShulkerJew());
+        addHack(new MobOwner());
 
         hacks.sort(this::sortABC);
         sortedHacks.addAll(hacks);

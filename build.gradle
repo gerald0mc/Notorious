@@ -72,6 +72,8 @@ dependencies {
         exclude module: 'jna'
     }
 
+    compile('com.googlecode.json-simple:json-simple:1.1')
+
     compile('javassist:javassist:3.12.1.GA')
 }
 
@@ -105,6 +107,7 @@ shadowJar {
         include(dependency('org.spongepowered:mixin'))
         include(dependency('club.minnced:java-discord-rpc'))
         include(dependency('javassist:javassist'))
+        include(dependency('com.googlecode.json-simple:json-simple'))
     }
     exclude 'dummyThing'
     exclude 'LICENSE.txt'
