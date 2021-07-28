@@ -27,7 +27,6 @@ public class NotoriousMod {
     public static final String MOD_NAME = "Notorious";
     public static final String VERSION = "beta-0.4";
     public static final String NAME_VERSION = MOD_NAME + " " + VERSION;
-    public static final String PREFIX = "-";
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {

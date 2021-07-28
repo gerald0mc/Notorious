@@ -25,7 +25,7 @@ import java.util.Date;
 public class ChatModifications extends Hack {
 
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla", "UnicodeVersion");
+    public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla", "UnicodeVer");
     @RegisterSetting
     public final ModeSetting chatColor = new ModeSetting("ChatColor", "Green", "Green", "Red", "Cyan");
     @RegisterSetting

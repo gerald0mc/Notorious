@@ -5,8 +5,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryUtil {
 
@@ -22,11 +26,39 @@ public class InventoryUtil {
         }
     }
 
-    public static int checkSlotsBlock(Block block) {
-        for(i = 9; i <= 36; i++) {
-            if(Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem().equals(block)) {
-                found = true;
-                break;
+    public static List<Integer> getItemInventory(final Item item) {
+        final List<Integer> ints = new ArrayList<Integer>();
+        for (int i = 9; i < 36; ++i) {
+            final Item target = Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem();
+            if (item instanceof ItemBlock && ((ItemBlock)item).getBlock().equals(item)) {
+                ints.add(i);
+            }
+        }
+        if (ints.size() == 0) {
+            ints.add(-1);
+        }
+        return ints;
+    }
+
+    public static int getItemSlot(Item items) {
+        for (int i = 0; i < 36; i++) {
+            final Item item = Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem();
+            if (item == items) {
+                if (i < 9) {
+                    i += 36;
+                }
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static int checkSlotsBlock(final Block blockIn) {
+        for (int i = 0; i < 9; ++i) {
+            final ItemStack stack = Minecraft.getMinecraft().player.inventory.getStackInSlot(i);
+            final Block block;
+            if (stack != ItemStack.EMPTY && stack.getItem() instanceof ItemBlock && (block = ((ItemBlock)stack.getItem()).getBlock()) == blockIn) {
+                return i;
             }
         }
         return -1;
@@ -60,19 +92,6 @@ public class InventoryUtil {
             }
         }
         return true;
-    }
-
-    public static int getItemSlot(Item items) {
-        for (int i = 0; i < 36; i++) {
-            final Item item = Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem();
-            if (item == items) {
-                if (i < 9) {
-                    i += 36;
-                }
-                return i;
-            }
-        }
-        return -1;
     }
 
     public static void moveItemToSlot(Integer startSlot, Integer endSlot) {

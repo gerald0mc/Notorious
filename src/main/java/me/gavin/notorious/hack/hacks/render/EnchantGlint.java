@@ -19,7 +19,7 @@ public class EnchantGlint extends Hack {
     @RegisterSetting
     public static NumSetting saturation = new NumSetting("Saturation", 1.0F, 0.1F, 1.0F, 0.1F);
     @RegisterSetting
-    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", false);
+    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
 
     public static Color getColor(long offset, float fade) {
         float hue = (float) (System.nanoTime() + offset) / 1.0E10F % 1.0F;
