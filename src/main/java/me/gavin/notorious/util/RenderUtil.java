@@ -1,8 +1,11 @@
 package me.gavin.notorious.util;
 
 import me.gavin.notorious.stuff.IMinecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -11,6 +14,9 @@ import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.Sphere;
 
 import java.awt.*;
+
+import static org.lwjgl.opengl.GL11.GL_FLAT;
+import static org.lwjgl.opengl.GL11.GL_SMOOTH;
 
 public class RenderUtil implements IMinecraft {
 
@@ -84,6 +90,26 @@ public class RenderUtil implements IMinecraft {
         release();
     }
 
+    public static void drawMultiColoredRect(float left, float top, float right, float bottom, Color topleftcolor, Color toprightcolor, Color bottomleftcolor, Color bottomrightcolor) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(GL_SMOOTH);
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(right, top, 0).color(toprightcolor.getRed(), toprightcolor.getGreen(), toprightcolor.getBlue(), toprightcolor.getAlpha()).endVertex();
+        bufferbuilder.pos(left, top, 0).color(topleftcolor.getRed(), topleftcolor.getGreen(), topleftcolor.getBlue(), topleftcolor.getAlpha()).endVertex();
+        bufferbuilder.pos(left, bottom, 0).color(bottomleftcolor.getRed(), bottomleftcolor.getGreen(), bottomleftcolor.getBlue(), bottomleftcolor.getAlpha()).endVertex();
+        bufferbuilder.pos(right, bottom, 0).color(bottomrightcolor.getRed(), bottomrightcolor.getGreen(), bottomrightcolor.getBlue(), bottomrightcolor.getAlpha()).endVertex();
+        tessellator.draw();
+        GlStateManager.shadeModel(GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+    }
+
     public static void drawPenis(final EntityPlayer player, final double x, final double y, final double z, float pspin, float pcumsize, float pamount) {
         GL11.glDisable(2896);
         GL11.glDisable(3553);
@@ -123,6 +149,34 @@ public class RenderUtil implements IMinecraft {
         GL11.glDisable(3042);
         GL11.glEnable(2896);
         GL11.glEnable(3553);
+    }
+
+    public static void drawSideGradientRect(int left, int top, int right, int bottom, int startColor, int endColor) {
+        float f = (float)(startColor >> 24 & 255) / 255.0F;
+        float f1 = (float)(startColor >> 16 & 255) / 255.0F;
+        float f2 = (float)(startColor >> 8 & 255) / 255.0F;
+        float f3 = (float)(startColor & 255) / 255.0F;
+        float f4 = (float)(endColor >> 24 & 255) / 255.0F;
+        float f5 = (float)(endColor >> 16 & 255) / 255.0F;
+        float f6 = (float)(endColor >> 8 & 255) / 255.0F;
+        float f7 = (float)(endColor & 255) / 255.0F;
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(7425);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(right, top, 0).color(f5, f6, f7, f4).endVertex();
+        bufferbuilder.pos(left, top, 0).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos(left, bottom, 0).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos(right, bottom, 0).color(f5, f6, f7, f4).endVertex();
+        tessellator.draw();
+        GlStateManager.shadeModel(7424);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
     }
 
     private enum RenderMode {

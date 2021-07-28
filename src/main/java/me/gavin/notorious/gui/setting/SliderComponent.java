@@ -17,7 +17,7 @@ public class SliderComponent extends SettingComponent {
 
     private final NumSetting setting;
 
-    private float sliderWidth;
+    public float sliderWidth;
 
     private boolean draggingSlider;
 
@@ -64,7 +64,7 @@ public class SliderComponent extends SettingComponent {
     public void keyTyped(char keyChar, int keyCode) {
     }
 
-    private void updateSliderLogic(int mouseX, int mouseY) {
+    protected void updateSliderLogic(int mouseX, int mouseY) {
         float diff = Math.min(width, Math.max(0, mouseX - x));
         float min = setting.getMin();
         float max = setting.getMax();
@@ -79,7 +79,7 @@ public class SliderComponent extends SettingComponent {
         }
     }
 
-    private float roundToPlace(float value, int places) {
+    public static float roundToPlace(float value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
         }

@@ -50,4 +50,8 @@ public class ColorSetting extends Setting {
     public Color getAsColor() {
         return new Color((int)red.getValue(), (int)green.getValue(), (int)blue.getValue(), (int)alpha.getValue());
     }
+
+    public float[] getHSB() {
+        return Color.RGBtoHSB((int)red.getValue(), (int)green.getValue(), (int)blue.getValue(), null);
+    }
 }
