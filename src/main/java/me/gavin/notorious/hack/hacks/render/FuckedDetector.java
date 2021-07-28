@@ -54,31 +54,31 @@ public class FuckedDetector extends Hack {
     @SubscribeEvent
     public void onTick(TickEvent event) {
         fuckedEntities.clear();
-        for(EntityPlayer e : mc.world.playerEntities) {
-            if(e.equals(mc.player) && !self.isEnabled())
+        for (EntityPlayer e : mc.world.playerEntities) {
+            if (e.equals(mc.player) && !self.isEnabled())
                 return;
             pos = new BlockPos(e.posX, e.posY, e.posZ);
-            if(canPlaceCrystal(pos))
+            if (isFucked(e))
                 fuckedEntities.add(pos);
         }
     }
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
-        if(mode.getMode().equals("Both")) {
+        if (mode.getMode().equals("Both")) {
             outline = true;
             fill = true;
-        }else if(mode.getMode().equals("Outline")) {
+        } else if (mode.getMode().equals("Outline")) {
             outline = true;
             fill = false;
-        }else {
+        } else {
             fill = true;
             outline = false;
         }
-        for(BlockPos blockPos : fuckedEntities) {
-            if(outline)
+        for (BlockPos blockPos : fuckedEntities) {
+            if (outline)
                 RenderUtil.renderOutlineBB(new AxisAlignedBB(blockPos), outlineColor.getAsColor());
-            if(fill)
+            if (fill)
                 RenderUtil.renderFilledBB(new AxisAlignedBB(blockPos), boxColor.getAsColor());
         }
     }
@@ -89,9 +89,27 @@ public class FuckedDetector extends Hack {
         if (block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) {
             Block floor = mc.world.getBlockState(pos.add(0, 1, 0)).getBlock();
             Block ceil = mc.world.getBlockState(pos.add(0, 2, 0)).getBlock();
-            if (floor == Blocks.AIR && ceil == Blocks.AIR && mc.world.getEntitiesWithinAABBExcludingEntity((Entity)null, new AxisAlignedBB(pos.add(0, 1, 0))).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity((Entity)null, new AxisAlignedBB(pos.add(0, 2, 0))).isEmpty()) {
+            if (floor == Blocks.AIR && ceil == Blocks.AIR && mc.world.getEntitiesWithinAABBExcludingEntity((Entity) null, new AxisAlignedBB(pos.add(0, 1, 0))).isEmpty() && mc.world.getEntitiesWithinAABBExcludingEntity((Entity) null, new AxisAlignedBB(pos.add(0, 2, 0))).isEmpty()) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    //Also w+2 :trol:
+    public boolean isFucked(EntityPlayer player) {
+        BlockPos pos = new BlockPos(player.posX, player.posY - 1, player.posZ);
+        if (canPlaceCrystal(pos.south()) || (canPlaceCrystal(pos.south().south()) && mc.world.getBlockState(pos.add(0, 1, 1)).getBlock() == Blocks.AIR)) {
+            return true;
+        }
+        if (canPlaceCrystal(pos.east()) || (canPlaceCrystal(pos.east().east()) && mc.world.getBlockState(pos.add(1, 1, 0)).getBlock() == Blocks.AIR)) {
+            return true;
+        }
+        if (canPlaceCrystal(pos.west()) || (canPlaceCrystal(pos.west().west()) && mc.world.getBlockState(pos.add(-1, 1, 0)).getBlock() == Blocks.AIR)) {
+            return true;
+        }
+        if (canPlaceCrystal(pos.north()) || (canPlaceCrystal(pos.north().north()) && mc.world.getBlockState(pos.add(0, 1, -1)).getBlock() == Blocks.AIR)) {
+            return true;
         }
         return false;
     }

@@ -33,6 +33,7 @@ public class HackManager {
 
         // chat
         addHack(new ChatModifications());
+        addHack(new ChorusPredict());
         addHack(new PotionAlert());
         addHack(new TotemPopCounter());
         addHack(new VisualRange());
@@ -88,6 +89,7 @@ public class HackManager {
         addHack(new HellenKeller());
         addHack(new PenisESP());
         addHack(new PopESP());
+        addHack(new SkyColor());
         addHack(new StorageESP());
         addHack(new ViewModel());
         addHack(new VoidESP());

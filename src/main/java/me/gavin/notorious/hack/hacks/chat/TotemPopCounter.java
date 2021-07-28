@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.chat;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
@@ -40,7 +41,7 @@ public class TotemPopCounter extends Hack {
             popMap.put(player.getName(), 1);
         } else {
             popMap.put(player.getName(), popMap.get(player.getName()) + 1);
-            notorious.messageManager.sendRemovableMessage(player.getName() + " has popped " + popMap.get(player.getName()) + " totems", player.getEntityId());
+            notorious.messageManager.sendRemovableMessage(player.getName() + " has popped " + ChatFormatting.GREEN + popMap.get(player.getName()) + ChatFormatting.RESET + " totems", player.getEntityId());
         }
     }
 
@@ -49,7 +50,7 @@ public class TotemPopCounter extends Hack {
         for (EntityPlayer player : mc.world.playerEntities) {
             if ((player.isDead || !player.isEntityAlive() || player.getHealth() <= 0) && popMap.containsKey(player.getName())) {
                 final String s = popMap.get(player.getName()) == 1 ? "" : "s";
-                notorious.messageManager.sendRemovableMessage(player.getName() + " has died after popping " + popMap.get(player.getName()) + " totem" + s, player.getEntityId());
+                notorious.messageManager.sendRemovableMessage(player.getName() + " has died after popping " + ChatFormatting.GREEN + popMap.get(player.getName()) + ChatFormatting.RESET + " totem" + s, player.getEntityId());
                 popMap.remove(player.getName());
             }
         }

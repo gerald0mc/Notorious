@@ -13,7 +13,11 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemBow;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
+import net.minecraft.potion.PotionUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.List;
+import java.util.Objects;
 
 @RegisterHack(name = "Quiver", description = "Automatically places a totem in your offhand.", category = Hack.Category.Combat)
 public class Quiver extends Hack{
@@ -23,36 +27,32 @@ public class Quiver extends Hack{
     @RegisterSetting
     public final BooleanSetting autoEffect = new BooleanSetting("AutoEffect", true);
 
-    public int slot;
+    public List<Integer> slot;
+    public int speedSlot = -1;
+    public int strengthSlot = -1;
 
     @Override
     public String getMetaData() {
         return " [" + ChatFormatting.GRAY + tickDelay.getValue() + ChatFormatting.RESET + "]";
     }
 
-    @Override
-    public void onEnable() {
-        notorious.messageManager.sendMessage("When you try to use the bow let go quickly.");
-    }
-
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
-        if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBow && mc.player.getItemInUseMaxCount() >= 3) {
-            if(autoEffect.isEnabled()) {
-                switchToArrow();
-            }
+        if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBow && mc.player.getItemInUseMaxCount() >= tickDelay.getValue()) {
             mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.cameraYaw, -90f, true));
             mc.player.connection.sendPacket(new CPacketPlayerTryUseItem());
-            toggle();
-            mc.player.stopActiveHand();
         }
-    }
-
-    public void switchToArrow() {
-        slot = InventoryUtil.getItemSlot(Items.TIPPED_ARROW);
-        mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
-        mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 9, 0, ClickType.PICKUP, mc.player);
-        mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
-        mc.playerController.updateController();
+        slot = InventoryUtil.getItemInventory(Items.TIPPED_ARROW);
+        for (final Integer slots : slot) {
+            if (PotionUtils.getPotionFromItem(Quiver.mc.player.inventory.getStackInSlot((int)slots)).getRegistryName().getPath().contains("swiftness")) {
+                speedSlot = slots;
+            }
+            else {
+                if (!Objects.requireNonNull(PotionUtils.getPotionFromItem(Quiver.mc.player.inventory.getStackInSlot((int)slots)).getRegistryName()).getPath().contains("strength")) {
+                    continue;
+                }
+                strengthSlot = slots;
+            }
+        }
     }
 }
