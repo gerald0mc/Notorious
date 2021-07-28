@@ -37,6 +37,7 @@ public class ColorComponent extends SettingComponent {
                 Gui.drawRect(x + (int)sliderWidth - 1, y, x + (int)sliderWidth + 1, y + height, 0xFFFFFFFF);
             }
         };
+        // very broken chinese code kys
         pickerSliders = new QuadSliderComponent(colorSetting.getHSB()[1], colorSetting.getHSB()[2], x, y, width - 2, width - 2) {
             @Override
             public int getTotalHeight() {
