@@ -46,6 +46,7 @@ public class HackManager {
         addHack(new WaterMark());
 
         // combat
+        addHack(new AntiCrystal());
         addHack(new AnvilBurrow());
         addHack(new AutoCrystal());
         addHack(new Burrow());
@@ -65,9 +66,9 @@ public class HackManager {
 
         // movement
         addHack(new AntiVoid());
+        addHack(new AutoHop());
         addHack(new Sprint());
         addHack(new Step());
-        addHack(new AutoHop());
         addHack(new Velocity());
 
         // player
