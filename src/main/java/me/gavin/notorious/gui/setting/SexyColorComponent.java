@@ -57,7 +57,7 @@ public class SexyColorComponent extends SettingComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        Gui.drawRect(x, y, x + width, y + height, 0x90BF0000);
+        Gui.drawRect(x, y, x + width, y + height, colorSetting.getAsColor().getRGB());
         mc.fontRenderer.drawStringWithShadow(colorSetting.getName(), x + 2f, y + 2f, -1);
         if (open) {
             pickerSliders.x = (this.x + 1);
