@@ -29,7 +29,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
             }else if (setting instanceof NumSetting) {
                 components.add(new SliderComponent((NumSetting) setting, x, y, width, height));
             }else if (setting instanceof ColorSetting) {
-                components.add(new ColorComponent((ColorSetting) setting, x, y, width, height));
+                components.add(new SexyColorComponent((ColorSetting) setting, x, y, width, height));
             }
         }
 

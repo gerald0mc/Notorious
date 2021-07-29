@@ -23,9 +23,9 @@ public class SkyColor extends Hack {
 
     @SubscribeEvent
     public void fogColors(final EntityViewRenderEvent.FogColors event) {
-        event.setRed(rgba.getRed().getValue() / 255f);
-        event.setGreen(rgba.getGreen().getValue() / 255f);
-        event.setBlue(rgba.getBlue().getValue() / 255f);
+        event.setRed(rgba.getAsColor().getRed() / 255f);
+        event.setGreen(rgba.getAsColor().getGreen() / 255f);
+        event.setBlue(rgba.getAsColor().getBlue() / 255f);
     }
 
     @SubscribeEvent
@@ -36,20 +36,20 @@ public class SkyColor extends Hack {
         }
     }
 
-    @SubscribeEvent
-    public void onUpdate(TickEvent event) {
-        if(rainbow.getValue()) {
-            doRainbow();
-        }
-    }
-
-    public void doRainbow() {
-        float[] tick_color = {
-                (System.currentTimeMillis() % (360 * 32)) / (360f * 32)
-        };
-        int color_rgb_o = Color.HSBtoRGB(tick_color[0], 0.8f, 0.8f);
-        rgba.getRed().setValue((color_rgb_o >> 16) & 0xFF);
-        rgba.getGreen().setValue((color_rgb_o >> 8) & 0xFF);
-        rgba.getBlue().setValue(color_rgb_o & 0xFF);
-    }
+//    @SubscribeEvent
+//    public void onUpdate(TickEvent event) {
+//        if(rainbow.getValue()) {
+//            doRainbow();
+//        }
+//    }
+//
+//    public void doRainbow() {
+//        float[] tick_color = {
+//                (System.currentTimeMillis() % (360 * 32)) / (360f * 32)
+//        };
+//        int color_rgb_o = Color.HSBtoRGB(tick_color[0], 0.8f, 0.8f);
+//        rgba.getRed().setValue((color_rgb_o >> 16) & 0xFF);
+//        rgba.getGreen().setValue((color_rgb_o >> 8) & 0xFF);
+//        rgba.getBlue().setValue(color_rgb_o & 0xFF);
+//    }
 }

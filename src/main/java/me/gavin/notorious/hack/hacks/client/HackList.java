@@ -34,7 +34,7 @@ public class HackList extends Hack {
     @RegisterSetting
     public final NumSetting saturation = new NumSetting("Saturation", 0.5f, 0.1f, 1f, 0.1f);
     @RegisterSetting
-    public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255);
+    public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255, 255);
 
     public HackList() {
         this.toggle();
