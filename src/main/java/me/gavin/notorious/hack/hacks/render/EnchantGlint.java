@@ -40,7 +40,7 @@ public class EnchantGlint extends Hack {
                 (System.currentTimeMillis() % (360 * 32)) / (360f * 32)
         };
         int color_rgb_o = Color.HSBtoRGB(tick_color[0], 0.8f, 0.8f);
-        colorShit.getRed().setValue((color_rgb_o >> 16) & 0xFF);
+        colorShit..setValue((color_rgb_o >> 16) & 0xFF);
         colorShit.getGreen().setValue((color_rgb_o >> 8) & 0xFF);
         colorShit.getBlue().setValue(color_rgb_o & 0xFF);
     }

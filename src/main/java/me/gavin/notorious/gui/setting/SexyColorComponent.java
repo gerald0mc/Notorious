@@ -8,7 +8,7 @@ import net.minecraft.client.gui.Gui;
 
 import java.awt.*;
 
-public class ColorComponent extends SettingComponent {
+public class SexyColorComponent extends SettingComponent {
 
     private boolean open;
 
@@ -20,7 +20,7 @@ public class ColorComponent extends SettingComponent {
     private final CustomSliderComponent alphaSlider;
     private final QuadSliderComponent pickerSliders;
 
-    public ColorComponent(ColorSetting colorSetting, int x, int y, int width, int height) {
+    public SexyColorComponent(ColorSetting colorSetting, int x, int y, int width, int height) {
         super(x, y, width, height);
         this.colorSetting = colorSetting;
         hueSlider = new CustomSliderComponent(colorSetting.getHue(), x, y, width, 12) {
@@ -33,12 +33,11 @@ public class ColorComponent extends SettingComponent {
         alphaSlider = new CustomSliderComponent(colorSetting.getAlpha(), x, y, width, 12) {
             @Override
             public void drawCustomSlider(int mouseX, int mouseY, float partialTicks) {
-                RenderUtil.drawSideGradientRect(x, y, x + width, y + height, Color.BLACK.getRed(), colorSetting.getColor().getRGB());
+                RenderUtil.drawSideGradientRect(x, y, x + width, y + height, Color.BLACK.getRed(), colorSetting.getAsColor().getRGB());
                 Gui.drawRect(x + (int)sliderWidth - 1, y, x + (int)sliderWidth + 1, y + height, 0xFFFFFFFF);
             }
         };
-        // very broken chinese code kys
-        pickerSliders = new QuadSliderComponent(colorSetting.getHSB()[1], colorSetting.getHSB()[2], x, y, width - 2, width - 2) {
+        pickerSliders = new QuadSliderComponent(colorSetting.getSaturation(), colorSetting.getBrightness(), x, y, width - 2, width - 2) {
             @Override
             public int getTotalHeight() {
                 return height;
@@ -49,7 +48,8 @@ public class ColorComponent extends SettingComponent {
 
             @Override
             public void drawPicker(int mouseX, int mouseY, float partialTicks) {
-                RenderUtil.drawMultiColoredRect(x, y, x + width, y + height, Color.WHITE, Color.getHSBColor(colorSetting.getHSB()[0], 1f, 1f), Color.BLACK, Color.BLACK);
+                RenderUtil.drawSideGradientRect(x, y, x + width, y + height, 0xFFFFFFFF, Color.getHSBColor(colorSetting.getHue().getValue(), 1f, 1f).getRGB());
+                RenderUtil.drawGradientRect(x, y, x + width, y + height, 0x00000000, 0xFF000000);
                 Gui.drawRect(x + (int)sliderWidth - 1, y + (int)sliderHeight - 1, x + (int)sliderWidth + 1, y + (int)sliderHeight + 1, 0xFF909090);
             }
         };
