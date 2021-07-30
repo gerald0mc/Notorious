@@ -1,18 +1,17 @@
 package me.gavin.notorious.hack.hacks.combat;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import com.sun.istack.internal.NotNull;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
+import me.gavin.notorious.mixin.mixins.accessor.ICPacketUseEntityMixin;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
-import me.gavin.notorious.util.*;
+import me.gavin.notorious.util.BlockUtil;
+import me.gavin.notorious.util.NColor;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -22,12 +21,8 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemEndCrystal;
-import net.minecraft.network.play.client.CPacketHeldItemChange;
-import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
-import net.minecraft.network.play.server.SPacketSoundEffect;
+import net.minecraft.network.play.server.SPacketSpawnObject;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
@@ -38,14 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RegisterHack(name = "AutoGerald", description = "ez", category = Hack.Category.Combat)
 public class AutoCrystal extends Hack {
@@ -54,7 +42,7 @@ public class AutoCrystal extends Hack {
     private final NumSetting range = new NumSetting("Range", 4.5f, 1f, 6f, 0.5f);
 
     @RegisterSetting
-    private NumSetting attackDistance = new NumSetting("AttackRange", 4f, 1f, 6f, 1f);
+    private NumSetting attackDistance = new NumSetting("BreakRange", 4f, 1f, 6f, 1f);
     @RegisterSetting
     private NumSetting placeDistance = new NumSetting("PlaceRange", 4f, 1f, 6f, 1f);
     @RegisterSetting
@@ -79,8 +67,11 @@ public class AutoCrystal extends Hack {
     private BooleanSetting setDead = new BooleanSetting("SetDead", true);
     @RegisterSetting
     private BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
+    @RegisterSetting
+    private final BooleanSetting fastBreak = new BooleanSetting("FastBreak", false);
 
     private EntityPlayer targetPlayer = null;
+    private EntityEnderCrystal targetCrystal = null;
 
     /* :flushed: */
     @SubscribeEvent
@@ -91,6 +82,24 @@ public class AutoCrystal extends Hack {
         } else {
             break_();
             place();
+        }
+    }
+
+    @SubscribeEvent
+    public void onPacketReceive(PacketEvent.Receive event) {
+        if (fastBreak.getValue()) {
+            if (event.getPacket() instanceof SPacketSpawnObject) {
+                final SPacketSpawnObject sPacketSpawnObject = (SPacketSpawnObject) event.getPacket();
+
+                if (sPacketSpawnObject.getType() == 25) {
+                    final CPacketUseEntity cPacketUseEntity = new CPacketUseEntity();
+                    final ICPacketUseEntityMixin accessor = (ICPacketUseEntityMixin) cPacketUseEntity;
+                    accessor.setEntityIdAccessor(sPacketSpawnObject.getEntityID());
+                    accessor.setActionAccessor(CPacketUseEntity.Action.ATTACK);
+                    accessor.setHandAccessor(EnumHand.MAIN_HAND);
+                    mc.player.connection.sendPacket(cPacketUseEntity);
+                }
+            }
         }
     }
 
@@ -114,7 +123,7 @@ public class AutoCrystal extends Hack {
         }
     }
 
-    private BlockPos getBestPlacementPosition(@NotNull EntityPlayer player) {
+    private BlockPos getBestPlacementPosition(EntityPlayer player) {
         double bestDamage = -1;
         BlockPos bestPosition = null;
         for (BlockPos pos : BlockUtil.getSurroundingBlocks((int)placeDistance.getValue(), true)) {
@@ -130,19 +139,31 @@ public class AutoCrystal extends Hack {
         return bestPosition;
     }
 
-    private boolean canPlaceCrystal(@NotNull BlockPos pos) {
+    private boolean canPlaceCrystal(BlockPos pos) {
         return getBlock(pos) == Blocks.OBSIDIAN
                 && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
                 && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
                 && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
     }
 
-    private Block getBlock(@NotNull BlockPos pos) {
+    private Block getBlock(BlockPos pos) {
         return mc.world.getBlockState(pos).getBlock();
     }
 
     private void break_() {
+        if (targetCrystal == null) {
+            targetCrystal = findCrystalTarget();
+        } else {
+            if (!isCrystalTargetStillViable(targetCrystal)) {
+                targetCrystal = null;
+                return;
+            }
 
+            mc.playerController.attackEntity(mc.player, targetCrystal);
+            mc.player.swingArm(EnumHand.MAIN_HAND);
+            if (setDead.getValue())
+                targetCrystal.setDead();
+        }
     }
 
     private EntityPlayer findPlayerTarget() {
@@ -156,12 +177,22 @@ public class AutoCrystal extends Hack {
     }
 
     private boolean isTargetStillViable(EntityPlayer player) {
-        return  player.getDistance(mc.player) <= range.getValue() && player.getHealth() > 0 && player.isEntityAlive() && !player.isDead;
+        return player.getDistance(mc.player) <= range.getValue() && player.getHealth() > 0 && player.isEntityAlive() && !player.isDead;
     }
 
-//    private EntityEnderCrystal findCrystalTarget() {
-//
-//    }
+    private EntityEnderCrystal findCrystalTarget() {
+        return mc.world.loadedEntityList.stream()
+                .filter(entity -> entity instanceof EntityEnderCrystal)
+                .map(entity -> (EntityEnderCrystal) entity)
+                .filter(crystal -> crystal.getDistance(mc.player) <= attackDistance.getValue())
+                .filter(Entity::isEntityAlive)
+                .filter(crystal -> !crystal.isDead)
+                .findFirst().orElse(null);
+    }
+
+    private boolean isCrystalTargetStillViable(EntityEnderCrystal crystal) {
+        return crystal.getDistance(mc.player) <= attackDistance.getValue() && crystal.isEntityAlive() && !crystal.isDead;
+    }
 
     public float getBlastReduction(EntityLivingBase entity, float damage, Explosion explosion) {
         if (entity instanceof EntityPlayer) {

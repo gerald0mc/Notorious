@@ -11,6 +11,7 @@
     "MixinRenderItem",
     "ModelPlayerMixin",
     "NetworkManagerMixin",
+    "accessor.ICPacketUseEntityMixin",
     "accessor.IEntityMixin",
     "accessor.IEntityPlayerSPMixin",
     "accessor.IMinecraftMixin",
