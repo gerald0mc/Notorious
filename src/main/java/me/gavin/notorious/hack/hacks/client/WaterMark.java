@@ -22,7 +22,7 @@ public class WaterMark extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Rainbow", "Rainbow", "RGB");
     @RegisterSetting
-    public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255);
+    public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255, 255);
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Text event) {
