@@ -140,7 +140,7 @@ public class AutoCrystal extends Hack {
     }
 
     private boolean canPlaceCrystal(BlockPos pos) {
-        return getBlock(pos) == Blocks.OBSIDIAN
+        return (getBlock(pos) == Blocks.BEDROCK || getBlock(pos) == Blocks.OBSIDIAN)
                 && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
                 && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
                 && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
