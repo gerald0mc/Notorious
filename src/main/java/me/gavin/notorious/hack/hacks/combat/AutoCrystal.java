@@ -35,6 +35,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RegisterHack(name = "AutoGerald", description = "ez", category = Hack.Category.Combat)
 public class AutoCrystal extends Hack {
 
@@ -72,6 +75,8 @@ public class AutoCrystal extends Hack {
 
     private EntityPlayer targetPlayer = null;
     private EntityEnderCrystal targetCrystal = null;
+
+    private final List<Integer> hit = new ArrayList<>();
 
     /* :flushed: */
     @SubscribeEvent
@@ -127,7 +132,7 @@ public class AutoCrystal extends Hack {
         double bestDamage = -1;
         BlockPos bestPosition = null;
         for (BlockPos pos : BlockUtil.getSurroundingBlocks((int)placeDistance.getValue(), true)) {
-            if (canPlaceCrystal(pos)) {
+            if (canPlaceCrystal(pos) && canPlaceCrystal2(pos)) {
                 double damage = calculateDamage(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, player);
                 if (damage > bestDamage) {
                     bestDamage = damage;
@@ -144,6 +149,16 @@ public class AutoCrystal extends Hack {
                 && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
                 && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
                 && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
+    }
+
+    public boolean canPlaceCrystal2(BlockPos pos){
+        for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0)))) {
+            if (entity.isDead || (entity instanceof EntityEnderCrystal && hit.contains(entity.getEntityId())))
+                continue;
+
+            return false;
+        }
+        return true;
     }
 
     private Block getBlock(BlockPos pos) {
@@ -163,6 +178,7 @@ public class AutoCrystal extends Hack {
             mc.player.swingArm(EnumHand.MAIN_HAND);
             if (setDead.getValue())
                 targetCrystal.setDead();
+            hit.add(targetCrystal.getEntityId());
         }
     }
 
