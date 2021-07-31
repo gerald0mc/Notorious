@@ -37,7 +37,9 @@ public class HackList extends Hack {
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255, 255);
 
     public HackList() {
-        this.toggle();
+        if(!isEnabled()) {
+            this.toggle();
+        }
     }
 
     @Override
