@@ -1,10 +1,12 @@
 package me.gavin.notorious.hack.hacks.render;
 
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.Timer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.awt.*;
@@ -35,29 +37,31 @@ public class ViewModel extends Hack {
 
     @RegisterSetting
     public final ModeSetting animation = new ModeSetting("Animation", "None", "None", "RotateSide");
+    @RegisterSetting
+    public final NumSetting animationSpeed = new NumSetting("AnimationSpeed", 10, 1, 100, 1);
 
     public static ViewModel INSTANCE;
+    public Timer timer = new Timer();
 
     {
         INSTANCE = this;
     }
 
     @SubscribeEvent
-    public void onUpdate(TickEvent event) {
-        doAnimations();
+    public void onUpdate(PlayerLivingUpdateEvent event) {
+        if(timer.passed(animationSpeed.getValue())) {
+            doAnimations();
+            timer.reset();
+        }
     }
 
     public void doAnimations() {
         if(animation.getMode().equals("RotateSide")) {
-            float count = rotateZ.getValue();
-            while (count <= 200) {
-                count = count + 1;
+            while (rotateZ.getValue() <= 200) {
+                rotateZ.setValue(rotateZ.getValue() + 1);
             }
-            if(count == 200) {
-                rotateZ.setValue(70);
-            }
-            if(animation.getMode().equals("RotateSide")) {
-                rotateZ.setValue(((int) count) & 0xFF);
+            if(rotateZ.getValue() == 200) {
+                rotateZ.setValue(-70);
             }
         }
     }

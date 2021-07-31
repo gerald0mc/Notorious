@@ -12,6 +12,7 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.util.NColor;
+import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -33,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @RegisterHack(name = "AutoGerald", description = "ez", category = Hack.Category.Combat)
@@ -40,7 +42,6 @@ public class AutoCrystal extends Hack {
 
     @RegisterSetting
     private final NumSetting range = new NumSetting("Range", 4.5f, 1f, 6f, 0.5f);
-
     @RegisterSetting
     private NumSetting attackDistance = new NumSetting("BreakRange", 4f, 1f, 6f, 1f);
     @RegisterSetting
@@ -72,6 +73,9 @@ public class AutoCrystal extends Hack {
 
     private EntityPlayer targetPlayer = null;
     private EntityEnderCrystal targetCrystal = null;
+    private BlockPos blockPos;
+    private boolean box = false;
+    private boolean outline = false;
 
     /* :flushed: */
     @SubscribeEvent
@@ -103,6 +107,27 @@ public class AutoCrystal extends Hack {
         }
     }
 
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
+        if(renderMode.getMode().equals("Both")) {
+            outline = true;
+            box = true;
+        }else if(renderMode.getMode().equals("Outline")) {
+            outline = true;
+            box = false;
+        }else {
+            box = true;
+            outline = false;
+        }
+        if(blockPos != null) {
+            AxisAlignedBB bb = new AxisAlignedBB(blockPos);
+            if(box)
+                RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
+            if(outline)
+                RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+        }
+    }
+
     private void place() {
         if (mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)
             return;
@@ -112,6 +137,7 @@ public class AutoCrystal extends Hack {
         } else {
             if (!isTargetStillViable(targetPlayer)) {
                 targetPlayer = null;
+                blockPos = null;
                 return;
             }
 
@@ -129,6 +155,7 @@ public class AutoCrystal extends Hack {
         for (BlockPos pos : BlockUtil.getSurroundingBlocks((int)placeDistance.getValue(), true)) {
             if (canPlaceCrystal(pos)) {
                 double damage = calculateDamage(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, player);
+                blockPos = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
                 if (damage > bestDamage) {
                     bestDamage = damage;
                     bestPosition = pos;
@@ -137,13 +164,6 @@ public class AutoCrystal extends Hack {
         }
 
         return bestPosition;
-    }
-
-    private boolean canPlaceCrystal(BlockPos pos) {
-        return getBlock(pos) == Blocks.OBSIDIAN
-                && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
-                && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
-                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
     }
 
     private Block getBlock(BlockPos pos) {
@@ -232,5 +252,12 @@ public class AutoCrystal extends Hack {
             finald = getBlastReduction((EntityLivingBase) entity, getDamageMultiplied(damage), new Explosion(mc.world, null, posX, posY, posZ, 6F, false, true));
         }
         return (float) finald;
+    }
+
+    private boolean canPlaceCrystal(BlockPos pos) {
+        return getBlock(pos) == Blocks.OBSIDIAN
+                && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
+                && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
+                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
     }
 }
