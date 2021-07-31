@@ -42,6 +42,7 @@ public class AutoCrystal extends Hack {
 
     @RegisterSetting
     private final NumSetting range = new NumSetting("Range", 4.5f, 1f, 6f, 0.5f);
+
     @RegisterSetting
     private NumSetting attackDistance = new NumSetting("BreakRange", 4f, 1f, 6f, 1f);
     @RegisterSetting
@@ -166,6 +167,13 @@ public class AutoCrystal extends Hack {
         return bestPosition;
     }
 
+    private boolean canPlaceCrystal(BlockPos pos) {
+        return (getBlock(pos) == Blocks.BEDROCK || getBlock(pos) == Blocks.OBSIDIAN)
+                && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
+                && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
+                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
+    }
+
     private Block getBlock(BlockPos pos) {
         return mc.world.getBlockState(pos).getBlock();
     }
@@ -252,12 +260,5 @@ public class AutoCrystal extends Hack {
             finald = getBlastReduction((EntityLivingBase) entity, getDamageMultiplied(damage), new Explosion(mc.world, null, posX, posY, posZ, 6F, false, true));
         }
         return (float) finald;
-    }
-
-    private boolean canPlaceCrystal(BlockPos pos) {
-        return getBlock(pos) == Blocks.OBSIDIAN
-                && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
-                && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
-                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
     }
 }
