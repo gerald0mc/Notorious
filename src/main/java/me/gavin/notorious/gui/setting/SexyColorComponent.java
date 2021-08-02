@@ -1,6 +1,8 @@
 package me.gavin.notorious.gui.setting;
 
+import me.gavin.notorious.Notorious;
 import me.gavin.notorious.gui.api.SettingComponent;
+import me.gavin.notorious.hack.hacks.client.Font;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -57,8 +59,13 @@ public class SexyColorComponent extends SettingComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        Font font = ((me.gavin.notorious.hack.hacks.client.Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         Gui.drawRect(x, y, x + width, y + height, colorSetting.getAsColor().getRGB());
-        mc.fontRenderer.drawStringWithShadow(colorSetting.getName(), x + 2f, y + 2f, -1);
+        if(font.isEnabled()) {
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(colorSetting.getName(), x + 9f, y + 2f, new Color(255, 255, 255, 255));
+        }else {
+            mc.fontRenderer.drawStringWithShadow(colorSetting.getName(), x + 9f, y + 2f, -1);
+        }
         if (open) {
             pickerSliders.x = (this.x + 1);
             pickerSliders.y = (this.y + this.height);

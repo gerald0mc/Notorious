@@ -35,6 +35,8 @@ public class HackList extends Hack {
     public final NumSetting saturation = new NumSetting("Saturation", 0.5f, 0.1f, 1f, 0.1f);
     @RegisterSetting
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255, 255);
+    @RegisterSetting
+    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 9, 1, 30, 1);
 
     public HackList() {
         if(!isEnabled()) {
@@ -99,9 +101,9 @@ public class HackList extends Hack {
                     mc.fontRenderer.drawStringWithShadow(name,(int) x + 2,(int) y, color);
                 }
                 if(font.isEnabled()) {
-                    yOffset += notorious.fontRenderer.getHeight() + 4;
+                    yOffset += notorious.fontRenderer.getHeight() + (int) wordSpacing.getValue();
                 }else {
-                    yOffset += mc.fontRenderer.FONT_HEIGHT + 4;
+                    yOffset += mc.fontRenderer.FONT_HEIGHT + (int) wordSpacing.getValue();
                 }
             }
         }

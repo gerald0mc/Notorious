@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.combat;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
@@ -44,36 +45,35 @@ import java.util.List;
 public class AutoCrystal extends Hack {
 
     @RegisterSetting
-    private final NumSetting range = new NumSetting("Range", 4.5f, 1f, 6f, 0.5f);
-
+    public final NumSetting range = new NumSetting("Range", 4.5f, 1f, 6f, 0.5f);
     @RegisterSetting
-    private NumSetting attackDistance = new NumSetting("BreakRange", 4f, 1f, 6f, 1f);
+    public NumSetting attackDistance = new NumSetting("BreakRange", 4f, 1f, 6f, 1f);
     @RegisterSetting
-    private NumSetting placeDistance = new NumSetting("PlaceRange", 4f, 1f, 6f, 1f);
+    public NumSetting placeDistance = new NumSetting("PlaceRange", 4f, 1f, 6f, 1f);
     @RegisterSetting
-    private NumSetting minDmg = new NumSetting("MinDmg", 4f, 0.1f, 10.0f, 1f);
+    public NumSetting minDmg = new NumSetting("MinDmg", 4f, 0.1f, 10.0f, 1f);
     @RegisterSetting
-    private NumSetting maxSelfDmg = new NumSetting("MaxSelfDmg", 15f, 1f, 30f, 1f);
+    public NumSetting maxSelfDmg = new NumSetting("MaxSelfDmg", 15f, 1f, 30f, 1f);
     @RegisterSetting
-    private NumSetting breakDelay = new NumSetting("BreakDelay", 2f, 0f, 20f, 1f);
+    public NumSetting breakDelay = new NumSetting("BreakDelay", 2f, 0f, 20f, 1f);
     @RegisterSetting
-    private NumSetting placeDelay = new NumSetting("PlaceDelay", 2f, 0f, 20f, 1f);
+    public NumSetting placeDelay = new NumSetting("PlaceDelay", 2f, 0f, 20f, 1f);
     @RegisterSetting
-    private ModeSetting logic = new ModeSetting("Logic", "PlaceBreak", "PlaceBreak", "BreakPlace");
+    public ModeSetting logic = new ModeSetting("Logic", "PlaceBreak", "PlaceBreak", "BreakPlace");
     @RegisterSetting
-    private ModeSetting switchMode = new ModeSetting("SwitchMode", "Silent", "Silent", "Normal", "None");
+    public ModeSetting switchMode = new ModeSetting("SwitchMode", "Silent", "Silent", "Normal", "None");
     @RegisterSetting
-    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
+    public ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
     @RegisterSetting
-    public final ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
+    public ColorSetting boxColor = new ColorSetting("Box", new NColor(255, 255, 255, 125));
     @RegisterSetting
-    public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
+    public ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
     @RegisterSetting
-    private BooleanSetting setDead = new BooleanSetting("SetDead", true);
+    public BooleanSetting setDead = new BooleanSetting("SetDead", true);
     @RegisterSetting
-    private BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
+    public BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
     @RegisterSetting
-    private final BooleanSetting fastBreak = new BooleanSetting("FastBreak", false);
+    public BooleanSetting fastBreak = new BooleanSetting("FastBreak", false);
 
     private EntityPlayer targetPlayer = null;
     private EntityEnderCrystal targetCrystal = null;
@@ -82,6 +82,15 @@ public class AutoCrystal extends Hack {
     private boolean outline = false;
 
     private final List<Integer> hit = new ArrayList<>();
+
+    @Override
+    public String getMetaData() {
+        if (targetPlayer != null) {
+            return " [" + ChatFormatting.GRAY + targetPlayer.getDisplayNameString() + ChatFormatting.RESET + "]";
+        }else {
+            return "";
+        }
+    }
 
     /* :flushed: */
     @SubscribeEvent
