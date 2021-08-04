@@ -81,11 +81,11 @@ public class TargetHUD extends Hack {
             if(entityPlayer.getDistance(mc.player) <= range.getValue()) {
                 ////////////////////////////////////////////////background////////////////////////////////////////////////
                 if(background.isEnabled()) {
-                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 145, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
+                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 165, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
                 }
                 ////////////////////////////////////////////////rainbow line////////////////////////////////////////////////
                 if(rainbowLine.isEnabled()) {
-                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 145, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
+                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 165, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
                 }
                 ////////////////////////////////////////////////name////////////////////////////////////////////////
                 if(name.isEnabled()) {
@@ -164,6 +164,8 @@ public class TargetHUD extends Hack {
                     renderItem(new ItemStack(surroundblocks.get(2)), (int) x.getValue() + 75, (int) y.getValue() + 29);
                     renderItem(new ItemStack(surroundblocks.get(3)), (int) x.getValue() + 87, (int) y.getValue() + 18);
                 }
+                ////////////////////////////////////////////////mainhand and offhand////////////////////////////////////////////////
+
             }
         }
     }
