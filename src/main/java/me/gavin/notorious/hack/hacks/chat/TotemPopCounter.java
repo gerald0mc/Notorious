@@ -5,6 +5,8 @@ import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
+import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.SPacketEntityStatus;
@@ -16,6 +18,9 @@ import java.util.Map;
 @RegisterHack(name = "TotemPopCounter", description = "Counts totem pops", category = Hack.Category.Chat)
 public class TotemPopCounter extends Hack {
 
+    @RegisterSetting
+    public final BooleanSetting self = new BooleanSetting("Self", true);
+
     public final Map<String, Integer> popMap = new HashMap<>();
 
     @SubscribeEvent
@@ -25,7 +30,7 @@ public class TotemPopCounter extends Hack {
             if (packet.getOpCode() == 35) {
                 final Entity entity = packet.getEntity(mc.world);
                 if (entity instanceof EntityPlayer) {
-                    if (entity.equals(mc.player))
+                    if (entity.equals(mc.player) && !self.isEnabled())
                         return;
 
                     final EntityPlayer player = (EntityPlayer) entity;

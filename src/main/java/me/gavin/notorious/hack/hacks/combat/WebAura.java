@@ -10,6 +10,7 @@ import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.Timer;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -34,7 +35,7 @@ import java.util.List;
 public class WebAura extends Hack {
 
     @RegisterSetting
-    public final NumSetting delay = new NumSetting("Delay", 100, 1, 300, 1);
+    public final NumSetting delay = new NumSetting("Delay", 5, 1, 10, 1);
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 4, 1, 6, 1);
     @RegisterSetting
@@ -63,9 +64,8 @@ public class WebAura extends Hack {
             if(e.equals(mc.player) || e.isInWater() || e.isInLava())
                 return;
             if(e.getDistance(mc.player) <= range.getValue()) {
-                pos = new BlockPos(e.posX, e.posY, e.posZ);
-                if(mc.player.getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.WEB) && timer.passed(delay.getValue()) && mc.world.getBlockState(pos).getBlock().equals(Blocks.AIR)) {
-                    timer.reset();
+                pos = new BlockPos(e.posX, e.posY - 1D, e.posZ);
+                if(mc.player.getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.WEB) && mc.player.ticksExisted == (int) delay.getValue() && !mc.world.getBlockState(pos).getBlock().equals(Blocks.AIR)) {
                     target.add(pos);
                     BlockUtil.placeBlock(pos, EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false);
                 }

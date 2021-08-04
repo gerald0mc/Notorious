@@ -4,12 +4,14 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
+import me.gavin.notorious.friend.Friends;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.hack.hacks.combat.AutoCrystal;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import me.gavin.notorious.util.MathUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.Gui;
@@ -30,10 +32,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RegisterHack(name = "TargetHUD", description = "ez", category = Hack.Category.Render)
 public class TargetHUD extends Hack {
@@ -43,7 +42,13 @@ public class TargetHUD extends Hack {
     @RegisterSetting
     public final NumSetting y = new NumSetting("Y", 2.0f, 0.1f, 600.0f, 0.1f);
     @RegisterSetting
+    public final NumSetting range = new NumSetting("Range", 4, 1, 6, 1);
+    @RegisterSetting
+    public final BooleanSetting friendSkip = new BooleanSetting("FriendSkip", true);
+    @RegisterSetting
     public final BooleanSetting background = new BooleanSetting("Background", true);
+    @RegisterSetting
+    public final BooleanSetting rainbowLine = new BooleanSetting("RainbowLine", true);
     @RegisterSetting
     public final BooleanSetting name = new BooleanSetting("Name", true);
     @RegisterSetting
@@ -58,9 +63,11 @@ public class TargetHUD extends Hack {
     public final BooleanSetting totemPopCounter = new BooleanSetting("TotemPopCounter", true);
     @RegisterSetting
     public final BooleanSetting armor = new BooleanSetting("Armor", true);
+    @RegisterSetting
+    public final BooleanSetting surroundBlocks = new BooleanSetting("SurroundBlocks", true);
 
     public final Map<String, Integer> popMap = new HashMap<>();
-    public String totemName;
+    public String totemAmount;
 
     @SubscribeEvent
     public void onUpdate(RenderGameOverlayEvent.Text event) {
@@ -71,20 +78,52 @@ public class TargetHUD extends Hack {
                 .min(Comparator.comparing(c -> mc.player.getDistance(c)))
                 .orElse(null);
         if(entityPlayer != null) {
-            if(entityPlayer.getDistance(mc.player) <= ((AutoCrystal)Notorious.INSTANCE.hackManager.getHack(AutoCrystal.class)).range.getValue()) {
+            if(entityPlayer.getDistance(mc.player) <= range.getValue()) {
+                ////////////////////////////////////////////////background////////////////////////////////////////////////
+                if(background.isEnabled()) {
+                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 145, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
+                }
+                ////////////////////////////////////////////////rainbow line////////////////////////////////////////////////
+                if(rainbowLine.isEnabled()) {
+                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 145, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
+                }
+                ////////////////////////////////////////////////name////////////////////////////////////////////////
+                if(name.isEnabled()) {
+//                    Color nameColor;
+//                    if(Friends.isFriend(entityPlayer.getName())) {
+//                        nameColor = new Color(5, 195, 221, 255);
+//                    }else {
+//                        nameColor = new Color(-1);
+//                    }
+                    mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, -1);
+                }
+                ////////////////////////////////////////////////health////////////////////////////////////////////////
                 int healthInt = (int) (entityPlayer.getHealth() + entityPlayer.getAbsorptionAmount());
-                Color healthString = null;
+                Color healthColor = null;
+                if(healthInt > 19) {
+                    healthColor = new Color(0, 255, 0, 255);
+                }else if(healthInt > 10) {
+                    healthColor = new Color(255, 255, 0, 255);
+                }else if(healthInt > 0) {
+                    healthColor = new Color(255, 0, 0, 255);
+                }else {
+                    healthColor = new Color(0, 0, 0, 255);
+                }
+                if(health.isEnabled()) {
+                    mc.fontRenderer.drawStringWithShadow("HP:" + String.valueOf(healthInt), x.getValue() + 5, y.getValue() + 15, healthColor.getRGB());
+                }
+                ////////////////////////////////////////////////player view////////////////////////////////////////////////
+                if(playerView.isEnabled()) {
+                    GlStateManager.color(1f, 1f, 1f);
+                    GuiInventory.drawEntityOnScreen((int) x.getValue() + 115, (int) y.getValue() + 48, 20, 0, 0, entityPlayer);
+                }
+                ////////////////////////////////////////////////ping////////////////////////////////////////////////
+                if(ping.isEnabled()) {
+                    mc.fontRenderer.drawStringWithShadow("Ping:" + String.valueOf(getPing(entityPlayer)), x.getValue() + 5, y.getValue() + 25, -1);
+                }
+                ////////////////////////////////////////////////fucked detector////////////////////////////////////////////////
                 String fuckedDetector = "";
                 Color fuckedColor = null;
-                if(healthInt > 19) {
-                    healthString = new Color(0, 255, 0, 255);
-                }else if(healthInt > 10) {
-                    healthString = new Color(255, 255, 0, 255);
-                }else if(healthInt > 0) {
-                    healthString = new Color(255, 0, 0, 255);
-                }else {
-                    healthString = new Color(0, 0, 0, 255);
-                }
                 if(isFucked(entityPlayer)) {
                     fuckedDetector = "FUCKED";
                     fuckedColor = new Color(0, 255, 0, 255);
@@ -94,41 +133,20 @@ public class TargetHUD extends Hack {
                 }else {
                     fuckedColor = new Color(0, 0, 0, 255);
                 }
-                //background
-                if(background.isEnabled()) {
-                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 145, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
+                if(fucked.isEnabled()) {
+                    mc.fontRenderer.drawStringWithShadow(fuckedDetector, x.getValue() + 5, y.getValue() + 35, fuckedColor.getRGB());
                 }
-                //name
-                if(name.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, -1);
-                }
-                //health
-                if(health.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(String.valueOf(healthInt), x.getValue() + 5, y.getValue() + 15, healthString.getRGB());
-                }
-                //player view
-                if(playerView.isEnabled()) {
-                    GlStateManager.color(1f, 1f, 1f);
-                    GuiInventory.drawEntityOnScreen((int) x.getValue() + 115, (int) y.getValue() + 48, 20, 0, 0, entityPlayer);
-                }
-                //ping
-                if(ping.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(String.valueOf(getPing(entityPlayer)), x.getValue() + 5, y.getValue() + 25, -1);
-                }
-                //fucked detector
-               if(fucked.isEnabled()) {
-                   mc.fontRenderer.drawStringWithShadow(fuckedDetector, x.getValue() + 5, y.getValue() + 35, fuckedColor.getRGB());
-               }
-                //totem pop counter
+                ////////////////////////////////////////////////totem pop counter////////////////////////////////////////////////
                 if(totemPopCounter.isEnabled()) {
                     final ItemStack itemStack = new ItemStack(Items.TOTEM_OF_UNDYING);
-                    renderItem(itemStack, (int) x.getValue() + 52, (int) y.getValue() + 26);
-                    if(String.valueOf(totemName) == null) {
-                        totemName = "0";
+                    renderItem(itemStack, (int) x.getValue() + 34, (int) y.getValue() + 16);
+                    totemAmount = String.valueOf(popMap.get(entityPlayer));
+                    if(String.valueOf(popMap.get(entityPlayer)) == null) {
+                        totemAmount = "0";
                     }
-                    mc.fontRenderer.drawStringWithShadow("DickNuts", x.getValue() + 55, y.getValue() + 25, -1);
+                    mc.fontRenderer.drawStringWithShadow(totemAmount, x.getValue() + 50, y.getValue() + 20, -1);
                 }
-                //armor
+                ////////////////////////////////////////////////armor////////////////////////////////////////////////
                 if(armor.isEnabled()) {
                     int yOffset = 10;
                     for (ItemStack stack : entityPlayer.getArmorInventoryList()) {
@@ -138,10 +156,19 @@ public class TargetHUD extends Hack {
                         yOffset -= 12;
                     }
                 }
+                ////////////////////////////////////////////////surround blocks////////////////////////////////////////////////
+                if(surroundBlocks.isEnabled()) {
+                    ArrayList<Block> surroundblocks = getSurroundBlocks(entityPlayer);
+                    renderItem(new ItemStack(surroundblocks.get(0)), (int) x.getValue() + 75, (int) y.getValue() + 7);
+                    renderItem(new ItemStack(surroundblocks.get(1)), (int) x.getValue() + 63, (int) y.getValue() + 18);
+                    renderItem(new ItemStack(surroundblocks.get(2)), (int) x.getValue() + 75, (int) y.getValue() + 29);
+                    renderItem(new ItemStack(surroundblocks.get(3)), (int) x.getValue() + 87, (int) y.getValue() + 18);
+                }
             }
         }
     }
 
+    //skidded from wp2
     public boolean isFucked(EntityPlayer player) {
         BlockPos pos = new BlockPos(player.posX, player.posY - 1, player.posZ);
         if (canPlaceCrystal(pos.south()) || (canPlaceCrystal(pos.south().south()) && mc.world.getBlockState(pos.add(0, 1, 1)).getBlock() == Blocks.AIR)) {
@@ -159,6 +186,7 @@ public class TargetHUD extends Hack {
         return false;
     }
 
+    //skidded from wp2
     public boolean canPlaceCrystal(BlockPos pos) {
         Block block = mc.world.getBlockState(pos).getBlock();
         if (block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) {
@@ -201,7 +229,6 @@ public class TargetHUD extends Hack {
         for (EntityPlayer player : mc.world.playerEntities) {
             if ((player.isDead || !player.isEntityAlive() || player.getHealth() <= 0)) {
                 popMap.remove(player.getName());
-                totemName = player.getName();
             }
         }
     }
@@ -229,5 +256,16 @@ public class TargetHUD extends Hack {
         } else {
             popMap.put(player.getName(), popMap.get(player.getName()) + 1);
         }
+    }
+
+    //skidded from https://github.com/SomePineaple/PineapleClient/blob/c736e94775a953b069c45fd0a991c64b792a0612/src/main/java/me/somepineaple/pineapleclient/main/guiscreen/hud/EnemyInfo.java#L129
+    private ArrayList<Block> getSurroundBlocks(EntityLivingBase e) {
+        ArrayList<Block> surroundblocks = new ArrayList<>();
+        BlockPos entityblock = new BlockPos(Math.floor(e.posX), Math.floor(e.posY), Math.floor(e.posZ));
+        surroundblocks.add(mc.world.getBlockState(entityblock.north()).getBlock());
+        surroundblocks.add(mc.world.getBlockState(entityblock.east()).getBlock());
+        surroundblocks.add(mc.world.getBlockState(entityblock.south()).getBlock());
+        surroundblocks.add(mc.world.getBlockState(entityblock.west()).getBlock());
+        return surroundblocks;
     }
 }

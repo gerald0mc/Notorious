@@ -17,6 +17,15 @@ public class Setting {
         return name;
     }
 
+    public static Setting getFromDisplayString(String name) {
+        for(Setting setting : SettingGroup.getValues()) {
+            if(setting.getName().equalsIgnoreCase(name)) {
+                return setting;
+            }
+        }
+        return null;
+    }
+
     public void setHack(Hack hack) {
         this.hack = hack;
     }
