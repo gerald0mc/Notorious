@@ -36,7 +36,7 @@ public class HackList extends Hack {
     @RegisterSetting
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255, 255);
     @RegisterSetting
-    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 9, 1, 30, 1);
+    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 4, 0.1f, 30, 0.1f);
 
     public HackList() {
         if(!isEnabled()) {

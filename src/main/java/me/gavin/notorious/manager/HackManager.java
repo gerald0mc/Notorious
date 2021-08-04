@@ -43,13 +43,13 @@ public class HackManager {
         addHack(new DiscordRPC());
         addHack(new Font());
         addHack(new HackList());
+        addHack(new SkeetWatermark());
         addHack(new WaterMark());
 
         // combat
         addHack(new AntiCrystal());
         addHack(new AnvilBurrow());
         addHack(new AutoCrystal());
-        addHack(new Burrow());
         addHack(new KillAura());
         addHack(new Offhand());
         addHack(new Quiver());
@@ -61,6 +61,7 @@ public class HackManager {
         addHack(new CopyIP());
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
+        addHack(new MiddleClickFriend());
         addHack(new PlayerFinder());
         addHack(new WeaknessLog());
 

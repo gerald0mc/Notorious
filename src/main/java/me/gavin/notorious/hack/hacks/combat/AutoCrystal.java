@@ -82,6 +82,7 @@ public class AutoCrystal extends Hack {
     private BlockPos blockPos;
     private boolean box = false;
     private boolean outline = false;
+    private boolean alreadyAttacking = false;
 
     private final List<Integer> hit = new ArrayList<>();
 
@@ -149,6 +150,8 @@ public class AutoCrystal extends Hack {
         if (mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)
             return;
 
+        alreadyAttacking = false;
+
         if (targetPlayer == null) {
             targetPlayer = findPlayerTarget();
         } else {
@@ -207,6 +210,8 @@ public class AutoCrystal extends Hack {
     private void break_() {
         if (currentPos != null) {
             final EntityEnderCrystal target = getCrystalTest();
+            if(!alreadyAttacking)
+                alreadyAttacking = true;
             if (target != null) {
                 mc.playerController.attackEntity(mc.player, target);
                 currentPos = null;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SettingGroup {
 
     private final String name;
-    private final ArrayList<Setting> values;
+    private static ArrayList<Setting> values;
 
     public SettingGroup(String name) {
         this.name = name;
@@ -16,7 +16,7 @@ public class SettingGroup {
         return name;
     }
 
-    public ArrayList<Setting> getValues() {
+    public static ArrayList<Setting> getValues() {
         return values;
     }
 }
