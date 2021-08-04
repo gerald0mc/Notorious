@@ -147,9 +147,6 @@ public class AutoCrystal extends Hack {
     }
 
     private void place() {
-        if (mc.player.getHeldItemMainhand().getItem() != Items.END_CRYSTAL)
-            return;
-
         alreadyAttacking = false;
 
         if (targetPlayer == null) {
@@ -193,31 +190,27 @@ public class AutoCrystal extends Hack {
                 && getBlock(pos.add(0, 2, 0)) == Blocks.AIR;
     }
 
-    private boolean canPlaceCrystal2(BlockPos pos){
-        for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0)))) {
-            if (entity.isDead || (entity instanceof EntityEnderCrystal && hit.contains(entity.getEntityId())))
-                continue;
-
-            return false;
-        }
-        return true;
+    private boolean canPlaceCrystal2(final BlockPos blockPos) {
+        final BlockPos boost = blockPos.add(0, 1, 0);
+        final BlockPos boost2 = blockPos.add(0, 2, 0);
+        return (AutoCrystal.mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK || AutoCrystal.mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN) && AutoCrystal.mc.world.getBlockState(boost).getBlock() == Blocks.AIR && AutoCrystal.mc.world.getBlockState(boost2).getBlock() == Blocks.AIR && AutoCrystal.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty() && AutoCrystal.mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)).isEmpty();
     }
 
     private Block getBlock(BlockPos pos) {
         return mc.world.getBlockState(pos).getBlock();
     }
 
-    private void break_() {
-        if (currentPos != null) {
-            final EntityEnderCrystal target = getCrystalTest();
-            if(!alreadyAttacking)
-                alreadyAttacking = true;
-            if (target != null) {
-                mc.playerController.attackEntity(mc.player, target);
-                currentPos = null;
-            }
-        }
-    }
+//    private void break_() {
+//        if (currentPos != null) {
+//            final EntityEnderCrystal target = getCrystalTest();
+//            if(!alreadyAttacking)
+//                alreadyAttacking = true;
+//            if (target != null) {
+//                mc.playerController.attackEntity(mc.player, target);
+//                currentPos = null;
+//            }
+//        }
+//    }
 
     private EntityEnderCrystal getCrystalTest() {
         return mc.world.getEntitiesWithinAABB(Entity.class ,new AxisAlignedBB(currentPos.add(0.5, 1, 0.5))).stream()
@@ -230,22 +223,24 @@ public class AutoCrystal extends Hack {
                 .findFirst().orElse(null);
     }
 
-//    private void break_() {
-//        if (targetCrystal == null) {
-//            targetCrystal = findCrystalTarget();
-//        } else {
-//            if (!isCrystalTargetStillViable(targetCrystal)) {
-//                targetCrystal = null;
-//                return;
-//            }
-//
-//            mc.playerController.attackEntity(mc.player, targetCrystal);
-//            mc.player.swingArm(EnumHand.MAIN_HAND);
-//            if (setDead.getValue())
-//                targetCrystal.setDead();
-//            hit.add(targetCrystal.getEntityId());
-//        }
-//    }
+    private void break_() {
+        if(!alreadyAttacking)
+            alreadyAttacking = true;
+        if (targetCrystal == null) {
+            targetCrystal = findCrystalTarget();
+        } else {
+            if (!isCrystalTargetStillViable(targetCrystal)) {
+                targetCrystal = null;
+                return;
+            }
+
+            mc.playerController.attackEntity(mc.player, targetCrystal);
+            mc.player.swingArm(EnumHand.MAIN_HAND);
+            if (setDead.getValue())
+                targetCrystal.setDead();
+            hit.add(targetCrystal.getEntityId());
+        }
+    }
 
     private EntityPlayer findPlayerTarget() {
         return mc.world.playerEntities.stream()

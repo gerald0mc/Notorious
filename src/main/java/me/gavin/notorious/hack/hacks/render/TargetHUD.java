@@ -44,7 +44,7 @@ public class TargetHUD extends Hack {
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 4, 1, 6, 1);
     @RegisterSetting
-    public final BooleanSetting friendSkip = new BooleanSetting("FriendSkip", true);
+    public final BooleanSetting autoCrystalTarget = new BooleanSetting("AutoCrystalTarget", true);
     @RegisterSetting
     public final BooleanSetting background = new BooleanSetting("Background", true);
     @RegisterSetting
@@ -71,25 +71,29 @@ public class TargetHUD extends Hack {
 
     @SubscribeEvent
     public void onUpdate(RenderGameOverlayEvent.Text event) {
-        EntityPlayer entityPlayer = notorious.hackManager.getHack(AutoCrystal.class).targetPlayer;
+        EntityPlayer entityPlayer;
+        if(autoCrystalTarget.isEnabled()) {
+            entityPlayer = notorious.hackManager.getHack(AutoCrystal.class).targetPlayer;
+        }else {
+            entityPlayer = (EntityPlayer) mc.world.loadedEntityList.stream()
+                    .filter(entity -> entity instanceof EntityPlayer)
+                    .filter(entity -> entity != mc.player)
+                    .map(entity -> (EntityLivingBase) entity)
+                    .min(Comparator.comparing(c -> mc.player.getDistance(c)))
+                    .orElse(null);
+        }
         if(entityPlayer != null) {
             if(entityPlayer.getDistance(mc.player) <= range.getValue()) {
                 ////////////////////////////////////////////////background////////////////////////////////////////////////
                 if(background.isEnabled()) {
-                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 165, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
+                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
                 }
                 ////////////////////////////////////////////////rainbow line////////////////////////////////////////////////
                 if(rainbowLine.isEnabled()) {
-                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 165, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
+                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
                 }
                 ////////////////////////////////////////////////name////////////////////////////////////////////////
                 if(name.isEnabled()) {
-//                    Color nameColor;
-//                    if(Friends.isFriend(entityPlayer.getName())) {
-//                        nameColor = new Color(5, 195, 221, 255);
-//                    }else {
-//                        nameColor = new Color(-1);
-//                    }
                     mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, -1);
                 }
                 ////////////////////////////////////////////////health////////////////////////////////////////////////
@@ -131,31 +135,14 @@ public class TargetHUD extends Hack {
                 if(fucked.isEnabled()) {
                     mc.fontRenderer.drawStringWithShadow(fuckedDetector, x.getValue() + 5, y.getValue() + 35, fuckedColor.getRGB());
                 }
-                //health
-                if(health.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(String.valueOf(healthInt), x.getValue() + 5, y.getValue() + 15, healthString.getRGB());
-                }
-                //player view
-                if(playerView.isEnabled()) {
-                    GlStateManager.color(1f, 1f, 1f);
-                    GuiInventory.drawEntityOnScreen((int) x.getValue() + 115, (int) y.getValue() + 48, 20, 0, 0, entityPlayer);
-                }
-                //ping
-                if(ping.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(String.valueOf(getPing(entityPlayer)), x.getValue() + 5, y.getValue() + 25, -1);
-                }
-                //fucked detector
-               if(fucked.isEnabled()) {
-                   mc.fontRenderer.drawStringWithShadow(fuckedDetector, x.getValue() + 5, y.getValue() + 35, fuckedColor.getRGB());
-               }
-                //totem pop counter
+                ////////////////////////////////////////////////totem pop counter////////////////////////////////////////////////
                 final ItemStack itemStack = new ItemStack(Items.TOTEM_OF_UNDYING);
-                renderItem(itemStack, (int) x.getValue() + 52, (int) y.getValue() + 26);
-                int pops = 0;
+                renderItem(itemStack, (int) x.getValue() + 142, (int) y.getValue() + 26);
+                String pops = "0";
                 if (notorious.popListener.popMap.get(entityPlayer.getName()) != null)
-                    pops = notorious.popListener.popMap.get(entityPlayer.getName());
-                mc.fontRenderer.drawStringWithShadow("Pops: " + pops, x.getValue() + 55, y.getValue() + 25, -1);
-                //armor
+                    pops = notorious.popListener.popMap.get(entityPlayer.getName()).toString();
+                mc.fontRenderer.drawStringWithShadow(pops, x.getValue() + 158, y.getValue() + 32, -1);
+                ////////////////////////////////////////////////armor////////////////////////////////////////////////
                 if(armor.isEnabled()) {
                     int yOffset = 10;
                     for (ItemStack stack : entityPlayer.getArmorInventoryList()) {
@@ -174,7 +161,10 @@ public class TargetHUD extends Hack {
                     renderItem(new ItemStack(surroundblocks.get(3)), (int) x.getValue() + 87, (int) y.getValue() + 18);
                 }
                 ////////////////////////////////////////////////mainhand and offhand////////////////////////////////////////////////
-
+                final ItemStack mainHand = new ItemStack(entityPlayer.getHeldItemMainhand().getItem());
+                final ItemStack offHand = new ItemStack(entityPlayer.getHeldItemOffhand().getItem());
+                renderItem(mainHand, (int) x.getValue() + 160, (int) y.getValue() + 5);
+                renderItem(offHand, (int) x.getValue() + 142, (int) y.getValue() + 5);
             }
         }
     }

@@ -78,6 +78,7 @@ public class HackManager {
         addHack(new EChestFarmer());
         addHack(new FastPlace());
         addHack(new MiddleClickXP());
+        addHack(new ToggleSilentXP());
 
         // render
         addHack(new AntiFog());

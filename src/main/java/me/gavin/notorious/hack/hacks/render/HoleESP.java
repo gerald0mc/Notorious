@@ -6,11 +6,18 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 
 @RegisterHack(name = "HoleESP", description = "ez", category = Hack.Category.Render)
 public class HoleESP extends Hack {
+
+    @SubscribeEvent
+    public void onUpdate(RenderWorldLastEvent event) {
+
+    }
 
     private ArrayList<Block> getSafeHoles(EntityLivingBase e) {
         ArrayList<Block> surroundblocks = new ArrayList<>();
