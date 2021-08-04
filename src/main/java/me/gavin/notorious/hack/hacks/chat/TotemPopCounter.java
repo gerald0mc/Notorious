@@ -16,7 +16,7 @@ import java.util.Map;
 @RegisterHack(name = "TotemPopCounter", description = "Counts totem pops", category = Hack.Category.Chat)
 public class TotemPopCounter extends Hack {
 
-    private final Map<String, Integer> popMap = new HashMap<>();
+    public final Map<String, Integer> popMap = new HashMap<>();
 
     @SubscribeEvent
     public void onPacket(PacketEvent.Receive event) {

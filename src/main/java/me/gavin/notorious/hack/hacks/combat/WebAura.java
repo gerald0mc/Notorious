@@ -60,10 +60,10 @@ public class WebAura extends Hack {
     public void onTick(TickEvent event) {
         target.clear();
         for(EntityPlayer e : mc.world.playerEntities) {
-            if(e.equals(mc.player))
+            if(e.equals(mc.player) || e.isInWater() || e.isInLava())
                 return;
-            pos = new BlockPos(e.posX, e.posY - 1.0D, e.posZ);
             if(e.getDistance(mc.player) <= range.getValue()) {
+                pos = new BlockPos(e.posX, e.posY, e.posZ);
                 if(mc.player.getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.WEB) && timer.passed(delay.getValue()) && mc.world.getBlockState(pos).getBlock().equals(Blocks.AIR)) {
                     timer.reset();
                     target.add(pos);

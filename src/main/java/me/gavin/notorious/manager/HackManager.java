@@ -92,6 +92,7 @@ public class HackManager {
         addHack(new PopESP());
         addHack(new SkyColor());
         addHack(new StorageESP());
+        addHack(new TargetHUD());
         addHack(new ViewModel());
         addHack(new VoidESP());
 
