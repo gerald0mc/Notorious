@@ -112,10 +112,11 @@ public class HackManager {
 
     public ArrayList<Hack> getSortedHacks() { return sortedHacks; }
 
-    public Hack getHack(Class<? extends Hack> clazz) {
+    @SuppressWarnings("unchecked")
+    public <T extends Hack> T getHack(Class<T> clazz) {
         for (Hack hack : hacks) {
             if (hack.getClass() == clazz)
-                return hack;
+                return (T) hack;
         }
 
         return null;

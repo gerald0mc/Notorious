@@ -8,6 +8,7 @@ import me.gavin.notorious.manager.HackManager;
 import me.gavin.notorious.manager.MessageManager;
 import me.gavin.notorious.manager.RotationManager;
 import me.gavin.notorious.util.ConfigUtil;
+import me.gavin.notorious.util.TotemPopListener;
 import me.gavin.notorious.util.font.CFontLoader;
 import me.gavin.notorious.util.font.CFontRenderer;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -29,6 +30,7 @@ public class Notorious {
     public final MessageManager messageManager;
     public final RotationManager rotationManager;
     public final ConfigUtil configUtil;
+    public final TotemPopListener popListener;
 
     public Notorious() {
         INSTANCE = this;
@@ -39,6 +41,7 @@ public class Notorious {
         messageManager = new MessageManager();
         rotationManager = new RotationManager();
         configUtil = new ConfigUtil();
+        popListener = new TotemPopListener();
 
         new EventProcessor();
 

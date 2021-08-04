@@ -77,7 +77,7 @@ public class AutoCrystal extends Hack {
     @RegisterSetting
     public BooleanSetting fastBreak = new BooleanSetting("FastBreak", false);
 
-    private EntityPlayer targetPlayer = null;
+    public EntityPlayer targetPlayer = null;
     private EntityEnderCrystal targetCrystal = null;
     private BlockPos blockPos;
     private boolean box = false;

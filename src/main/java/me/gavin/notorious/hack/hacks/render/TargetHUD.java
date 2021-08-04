@@ -64,12 +64,7 @@ public class TargetHUD extends Hack {
 
     @SubscribeEvent
     public void onUpdate(RenderGameOverlayEvent.Text event) {
-        EntityPlayer entityPlayer = (EntityPlayer) mc.world.loadedEntityList.stream()
-                .filter(entity -> entity instanceof EntityPlayer)
-                .filter(entity -> entity != mc.player)
-                .map(entity -> (EntityLivingBase) entity)
-                .min(Comparator.comparing(c -> mc.player.getDistance(c)))
-                .orElse(null);
+        EntityPlayer entityPlayer = notorious.hackManager.getHack(AutoCrystal.class).targetPlayer;
         if(entityPlayer != null) {
             if(entityPlayer.getDistance(mc.player) <= ((AutoCrystal)Notorious.INSTANCE.hackManager.getHack(AutoCrystal.class)).range.getValue()) {
                 int healthInt = (int) (entityPlayer.getHealth() + entityPlayer.getAbsorptionAmount());
@@ -120,14 +115,12 @@ public class TargetHUD extends Hack {
                    mc.fontRenderer.drawStringWithShadow(fuckedDetector, x.getValue() + 5, y.getValue() + 35, fuckedColor.getRGB());
                }
                 //totem pop counter
-                if(totemPopCounter.isEnabled()) {
-                    final ItemStack itemStack = new ItemStack(Items.TOTEM_OF_UNDYING);
-                    renderItem(itemStack, (int) x.getValue() + 52, (int) y.getValue() + 26);
-                    if(String.valueOf(totemName) == null) {
-                        totemName = "0";
-                    }
-                    mc.fontRenderer.drawStringWithShadow("DickNuts", x.getValue() + 55, y.getValue() + 25, -1);
-                }
+                final ItemStack itemStack = new ItemStack(Items.TOTEM_OF_UNDYING);
+                renderItem(itemStack, (int) x.getValue() + 52, (int) y.getValue() + 26);
+                int pops = 0;
+                if (notorious.popListener.popMap.get(entityPlayer.getName()) != null)
+                    pops = notorious.popListener.popMap.get(entityPlayer.getName());
+                mc.fontRenderer.drawStringWithShadow("Pops: " + pops, x.getValue() + 55, y.getValue() + 25, -1);
                 //armor
                 if(armor.isEnabled()) {
                     int yOffset = 10;
