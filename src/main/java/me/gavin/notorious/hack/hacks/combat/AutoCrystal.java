@@ -44,6 +44,8 @@ import java.util.List;
 @RegisterHack(name = "AutoGerald", description = "ez", category = Hack.Category.Combat)
 public class AutoCrystal extends Hack {
 
+    private BlockPos currentPos;
+
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 4.5f, 1f, 6f, 0.5f);
     @RegisterSetting
@@ -156,10 +158,11 @@ public class AutoCrystal extends Hack {
                 return;
             }
 
-            final BlockPos pos = getBestPlacementPosition(targetPlayer);
-            if (pos != null) {
-                mc.playerController.processRightClickBlock(mc.player, mc.world, pos, EnumFacing.UP, Vec3d.ZERO, EnumHand.MAIN_HAND);
+            if (currentPos != null) {
+                mc.playerController.processRightClickBlock(mc.player, mc.world, currentPos, EnumFacing.UP, Vec3d.ZERO, EnumHand.MAIN_HAND);
                 mc.player.swingArm(EnumHand.MAIN_HAND);
+            } else {
+                currentPos = getBestPlacementPosition(targetPlayer);
             }
         }
     }
@@ -184,11 +187,10 @@ public class AutoCrystal extends Hack {
     private boolean canPlaceCrystal(BlockPos pos) {
         return (getBlock(pos) == Blocks.BEDROCK || getBlock(pos) == Blocks.OBSIDIAN)
                 && getBlock(pos.add(0, 1, 0)) == Blocks.AIR
-                && getBlock(pos.add(0, 2, 0)) == Blocks.AIR
-                && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0))).size() == 0;
+                && getBlock(pos.add(0, 2, 0)) == Blocks.AIR;
     }
 
-    public boolean canPlaceCrystal2(BlockPos pos){
+    private boolean canPlaceCrystal2(BlockPos pos){
         for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(0, 1, 0)))) {
             if (entity.isDead || (entity instanceof EntityEnderCrystal && hit.contains(entity.getEntityId())))
                 continue;
@@ -203,21 +205,42 @@ public class AutoCrystal extends Hack {
     }
 
     private void break_() {
-        if (targetCrystal == null) {
-            targetCrystal = findCrystalTarget();
-        } else {
-            if (!isCrystalTargetStillViable(targetCrystal)) {
-                targetCrystal = null;
-                return;
+        if (currentPos != null) {
+            final EntityEnderCrystal target = getCrystalTest();
+            if (target != null) {
+                mc.playerController.attackEntity(mc.player, target);
+                currentPos = null;
             }
-
-            mc.playerController.attackEntity(mc.player, targetCrystal);
-            mc.player.swingArm(EnumHand.MAIN_HAND);
-            if (setDead.getValue())
-                targetCrystal.setDead();
-            hit.add(targetCrystal.getEntityId());
         }
     }
+
+    private EntityEnderCrystal getCrystalTest() {
+        return mc.world.getEntitiesWithinAABB(Entity.class ,new AxisAlignedBB(currentPos.add(0.5, 1, 0.5))).stream()
+                .filter(entity -> entity instanceof EntityEnderCrystal)
+                .map(entity -> (EntityEnderCrystal)entity)
+                .filter(Entity::isEntityAlive)
+                .filter(Entity::isEntityAlive)
+                .filter(crystal -> !crystal.isDead)
+                .filter(crystal -> crystal.getDistance(mc.player) <= attackDistance.getValue())
+                .findFirst().orElse(null);
+    }
+
+//    private void break_() {
+//        if (targetCrystal == null) {
+//            targetCrystal = findCrystalTarget();
+//        } else {
+//            if (!isCrystalTargetStillViable(targetCrystal)) {
+//                targetCrystal = null;
+//                return;
+//            }
+//
+//            mc.playerController.attackEntity(mc.player, targetCrystal);
+//            mc.player.swingArm(EnumHand.MAIN_HAND);
+//            if (setDead.getValue())
+//                targetCrystal.setDead();
+//            hit.add(targetCrystal.getEntityId());
+//        }
+//    }
 
     private EntityPlayer findPlayerTarget() {
         return mc.world.playerEntities.stream()
