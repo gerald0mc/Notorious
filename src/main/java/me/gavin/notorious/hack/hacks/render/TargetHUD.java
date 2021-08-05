@@ -65,6 +65,8 @@ public class TargetHUD extends Hack {
     public final BooleanSetting armor = new BooleanSetting("Armor", true);
     @RegisterSetting
     public final BooleanSetting surroundBlocks = new BooleanSetting("SurroundBlocks", true);
+    @RegisterSetting
+    public final BooleanSetting hands = new BooleanSetting("OffhandMainhand", true);
 
     public final Map<String, Integer> popMap = new HashMap<>();
     public String totemAmount;
@@ -155,16 +157,18 @@ public class TargetHUD extends Hack {
                 ////////////////////////////////////////////////surround blocks////////////////////////////////////////////////
                 if(surroundBlocks.isEnabled()) {
                     ArrayList<Block> surroundblocks = getSurroundBlocks(entityPlayer);
-                    renderItem(new ItemStack(surroundblocks.get(0)), (int) x.getValue() + 75, (int) y.getValue() + 7);
-                    renderItem(new ItemStack(surroundblocks.get(1)), (int) x.getValue() + 63, (int) y.getValue() + 18);
-                    renderItem(new ItemStack(surroundblocks.get(2)), (int) x.getValue() + 75, (int) y.getValue() + 29);
-                    renderItem(new ItemStack(surroundblocks.get(3)), (int) x.getValue() + 87, (int) y.getValue() + 18);
+                    renderItem(new ItemStack(surroundblocks.get(0)), (int) x.getValue() + 73, (int) y.getValue() + 10);
+                    renderItem(new ItemStack(surroundblocks.get(1)), (int) x.getValue() + 61, (int) y.getValue() + 21);
+                    renderItem(new ItemStack(surroundblocks.get(2)), (int) x.getValue() + 73, (int) y.getValue() + 32);
+                    renderItem(new ItemStack(surroundblocks.get(3)), (int) x.getValue() + 85, (int) y.getValue() + 21);
                 }
                 ////////////////////////////////////////////////mainhand and offhand////////////////////////////////////////////////
-                final ItemStack mainHand = new ItemStack(entityPlayer.getHeldItemMainhand().getItem());
-                final ItemStack offHand = new ItemStack(entityPlayer.getHeldItemOffhand().getItem());
-                renderItem(mainHand, (int) x.getValue() + 160, (int) y.getValue() + 5);
-                renderItem(offHand, (int) x.getValue() + 142, (int) y.getValue() + 5);
+                if(hands.isEnabled()) {
+                    final ItemStack mainHand = new ItemStack(entityPlayer.getHeldItemMainhand().getItem());
+                    final ItemStack offHand = new ItemStack(entityPlayer.getHeldItemOffhand().getItem());
+                    renderItem(mainHand, (int) x.getValue() + 160, (int) y.getValue() + 5);
+                    renderItem(offHand, (int) x.getValue() + 142, (int) y.getValue() + 5);
+                }
             }
         }
     }

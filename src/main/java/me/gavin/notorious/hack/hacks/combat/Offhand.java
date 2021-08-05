@@ -1,6 +1,7 @@
 package me.gavin.notorious.hack.hacks.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -9,8 +10,10 @@ import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.InventoryUtil;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.item.ItemSword;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.input.Mouse;
 
 /**
  * @author gerald0mc
@@ -43,7 +46,6 @@ public class Offhand extends Hack {
 
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
-        String itemName;
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
             slot = InventoryUtil.getItemSlot(Items.END_CRYSTAL);
         }else if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
@@ -60,7 +62,7 @@ public class Offhand extends Hack {
                     switchToShit();
             }
         if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart"))
-            if(mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL && mc.player.getHealth() > health.getValue()) {
+            if(mc.player.getHeldItemOffhand().getItem() != Items.GOLDEN_APPLE && mc.player.getHealth() > health.getValue()) {
                 if (slot != -1)
                     switchToShit();
             }else if(mc.player.getHealth() < health.getValue()) {

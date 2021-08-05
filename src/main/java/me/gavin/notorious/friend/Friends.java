@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Friends {
-    public static List<Friend> friends;
+    public static ArrayList<Friend> friends;
     public Friends(){
         friends = new ArrayList<>();
     }
@@ -21,7 +21,7 @@ public class Friends {
         return false;
     }
 
-    public static List<String> getFriendByName() {
+    public static ArrayList<String> getFriendByName() {
         ArrayList<String> friendsName = new ArrayList<>();
         friends.forEach(friend -> {
             friendsName.add(friend.getName());

@@ -1,6 +1,8 @@
 package me.gavin.notorious;
 
 import me.gavin.notorious.event.EventProcessor;
+import me.gavin.notorious.friend.Friend;
+import me.gavin.notorious.friend.Friends;
 import me.gavin.notorious.gui.ClickGuiScreen;
 import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.hack.hacks.client.Font;
@@ -31,6 +33,7 @@ public class Notorious {
     public final RotationManager rotationManager;
     public final ConfigUtil configUtil;
     public final TotemPopListener popListener;
+    public final Friends friend;
 
     public Notorious() {
         INSTANCE = this;
@@ -42,6 +45,7 @@ public class Notorious {
         rotationManager = new RotationManager();
         configUtil = new ConfigUtil();
         popListener = new TotemPopListener();
+        friend = new Friends();
 
         new EventProcessor();
 
