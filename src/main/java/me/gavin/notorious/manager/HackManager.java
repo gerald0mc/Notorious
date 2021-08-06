@@ -44,6 +44,7 @@ public class HackManager {
         addHack(new DiscordRPC());
         addHack(new Font());
         addHack(new HackList());
+        addHack(new SaveConfig());
         addHack(new SkeetWatermark());
         addHack(new WaterMark());
 
@@ -51,6 +52,7 @@ public class HackManager {
         addHack(new AntiCrystal());
         addHack(new AnvilBurrow());
         addHack(new AutoCrystal());
+        addHack(new BurrowBreaker());
         addHack(new KillAura());
         addHack(new Offhand());
         addHack(new PacketAutoCity());
@@ -122,6 +124,15 @@ public class HackManager {
                 return (T) hack;
         }
 
+        return null;
+    }
+
+    public Hack getHackString(String name) {
+        for (Hack h : getHacks()) {
+            if(h.getName().equalsIgnoreCase(name)) {
+                return h;
+            }
+        }
         return null;
     }
 
