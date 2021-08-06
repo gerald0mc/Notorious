@@ -66,9 +66,6 @@ public class TargetHUD extends Hack {
     @RegisterSetting
     public final BooleanSetting surroundBlocks = new BooleanSetting("SurroundBlocks", true);
 
-    public final Map<String, Integer> popMap = new HashMap<>();
-    public String totemAmount;
-
     @SubscribeEvent
     public void onUpdate(RenderGameOverlayEvent.Text event) {
         EntityPlayer entityPlayer;
@@ -222,41 +219,6 @@ public class TargetHUD extends Hack {
         mc.getRenderItem().renderItemOverlays(mc.fontRenderer, itemStack, posX, posY);
         RenderHelper.disableStandardItemLighting();
         mc.getRenderItem().zLevel = 0.0f;
-    }
-
-    //yoinked from totempopcounter ezz cope
-    @SubscribeEvent
-    public void onTick(PlayerLivingUpdateEvent event) {
-        for (EntityPlayer player : mc.world.playerEntities) {
-            if ((player.isDead || !player.isEntityAlive() || player.getHealth() <= 0)) {
-                popMap.remove(player.getName());
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onPacket(PacketEvent.Receive event) {
-        if (event.getPacket() instanceof SPacketEntityStatus) {
-            final SPacketEntityStatus packet = (SPacketEntityStatus) event.getPacket();
-            if (packet.getOpCode() == 35) {
-                final Entity entity = packet.getEntity(mc.world);
-                if (entity instanceof EntityPlayer) {
-                    if (entity.equals(mc.player))
-                        return;
-
-                    final EntityPlayer player = (EntityPlayer) entity;
-                    handlePop(player);
-                }
-            }
-        }
-    }
-
-    private void handlePop(EntityPlayer player) {
-        if (!popMap.containsKey(player.getName())) {
-            popMap.put(player.getName(), 1);
-        } else {
-            popMap.put(player.getName(), popMap.get(player.getName()) + 1);
-        }
     }
 
     //skidded from https://github.com/SomePineaple/PineapleClient/blob/c736e94775a953b069c45fd0a991c64b792a0612/src/main/java/me/somepineaple/pineapleclient/main/guiscreen/hud/EnemyInfo.java#L129

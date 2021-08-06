@@ -2,8 +2,6 @@ package me.gavin.notorious;
 
 import me.gavin.notorious.event.EventProcessor;
 import me.gavin.notorious.gui.ClickGuiScreen;
-import me.gavin.notorious.hack.hacks.client.ClickGUI;
-import me.gavin.notorious.hack.hacks.client.Font;
 import me.gavin.notorious.manager.HackManager;
 import me.gavin.notorious.manager.MessageManager;
 import me.gavin.notorious.manager.RotationManager;
@@ -11,7 +9,6 @@ import me.gavin.notorious.util.ConfigUtil;
 import me.gavin.notorious.util.TotemPopListener;
 import me.gavin.notorious.util.font.CFontLoader;
 import me.gavin.notorious.util.font.CFontRenderer;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.opengl.Display;
 
