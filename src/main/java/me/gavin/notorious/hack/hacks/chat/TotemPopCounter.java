@@ -19,7 +19,7 @@ public class TotemPopCounter extends Hack {
         if (event.getPopCount() == 1) {
             notorious.messageManager.sendRemovableMessage(event.getName() + " has popped a totem", event.getEntityId());
         } else {
-            notorious.messageManager.sendRemovableMessage(event.getName() + " has popped " + event.getPopCount() + " totems", event.getEntityId());
+            notorious.messageManager.sendRemovableMessage(event.getName() + " has popped " + ChatFormatting.GREEN + event.getPopCount() + ChatFormatting.RESET + " totems", event.getEntityId());
         }
     }
 }

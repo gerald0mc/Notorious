@@ -8,12 +8,17 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.setting.SettingGroup;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
+import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
@@ -58,16 +63,16 @@ public class KillAura extends Hack {
     @SubscribeEvent
     public void onLivingUpdate(PlayerLivingUpdateEvent event) {
         for (Entity entity : mc.world.loadedEntityList) {
-            if(entity.equals(mc.player))
+            if (entity.equals(mc.player))
                 continue;
 
-            if(entity instanceof EntityPlayer && players.isEnabled()) {
+            if (entity instanceof EntityPlayer && players.isEnabled()) {
                 attack(entity);
             }
-            if(entity instanceof EntityAnimal && animals.isEnabled()) {
+            if (entity instanceof EntityAnimal && animals.isEnabled()) {
                 attack(entity);
             }
-            if(entity instanceof EntityMob && mobs.isEnabled()) {
+            if (entity instanceof EntityMob && mobs.isEnabled()) {
                 attack(entity);
             }
         }
@@ -91,9 +96,5 @@ public class KillAura extends Hack {
 
     private boolean shouldAttack(EntityLivingBase entity) {
         return entity.getDistance(mc.player) <= range.getValue() && entity.getHealth() > 0;
-    }
-
-    private boolean isHoldingSword() {
-        return mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD;
     }
 }

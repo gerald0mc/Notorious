@@ -7,6 +7,7 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.mixin.mixins.accessor.ICPacketUseEntityMixin;
+import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
@@ -82,9 +83,6 @@ public class AutoCrystal extends Hack {
     private BlockPos blockPos;
     private boolean box = false;
     private boolean outline = false;
-    private boolean alreadyAttacking = false;
-
-    private final List<Integer> hit = new ArrayList<>();
 
     @Override
     public String getMetaData() {
@@ -147,8 +145,6 @@ public class AutoCrystal extends Hack {
     }
 
     private void place() {
-        alreadyAttacking = false;
-
         if (targetPlayer == null) {
             targetPlayer = findPlayerTarget();
         } else {
@@ -200,17 +196,15 @@ public class AutoCrystal extends Hack {
         return mc.world.getBlockState(pos).getBlock();
     }
 
-//    private void break_() {
-//        if (currentPos != null) {
-//            final EntityEnderCrystal target = getCrystalTest();
-//            if(!alreadyAttacking)
-//                alreadyAttacking = true;
-//            if (target != null) {
-//                mc.playerController.attackEntity(mc.player, target);
-//                currentPos = null;
-//            }
-//        }
-//    }
+    private void break_() {
+        if (currentPos != null) {
+            final EntityEnderCrystal target = getCrystalTest();
+            if (target != null) {
+                mc.playerController.attackEntity(mc.player, target);
+                currentPos = null;
+            }
+        }
+    }
 
     private EntityEnderCrystal getCrystalTest() {
         return mc.world.getEntitiesWithinAABB(Entity.class ,new AxisAlignedBB(currentPos.add(0.5, 1, 0.5))).stream()
@@ -223,24 +217,24 @@ public class AutoCrystal extends Hack {
                 .findFirst().orElse(null);
     }
 
-    private void break_() {
-        if(!alreadyAttacking)
-            alreadyAttacking = true;
-        if (targetCrystal == null) {
-            targetCrystal = findCrystalTarget();
-        } else {
-            if (!isCrystalTargetStillViable(targetCrystal)) {
-                targetCrystal = null;
-                return;
-            }
-
-            mc.playerController.attackEntity(mc.player, targetCrystal);
-            mc.player.swingArm(EnumHand.MAIN_HAND);
-            if (setDead.getValue())
-                targetCrystal.setDead();
-            hit.add(targetCrystal.getEntityId());
-        }
-    }
+//    private void break_() {
+//        if(!alreadyAttacking)
+//            alreadyAttacking = true;
+//        if (targetCrystal == null) {
+//            targetCrystal = findCrystalTarget();
+//        } else {
+//            if (!isCrystalTargetStillViable(targetCrystal)) {
+//                targetCrystal = null;
+//                return;
+//            }
+//
+//            mc.playerController.attackEntity(mc.player, targetCrystal);
+//            mc.player.swingArm(EnumHand.MAIN_HAND);
+//            if (setDead.getValue())
+//                targetCrystal.setDead();
+//            hit.add(targetCrystal.getEntityId());
+//        }
+//    }
 
     private EntityPlayer findPlayerTarget() {
         return mc.world.playerEntities.stream()
