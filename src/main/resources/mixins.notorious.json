@@ -16,6 +16,7 @@
     "accessor.IEntityMixin",
     "accessor.IEntityPlayerSPMixin",
     "accessor.IMinecraftMixin",
-    "accessor.IRenderGlobal"
+    "accessor.IRenderGlobal",
+    "accessor.ISpacketExplosionMixin"
   ]
 }
