@@ -102,11 +102,10 @@ public class PacketAutoCity extends Hack {
             if(!wasEnabled) {
                 notorious.hackManager.getHack(PacketMine.class).toggle();
             }
-            toggle();
         } else {
             notorious.messageManager.sendMessage("No city blocks to mine!");
-            toggle();
         }
+        toggle();
     }
 
     public BlockPos findCityBlock() {
@@ -132,8 +131,8 @@ public class PacketAutoCity extends Hack {
             if((!canBreak(targetX) && !canBreak(targetXMinus) && !canBreak(targetZ) && !canBreak(targetZMinus)) || mc.player.getPositionVector().distanceTo(vec) > dist) {
                 mineTarget = null;
             }
+            renderBlock = mineTarget;
         }
-        renderBlock = mineTarget;
         return mineTarget;
     }
 

@@ -91,6 +91,7 @@ public class HackManager {
         addHack(new FuckedDetector());
         addHack(new Fullbright());
         addHack(new HellenKeller());
+        addHack(new HoleESP());
         addHack(new PenisESP());
         addHack(new SkyColor());
         addHack(new StorageESP());

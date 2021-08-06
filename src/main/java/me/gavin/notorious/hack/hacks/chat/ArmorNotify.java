@@ -6,7 +6,9 @@ import me.gavin.notorious.friend.Friends;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,8 @@ public class ArmorNotify extends Hack {
     public final NumSetting x = new NumSetting("X", 2.0f, 0.1f, 1000.0f, 0.1f);
     @RegisterSetting
     public final NumSetting y = new NumSetting("Y", 2.0f, 0.1f, 600.0f, 0.1f);
+    @RegisterSetting
+    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
 
     boolean hasAnnounced = false;
 
@@ -50,7 +54,7 @@ public class ArmorNotify extends Hack {
         boolean armorDurability = getArmorDurability();
 
         if(armorDurability) {
-            mc.fontRenderer.drawStringWithShadow("Armor is below 50%", x.getValue(), y.getValue(), -1);
+            mc.fontRenderer.drawStringWithShadow("Armor is below 50%", x.getValue(), y.getValue(), rainbow.getValue() ? ColorUtil.getRainbow(6f, 1f) : -1);
         }
     }
 
