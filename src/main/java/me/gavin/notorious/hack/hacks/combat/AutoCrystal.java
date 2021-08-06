@@ -264,7 +264,7 @@ public class AutoCrystal extends Hack {
         return crystal.getDistance(mc.player) <= attackDistance.getValue() && crystal.isEntityAlive() && !crystal.isDead;
     }
 
-    public float getBlastReduction(EntityLivingBase entity, float damage, Explosion explosion) {
+    public static float getBlastReduction(EntityLivingBase entity, float damage, Explosion explosion) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer ep = (EntityPlayer) entity;
             DamageSource ds = DamageSource.causeExplosionDamage(explosion);
@@ -284,12 +284,12 @@ public class AutoCrystal extends Hack {
         return damage;
     }
 
-    private float getDamageMultiplied(float damage) {
+    private static float getDamageMultiplied(float damage) {
         int diff = mc.world.getDifficulty().getId();
         return damage * (diff == 0 ? 0 : (diff == 2 ? 1 : (diff == 1 ? 0.5f : 1.5f)));
     }
 
-    public float calculateDamage(double posX, double posY, double posZ, Entity entity) {
+    public static float calculateDamage(double posX, double posY, double posZ, Entity entity) {
         float doubleExplosionSize = 12.0F;
         double distancedsize = entity.getDistance(posX, posY, posZ) / (double) doubleExplosionSize;
         Vec3d vec3d = new Vec3d(posX, posY, posZ);

@@ -6,6 +6,7 @@ import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.event.events.TotemPopEvent;
 import me.gavin.notorious.hack.hacks.chat.TotemPopCounter;
+import me.gavin.notorious.hack.hacks.misc.FakePlayer;
 import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +43,7 @@ public class TotemPopListener implements IMinecraft {
         }
     }
 
-    private void handlePop(EntityPlayer player) {
+    public void handlePop(EntityPlayer player) {
         if (!popMap.containsKey(player.getName())) {
             MinecraftForge.EVENT_BUS.post(new TotemPopEvent(player.getName(), 1, player.getEntityId()));
             popMap.put(player.getName(), 1);
@@ -55,6 +56,9 @@ public class TotemPopListener implements IMinecraft {
     @SubscribeEvent
     public void onTick(PlayerLivingUpdateEvent event) {
         for (EntityPlayer player : mc.world.playerEntities) {
+            if (player == notorious.hackManager.getHack(FakePlayer.class).fakePlayer)
+                continue;
+
             if (player != mc.player && popMap.containsKey(player.getName())) {
                 if ((player.isDead || !player.isEntityAlive() || player.getHealth() <= 0)) {
                     notorious.hackManager.getHack(TotemPopCounter.class).onDeath(player.getName(), popMap.get(player.getName()), player.getEntityId());
