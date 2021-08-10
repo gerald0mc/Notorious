@@ -30,8 +30,6 @@ public class ChatModifications extends Hack {
     @RegisterSetting
     public final ModeSetting chatColor = new ModeSetting("ChatColor", "Green", "Green", "Red", "Cyan");
     @RegisterSetting
-    public final StringSetting suffixSetting = new StringSetting("Suffix", "Notorious");
-    @RegisterSetting
     public final BooleanSetting chatSuffix = new BooleanSetting("ChatSuffix", true);
     @RegisterSetting
     public final BooleanSetting chatTimestamps = new BooleanSetting("ChatTimestamps", true);
@@ -61,8 +59,6 @@ public class ChatModifications extends Hack {
                 suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D0F\u1D1C\uA731";
             }else if(mode.getMode().equals("UnicodeVersion")){
                 suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D0F\u1D1C\uA731\u1D0F " + NotoriousMod.VERSION;
-            }else {
-                suffix = " \u23d0 " + suffixSetting.getString();
             }
             if(event.getMessage().startsWith("!")) return;
             if(event.getMessage().startsWith(".")) return;

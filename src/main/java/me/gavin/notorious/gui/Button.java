@@ -83,13 +83,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         if (isMouseInside(mouseX, mouseY)) {
-            if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getDescription(), mouseX + 2f, mouseY + 2f, Color.WHITE);
-            }else {
-                mc.fontRenderer.drawStringWithShadow(hack.getDescription(), mouseX + 2f, mouseY + 2f, new Color(255, 255, 255).getRGB());
-            }
             if (mouseButton == 0) {
                 hack.toggle();
             }else if (mouseButton == 1) {

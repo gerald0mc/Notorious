@@ -34,7 +34,7 @@ public class FakePlayer extends Hack {
         UUID playerUUID = mc.player.getUniqueID();
         if (mc.world == null || mc.player == null) {
             disable();
-        } else {
+        }else {
             fakePlayer = new EntityOtherPlayerMP(mc.world, new GameProfile(UUID.fromString(playerUUID.toString()), "gerald0mc"));
             fakePlayer.copyLocationAndAnglesFrom(mc.player);
             fakePlayer.inventory.copyInventory(mc.player.inventory);

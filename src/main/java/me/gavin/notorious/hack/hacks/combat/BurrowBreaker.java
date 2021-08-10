@@ -42,7 +42,7 @@ public class BurrowBreaker extends Hack {
                     burrowedEntities.add(pos);
                 }
                 if(burrowedEntities.contains(pos) && mc.player.getHeldItemMainhand().getItem() instanceof ItemPickaxe && !isBreaking) {
-                    BlockUtil.damageBlock(pos, true, true);
+                    BlockUtil.damageBlock(pos, packet.getValue(), rotate.getValue());
                     isBreaking = true;
                 }
                 if(mc.world.getBlockState(pos).getBlock() == Blocks.AIR) {

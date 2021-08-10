@@ -35,11 +35,8 @@ public class Offhand extends Hack {
     public final ModeSetting offhandMode = new ModeSetting("OffhandMode", "Crystal",  "Crystal", "Gapple");
     @RegisterSetting
     public final NumSetting health = new NumSetting("HealthToSwitch", 14.0f, 0.5f, 36.0f, 0.5f);
-    @RegisterSetting
-    public final BooleanSetting swordGap = new BooleanSetting("SwordGap", true);
 
     public int slot;
-    private boolean mouseHolding = false;
 
     @Override
     public String getMetaData() {
@@ -54,23 +51,14 @@ public class Offhand extends Hack {
     }
 
     @SubscribeEvent
-    public void onMouse(InputEvent.MouseInputEvent event) {
-        if(Mouse.isButtonDown(1)) {
-            if(Mouse.getEventButtonState()) {
-                mouseHolding = true;
-            }else {
-                mouseHolding = false;
-            }
-        }
-    }
-
-    @SubscribeEvent
     public void onUpdate(TickEvent event) {
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
             slot = InventoryUtil.getItemSlot(Items.END_CRYSTAL);
-        }else if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
+        }
+        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
             slot = InventoryUtil.getItemSlot(Items.GOLDEN_APPLE);
-        }else if(mc.player.getHealth() < health.getValue() || mode.getMode().equals("Strict")){
+        }
+        if(mc.player.getHealth() < health.getValue() || mode.getMode().equals("Strict")){
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
         }
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
@@ -80,24 +68,15 @@ public class Offhand extends Hack {
             doSwitch(Items.GOLDEN_APPLE);
         }
         if(mode.getMode().equals("Strict")) {
-            if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING && !mouseHolding) {
+            if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
                 if(slot != -1)
                     switchToShit();
-            }
-        }
-        if(mouseHolding && swordGap.isEnabled()) {
-            slot = InventoryUtil.getItemSlot(Items.GOLDEN_APPLE);
-            if(mc.player.getHeldItemMainhand().getItem() instanceof ItemSword && mc.player.getHeldItemOffhand().getItem() != Items.GOLDEN_APPLE) {
-                if(slot != -1) {
-                    switchToShit();
-                    mc.player.connection.sendPacket(new CPacketPlayerTryUseItem(EnumHand.OFF_HAND));
-                }
             }
         }
     }
 
     public void doSwitch(Item item) {
-        if (mc.player.getHeldItemOffhand().getItem() != item && mc.player.getHealth() > health.getValue() && !mouseHolding) {
+        if (mc.player.getHeldItemOffhand().getItem() != item && mc.player.getHealth() > health.getValue()) {
             if (slot != -1) {
                 switchToShit();
             }

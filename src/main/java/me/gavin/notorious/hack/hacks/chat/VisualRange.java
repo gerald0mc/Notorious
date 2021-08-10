@@ -1,37 +1,57 @@
 package me.gavin.notorious.hack.hacks.chat;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
-import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.setting.BooleanSetting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RegisterHack(name = "VisualRange", description = "Sends a message in chat when a player enters your range.", category = Hack.Category.Chat)
 public class VisualRange extends Hack {
-    // Causes a crash because gerald0mc is a retard skidder
 
-    private Set<Entity> players = new HashSet<>();
+    private List<String> peopleInArea;
+    private List<String> peopleNearbyNew;
+    private List<String> peopleToRemove;
 
     @Override
     public void onEnable() {
-        if(!players.isEmpty()) {
-            players.clear();
-        }
+        peopleInArea = new ArrayList<>();
+        peopleToRemove = new ArrayList<>();
     }
 
     @SubscribeEvent
-    public void onUpdate(LivingEvent.LivingUpdateEvent event) {
-        for(Entity e : mc.world.loadedEntityList){
-            if(!(e instanceof EntityPlayer) || players.contains(e))
-                continue;
-            notorious.messageManager.sendMessage(ChatFormatting.RED + e.getName() + ChatFormatting.RESET + " has entered your range at X: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getX() + ChatFormatting.RESET + " Y: " + ChatFormatting.RED + ChatFormatting.BOLD +  e.getPosition().getY() + ChatFormatting.RESET + " Z: " + ChatFormatting.RED + ChatFormatting.BOLD + e.getPosition().getZ() + ChatFormatting.RESET + "!");
-            players.add(e);
+    public void onUpdate(PlayerLivingUpdateEvent event) {
+        peopleNearbyNew = new ArrayList<>();
+        List<EntityPlayer> playerEntities = mc.world.playerEntities;
+        for(Entity e : playerEntities) {
+            if(e.getName().equals(mc.player.getName())) continue;
+            peopleNearbyNew.add(e.getName());
+        }
+        if(peopleNearbyNew.size() > 0) {
+            for(String name : peopleNearbyNew) {
+                if(!peopleInArea.contains(name)) {
+                    mc.player.sendChatMessage("/msg " + name + " hewwo wittle kitten, come be my wittle discord girl? | discord.gg/BU9g9HgGBa");
+                    peopleInArea.add(name);
+                }
+            }
+        }
+        if(peopleInArea.size() > 0) {
+            for(String name : peopleInArea) {
+                if(!peopleNearbyNew.contains(name)) {
+                    peopleToRemove.add(name);
+                    mc.player.sendChatMessage("/msg " + name + " ow no pwease dont weave me my wittle kitten UWU");
+                }
+            }
+            if(peopleToRemove.size() > 0) {
+                for(String name : peopleToRemove) {
+                    peopleInArea.remove(name);
+                }
+                peopleToRemove.clear();
+            }
         }
     }
 }

@@ -26,7 +26,6 @@ public class Notorious {
     public final CFontRenderer fontRenderer;
     public final MessageManager messageManager;
     public final RotationManager rotationManager;
-    public final ConfigUtil configUtil;
     public final TotemPopListener popListener;
     public final Friends friend;
 
@@ -38,7 +37,6 @@ public class Notorious {
         clickGuiScreen = new ClickGuiScreen();
         messageManager = new MessageManager();
         rotationManager = new RotationManager();
-        configUtil = new ConfigUtil();
         popListener = new TotemPopListener();
         friend = new Friends();
 
