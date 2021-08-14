@@ -26,7 +26,7 @@ public class SkeetWatermark extends Hack {
     @RegisterSetting
     public final NumSetting y = new NumSetting("Y", 2.0f, 0.1f, 600.0f, 0.1f);
     @RegisterSetting
-    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
+    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", false);
     @RegisterSetting
     public final BooleanSetting version = new BooleanSetting("Version", false);
     @RegisterSetting
@@ -59,7 +59,7 @@ public class SkeetWatermark extends Hack {
         //ip
         if(ip.isEnabled()) {
             if (mc.getConnection() != null && mc.getCurrentServerData() != null && mc.getCurrentServerData().serverIP != null) {
-                string += " \u23d0 " + "IP:" + data.serverIP;
+                string += " \u23d0 " + data.serverIP;
             }else {
                 string += " \u23d0 " + "Singeplayer";
             }
@@ -71,9 +71,9 @@ public class SkeetWatermark extends Hack {
         //background
         Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + mc.fontRenderer.getStringWidth(string) + 4, (int) y.getValue() + mc.fontRenderer.FONT_HEIGHT + 3, new Color(0, 0, 0, 255).getRGB());
         //rainbow line
-        Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + mc.fontRenderer.getStringWidth(string) + 4, (int) y.getValue() + 1, ColorUtil.getRainbow(6f, 1f));
+        Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + mc.fontRenderer.getStringWidth(string) + 4, (int) y.getValue() + 1, ColorUtil.getRainbow(3f, 1f));
         //string
-        mc.fontRenderer.drawStringWithShadow(string, x.getValue() + 2, y.getValue() + 2, -1);
+        mc.fontRenderer.drawStringWithShadow(string, x.getValue() + 2, y.getValue() + 2, rainbow.isEnabled() ? ColorUtil.getRainbow(3f, 1f) : -1);
     }
 
     public int getPing(EntityPlayer player) {

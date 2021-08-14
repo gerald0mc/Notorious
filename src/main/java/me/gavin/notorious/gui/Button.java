@@ -43,6 +43,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
         Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         int renderYOffset = height;
         int intRainbow;
+        Color colorRainbow;
         float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
         float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
         if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
@@ -50,8 +51,12 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
         }else {
             intRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
+        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+            colorRainbow = ColorUtil.colorRainbow((int) time, saturation, 1f);
+        }else {
+            colorRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor();
+        }
         Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
-        Gui.drawRect(x, y, x + width, y + height, hack.isEnabled() ? intRainbow : 0xCC000000);
         if(open) {
             if(font.isEnabled()) {
                 Notorious.INSTANCE.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 5f, Color.WHITE);
@@ -66,9 +71,9 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
             }
         }
         if(font.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, Color.WHITE);
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 3f, hack.isEnabled() ? colorRainbow : new Color(255, 255, 255, 255));
         }else {
-            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 5f, new Color(255, 255, 255).getRGB());
+            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 3f, hack.isEnabled() ? intRainbow : -1);
         }
 
         if (open) {
