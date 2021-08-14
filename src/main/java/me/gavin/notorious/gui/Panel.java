@@ -24,7 +24,7 @@ public class Panel extends AbstractDragComponent {
         this.category = category;
 
         for (Hack hack : Notorious.INSTANCE.hackManager.getHacksFromCategory(category)) {
-            buttons.add(new Button(hack, x, y, width, 15));
+            buttons.add(new Button(hack, x, y, width, 10));
         }
     }
 

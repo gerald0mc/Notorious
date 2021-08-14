@@ -48,7 +48,6 @@ public abstract class Hack implements Toggleable, Bindable, IMinecraft {
     public void enable() {
         enabled = true;
         MinecraftForge.EVENT_BUS.register(this);
-        notorious.messageManager.sendToggleMessage(this, true);
         onEnable();
         lastEnabledTime = System.currentTimeMillis();
     }
@@ -56,7 +55,6 @@ public abstract class Hack implements Toggleable, Bindable, IMinecraft {
     public void disable() {
         enabled = false;
         MinecraftForge.EVENT_BUS.unregister(this);
-        notorious.messageManager.sendToggleMessage(this, false);
         onDisable();
         lastDisabledTime = System.currentTimeMillis();
     }

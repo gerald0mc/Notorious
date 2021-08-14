@@ -24,7 +24,7 @@ public class AutoArmor extends Hack {
         boolean hasHelmet = mc.player.inventory.armorInventory.get(3).isEmpty();
 
         if(!hasBoots || !hasLegs || !hasChest || !hasHelmet) {
-            for(int slot = 0; slot < mc.player.inventory.armorInventory.size(); ++slot) {
+            for(int slot = 0; slot < mc.player.inventory.armorInventory.size(); slot++) {
                 Item itemSlot = mc.player.inventoryContainer.inventorySlots.get(slot).getStack().getItem();
                 if(itemSlot instanceof ItemArmor) {
                     ItemArmor itemArmor = (ItemArmor) itemSlot;
