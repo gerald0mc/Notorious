@@ -35,7 +35,7 @@ public class ModeSetting extends Setting {
         }
     }
 
-    private int getIndex(String value) {
+    public int getIndex(String value) {
         for (int i = 0; i < modes.length; i++) {
             if (modes[i].equals(value))
                 return i;

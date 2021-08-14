@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Friends {
-    public static ArrayList<Friend> friends;
+    public ArrayList<Friend> friends;
     public Friends(){
         friends = new ArrayList<>();
     }
 
-    public static List<Friend> getFriends(){
+    public List<Friend> getFriends(){
         return friends;
     }
 
-    public static boolean isFriend(String name){
+    public boolean isFriend(String name){
         for(Friend f : getFriends()){
             if(f.getName().equalsIgnoreCase(name))
                 return true;
@@ -21,7 +21,7 @@ public class Friends {
         return false;
     }
 
-    public static ArrayList<String> getFriendByName() {
+    public ArrayList<String> getFriendByName() {
         ArrayList<String> friendsName = new ArrayList<>();
         friends.forEach(friend -> {
             friendsName.add(friend.getName());
@@ -29,7 +29,7 @@ public class Friends {
         return friendsName;
     }
 
-    public static Friend getFriendByName(String name){
+    public Friend getFriendByName(String name){
         Friend fr = null;
         for(Friend f : getFriends()){
             if(f.getName().equalsIgnoreCase(name)) fr = f;
@@ -37,11 +37,11 @@ public class Friends {
         return fr;
     }
 
-    public static void addFriend(String name){
+    public void addFriend(String name){
         friends.add(new Friend(name));
     }
 
-    public static void delFriend(String name){
+    public void delFriend(String name){
         friends.remove(getFriendByName(name));
     }
 }

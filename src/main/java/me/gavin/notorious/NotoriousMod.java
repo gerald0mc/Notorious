@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.io.IOException;
 import java.util.Comparator;
 
 /**
@@ -32,6 +33,15 @@ public class NotoriousMod {
     public void init(FMLInitializationEvent event) {
         new Notorious();
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        try {
+            Notorious.INSTANCE.configManager.load();
+        } catch (IOException e) {
+            e.printStackTrace();;
+        }
     }
 
     @SubscribeEvent

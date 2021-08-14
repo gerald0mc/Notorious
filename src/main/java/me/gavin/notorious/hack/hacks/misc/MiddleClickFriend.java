@@ -27,12 +27,12 @@ public class MiddleClickFriend extends Hack {
             final RayTraceResult result = mc.objectMouseOver;
             if(result == null || result.typeOfHit != RayTraceResult.Type.ENTITY || !(result.entityHit instanceof EntityPlayer))
                 return;
-            for(Friend f : Friends.getFriends()) {
-                if(Friends.isFriend(mc.objectMouseOver.entityHit.getName())) {
-                    Friends.delFriend(mc.objectMouseOver.entityHit.getName());
+            for(Friend f : notorious.friend.getFriends()) {
+                if(notorious.friend.isFriend(mc.objectMouseOver.entityHit.getName())) {
+                    notorious.friend.delFriend(mc.objectMouseOver.entityHit.getName());
                     notorious.messageManager.sendMessage(ChatFormatting.RED + "Removed " + ChatFormatting.LIGHT_PURPLE + mc.objectMouseOver.entityHit.getName() + ChatFormatting.WHITE + " from friends list");
                 }else {
-                    Friends.addFriend(mc.objectMouseOver.entityHit.getName());
+                    notorious.friend.addFriend(mc.objectMouseOver.entityHit.getName());
                     notorious.messageManager.sendMessage(ChatFormatting.GREEN + "Added " + ChatFormatting.LIGHT_PURPLE + mc.objectMouseOver.entityHit.getName() + ChatFormatting.WHITE + " to friends list");
                 }
             }
