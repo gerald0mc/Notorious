@@ -91,7 +91,9 @@ public class ConfigManager {
                     final Color tempColor = new Color(object.get(setting.getName()).getAsInt());
                     final float[] hsb = Color.RGBtoHSB(tempColor.getRed(), tempColor.getGreen(), tempColor.getBlue(), null);
                     final ColorSetting colorSetting = (ColorSetting) setting;
-                    colorSetting.get
+                    colorSetting.getHue().setValue(hsb[0]);
+                    colorSetting.getSaturation().setValue(hsb[1]);
+                    colorSetting.getBrightness().setValue(hsb[2]);
                 }
             }
         }
