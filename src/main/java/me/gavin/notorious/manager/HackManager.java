@@ -36,6 +36,7 @@ public class HackManager {
         addHack(new ChatModifications());
         addHack(new ChorusPredict());
         addHack(new PotionAlert());
+        addHack(new ToggleMessages());
         addHack(new TotemPopCounter());
         addHack(new VisualRange());
 
@@ -44,15 +45,19 @@ public class HackManager {
         addHack(new DiscordRPC());
         addHack(new Font());
         addHack(new HackList());
+        addHack(new SaveConfig());
         addHack(new SkeetWatermark());
         addHack(new WaterMark());
 
         // combat
         addHack(new AntiCrystal());
         addHack(new AnvilBurrow());
+        addHack(new AutoArmor());
         addHack(new AutoCrystal());
+        addHack(new BurrowBreaker());
         addHack(new KillAura());
         addHack(new Offhand());
+        addHack(new StrictAutoTot());
         addHack(new PacketAutoCity());
         addHack(new Quiver());
         addHack(new WebAura());
@@ -64,7 +69,6 @@ public class HackManager {
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
         addHack(new MiddleClickFriend());
-        addHack(new PlayerFinder());
         addHack(new WeaknessLog());
 
         // movement
@@ -91,6 +95,7 @@ public class HackManager {
         addHack(new FuckedDetector());
         addHack(new Fullbright());
         addHack(new HellenKeller());
+        addHack(new HoleESP());
         addHack(new PenisESP());
         addHack(new SkyColor());
         addHack(new StorageESP());
@@ -121,6 +126,15 @@ public class HackManager {
                 return (T) hack;
         }
 
+        return null;
+    }
+
+    public Hack getHackString(String name) {
+        for (Hack h : getHacks()) {
+            if(h.getName().equalsIgnoreCase(name)) {
+                return h;
+            }
+        }
         return null;
     }
 

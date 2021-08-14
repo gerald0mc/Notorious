@@ -24,12 +24,6 @@ public class Quiver extends Hack{
 
     @RegisterSetting
     public final NumSetting tickDelay = new NumSetting("HoldTime", 3, 0, 8, 0.5f);
-    @RegisterSetting
-    public final BooleanSetting autoEffect = new BooleanSetting("AutoEffect", true);
-
-    public List<Integer> slot;
-    public int speedSlot = -1;
-    public int strengthSlot = -1;
 
     @Override
     public String getMetaData() {
@@ -41,18 +35,6 @@ public class Quiver extends Hack{
         if (mc.player.getHeldItemMainhand().getItem() instanceof ItemBow && mc.player.getItemInUseMaxCount() >= tickDelay.getValue()) {
             mc.player.connection.sendPacket(new CPacketPlayer.Rotation(mc.player.cameraYaw, -90f, true));
             mc.player.connection.sendPacket(new CPacketPlayerTryUseItem());
-        }
-        slot = InventoryUtil.getItemInventory(Items.TIPPED_ARROW);
-        for (final Integer slots : slot) {
-            if (PotionUtils.getPotionFromItem(Quiver.mc.player.inventory.getStackInSlot((int)slots)).getRegistryName().getPath().contains("swiftness")) {
-                speedSlot = slots;
-            }
-            else {
-                if (!Objects.requireNonNull(PotionUtils.getPotionFromItem(Quiver.mc.player.inventory.getStackInSlot((int)slots)).getRegistryName()).getPath().contains("strength")) {
-                    continue;
-                }
-                strengthSlot = slots;
-            }
         }
     }
 }

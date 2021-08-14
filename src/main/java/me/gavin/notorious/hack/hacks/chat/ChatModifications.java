@@ -9,6 +9,7 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.setting.StringSetting;
 import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.ClientChatEvent;
@@ -25,7 +26,7 @@ import java.util.Date;
 public class ChatModifications extends Hack {
 
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla", "UnicodeVer");
+    public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla", "UnicodeVer", "Custom");
     @RegisterSetting
     public final ModeSetting chatColor = new ModeSetting("ChatColor", "Green", "Green", "Red", "Cyan");
     @RegisterSetting
@@ -56,7 +57,7 @@ public class ChatModifications extends Hack {
                 suffix = " | Notorious";
             }else if(mode.getMode().equals("Unicode")){
                 suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D0F\u1D1C\uA731";
-            }else {
+            }else if(mode.getMode().equals("UnicodeVersion")){
                 suffix = " \u23d0 \u0274\u1D0F\u1D1B\u1D0F\u0280\u026A\u1D0F\u1D1C\uA731\u1D0F " + NotoriousMod.VERSION;
             }
             if(event.getMessage().startsWith("!")) return;

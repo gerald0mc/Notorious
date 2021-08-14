@@ -27,7 +27,7 @@ public class InventoryUtil {
     }
 
     public static List<Integer> getItemInventory(final Item item) {
-        final List<Integer> ints = new ArrayList<Integer>();
+        final List<Integer> ints = new ArrayList<>();
         for (int i = 9; i < 36; ++i) {
             final Item target = Minecraft.getMinecraft().player.inventory.getStackInSlot(i).getItem();
             if (item instanceof ItemBlock && ((ItemBlock)item).getBlock().equals(item)) {
@@ -97,5 +97,6 @@ public class InventoryUtil {
     public static void moveItemToSlot(Integer startSlot, Integer endSlot) {
         Minecraft.getMinecraft().playerController.windowClick(Minecraft.getMinecraft().player.inventoryContainer.windowId, startSlot, 0, ClickType.PICKUP, Minecraft.getMinecraft().player);
         Minecraft.getMinecraft().playerController.windowClick(Minecraft.getMinecraft().player.inventoryContainer.windowId, endSlot, 0, ClickType.PICKUP, Minecraft.getMinecraft().player);
+        Minecraft.getMinecraft().playerController.windowClick(Minecraft.getMinecraft().player.inventoryContainer.windowId, startSlot, 0, ClickType.PICKUP, Minecraft.getMinecraft().player);
     }
 }

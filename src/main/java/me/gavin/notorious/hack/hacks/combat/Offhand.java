@@ -5,13 +5,19 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.InventoryUtil;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSword;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
 
@@ -48,31 +54,35 @@ public class Offhand extends Hack {
     public void onUpdate(TickEvent event) {
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
             slot = InventoryUtil.getItemSlot(Items.END_CRYSTAL);
-        }else if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
+        }
+        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
             slot = InventoryUtil.getItemSlot(Items.GOLDEN_APPLE);
-        }else if(mc.player.getHealth() < health.getValue() || mode.getMode().equals("Strict")){
+        }
+        if(mc.player.getHealth() < health.getValue() || mode.getMode().equals("Strict")){
             slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
         }
-        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart"))
-            if(mc.player.getHeldItemOffhand().getItem() != Items.END_CRYSTAL && mc.player.getHealth() > health.getValue()) {
-                if (slot != -1)
-                    switchToShit();
-            }else if(mc.player.getHealth() < health.getValue()) {
-                if(slot != -1)
-                    switchToShit();
-            }
-        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart"))
-            if(mc.player.getHeldItemOffhand().getItem() != Items.GOLDEN_APPLE && mc.player.getHealth() > health.getValue()) {
-                if (slot != -1)
-                    switchToShit();
-            }else if(mc.player.getHealth() < health.getValue()) {
-                if(slot != -1)
-                    switchToShit();
-            }
+        if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
+            doSwitch(Items.END_CRYSTAL);
+        }
+        if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart")) {
+            doSwitch(Items.GOLDEN_APPLE);
+        }
         if(mode.getMode().equals("Strict")) {
             if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
                 if(slot != -1)
                     switchToShit();
+            }
+        }
+    }
+
+    public void doSwitch(Item item) {
+        if (mc.player.getHeldItemOffhand().getItem() != item && mc.player.getHealth() > health.getValue()) {
+            if (slot != -1) {
+                switchToShit();
+            }
+        } else if (mc.player.getHealth() < health.getValue()) {
+            if (slot != -1) {
+                switchToShit();
             }
         }
     }

@@ -30,6 +30,8 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
                 components.add(new SliderComponent((NumSetting) setting, x, y, width, height));
             }else if (setting instanceof ColorSetting) {
                 components.add(new SexyColorComponent((ColorSetting) setting, x, y, width, height));
+            }else if (setting instanceof StringSetting) {
+                components.add(new StringComponent((StringSetting) setting, x, y, width, height));
             }
         }
 
@@ -81,13 +83,7 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         if (isMouseInside(mouseX, mouseY)) {
-            if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getDescription(), mouseX + 2f, mouseY + 2f, Color.WHITE);
-            }else {
-                mc.fontRenderer.drawStringWithShadow(hack.getDescription(), mouseX + 2f, mouseY + 2f, new Color(255, 255, 255).getRGB());
-            }
             if (mouseButton == 0) {
                 hack.toggle();
             }else if (mouseButton == 1) {
