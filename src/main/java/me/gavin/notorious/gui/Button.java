@@ -40,23 +40,23 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
+        Font font = Notorious.INSTANCE.hackManager.getHack(Font.class);
         int renderYOffset = height;
         int intRainbow;
         Color colorRainbow;
-        float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
+        float time = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).length.getValue();
         float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
-        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+        if(Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).colorMode.getMode().equals("Rainbow")) {
             intRainbow = ColorUtil.getRainbow(time, saturation);
         }else {
-            intRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
+            intRainbow = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
         }
-        if(((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).colorMode.getMode().equals("Rainbow")) {
+        if(Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).colorMode.getMode().equals("Rainbow")) {
             colorRainbow = ColorUtil.colorRainbow((int) time, saturation, 1f);
         }else {
-            colorRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor();
+            colorRainbow = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor();
         }
-        Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? new Color(0, 0, 0, 150).getRGB() : new Color(0, 0, 0, 100).getRGB());
+        Gui.drawRect(x, y, x + width, y + height, new Color(0, 0, 0, (int) Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).backgroundAlpha.getValue()).getRGB());
         if(open) {
             if(font.isEnabled()) {
                 Notorious.INSTANCE.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 2f, Color.WHITE);

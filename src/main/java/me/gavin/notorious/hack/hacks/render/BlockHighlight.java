@@ -1,9 +1,11 @@
 package me.gavin.notorious.hack.hacks.render;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.Notorious;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
@@ -25,6 +27,8 @@ public class BlockHighlight extends Hack {
 
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Outline", "Both", "Outline", "Box");
+    @RegisterSetting
+    public final ModeSetting colorMode = new ModeSetting("ColorMode", "ClientSync", "ClientSync", "RGB");
     @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("OutlineColor", new NColor(255, 255, 255));
     @RegisterSetting
@@ -71,9 +75,9 @@ public class BlockHighlight extends Hack {
                         RenderUtil.renderFilledBB(box, rainbowColor);
                 }else {
                     if(outline)
-                        RenderUtil.renderOutlineBB(box, outlineColor.getAsColor());
+                        RenderUtil.renderOutlineBB(box, colorMode.getMode().equals("RGB") ? outlineColor.getAsColor() : Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor());
                     if(fill)
-                        RenderUtil.renderFilledBB(box, boxColor.getAsColor());
+                        RenderUtil.renderFilledBB(box, colorMode.getMode().equals("RGB") ? boxColor.getAsColor() : Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor());
                 }
             }
         }

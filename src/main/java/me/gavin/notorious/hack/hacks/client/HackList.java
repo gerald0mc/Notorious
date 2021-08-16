@@ -28,7 +28,7 @@ public class HackList extends Hack {
     @RegisterSetting
     public final ModeSetting listMode = new ModeSetting("ListMode", "Pretty", "Pretty", "Basic");
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB");
+    public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB", "ClientSync");
     @RegisterSetting
     public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
     @RegisterSetting
@@ -68,8 +68,10 @@ public class HackList extends Hack {
                 }
                 if(mode.getMode().equals("Flow")) {
                     color = ColorUtil.getRGBWave(length.getValue(), saturation.getValue(), yOffset * 20L);
-                }else {
+                }else if(mode.getMode().equals("RGB")){
                     color = rgb.getAsColor().getRGB();
+                }else {
+                    color = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
                 }
                 double x;
                 if(hack.isEnabled()) {

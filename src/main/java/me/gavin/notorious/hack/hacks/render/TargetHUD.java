@@ -1,10 +1,5 @@
 package me.gavin.notorious.hack.hacks.render;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import me.gavin.notorious.Notorious;
-import me.gavin.notorious.event.events.PacketEvent;
-import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
-import me.gavin.notorious.friend.Friends;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -24,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;

@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.Sphere;
@@ -43,6 +44,18 @@ public class RenderUtil implements IMinecraft {
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
+    }
+
+    public static AxisAlignedBB generateBB(long x, long y, long z) {
+        BlockPos blockPos = new BlockPos(x, y, z);
+        final AxisAlignedBB bb = new AxisAlignedBB(
+                blockPos.getX() - mc.getRenderManager().viewerPosX,
+                blockPos.getY() - mc.getRenderManager().viewerPosY,
+                blockPos.getZ() - mc.getRenderManager().viewerPosZ,
+                blockPos.getX() + 1 - mc.getRenderManager().viewerPosX,
+                blockPos.getY() + (1) - mc.getRenderManager().viewerPosY,
+                blockPos.getZ() + 1 - mc.getRenderManager().viewerPosZ);
+        return bb;
     }
 
     public static void renderFilledBB(AxisAlignedBB box, Color color) {

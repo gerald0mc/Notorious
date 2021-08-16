@@ -36,10 +36,6 @@ public class ChatModifications extends Hack {
     @RegisterSetting
     public final BooleanSetting chatTimestamps = new BooleanSetting("ChatTimestamps", true);
     @RegisterSetting
-    public final BooleanSetting nameHighlight = new BooleanSetting("NameHighlight", false);
-    @RegisterSetting
-    public final BooleanSetting friendHighlight = new BooleanSetting("FriendHighlight", true);
-    @RegisterSetting
     public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
 
     @Override
@@ -92,23 +88,6 @@ public class ChatModifications extends Hack {
             String time = new SimpleDateFormat("k:mm").format(new Date());
             TextComponentString text = new TextComponentString(ChatFormatting.GRAY + "<" + time + ">" + " " + ChatFormatting.RESET);
             event.setMessage(text.appendSibling(event.getMessage()));
-        }
-        String name = mc.player.getName().toLowerCase();
-        if (friendHighlight.getValue()) {
-            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">")) {
-                notorious.friend.getFriends().forEach(f -> {
-                    if (event.getMessage().getUnformattedText().contains(f.getName())) {
-                        event.getMessage().setStyle(event.getMessage().getStyle().setColor(TextFormatting.LIGHT_PURPLE));
-                    }
-                });
-            }
-        }
-        if (nameHighlight.getValue()) {
-            String s = ChatFormatting.GOLD + "" + ChatFormatting.BOLD + mc.player.getName() + ChatFormatting.RESET;
-            Style style = event.getMessage().getStyle();
-            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">") && event.getMessage().getUnformattedText().toLowerCase().contains(name)) {
-                event.getMessage().getStyle().setParentStyle(style.setBold(true).setColor(TextFormatting.GOLD));
-            }
         }
     }
 }

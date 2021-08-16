@@ -1,9 +1,11 @@
 package me.gavin.notorious.hack.hacks.render;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.Notorious;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.hack.hacks.client.ClickGUI;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
@@ -31,6 +33,8 @@ public class ESP extends Hack {
 
     @RegisterSetting
     public final ModeSetting espMode = new ModeSetting("ESPMode", "RotateBox", "RotateBox", "Glow");
+    @RegisterSetting
+    public final ModeSetting colorMode = new ModeSetting("ColorMode", "ClientSync", "ClientSync", "RGB");
     @RegisterSetting
     public final ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
     @RegisterSetting
@@ -105,7 +109,7 @@ public class ESP extends Hack {
         GL11.glTranslated(x, y, z);
         GL11.glRotated(-MathHelper.clampedLerp(entity.prevRotationYaw, entity.rotationYaw, mc.getRenderPartialTicks()), 0.0, 1.0, 0.0);
         GL11.glTranslated(-(x), -y, -z);
-        RenderUtil.entityESPBox(entity, boxColor.getAsColor(), outlineColor.getAsColor(), (int) lineWidth.getValue());
+        RenderUtil.entityESPBox(entity, colorMode.getMode().equals("RGB") ? boxColor.getAsColor() : Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor(), colorMode.getMode().equals("RGB") ? outlineColor.getAsColor() : Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor(), (int) lineWidth.getValue());
         GlStateManager.popMatrix();
     }
 }
