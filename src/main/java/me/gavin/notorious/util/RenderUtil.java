@@ -1,6 +1,7 @@
 package me.gavin.notorious.util;
 
 import me.gavin.notorious.stuff.IMinecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -50,6 +51,12 @@ public class RenderUtil implements IMinecraft {
 
     public static void renderOutlineBB(AxisAlignedBB box, Color color) {
         renderBB(box, color, RenderMode.OUTLINE);
+    }
+
+    public static void drawBorderedRect(int left, int top, int right, int bottom, int lineWidth, Color borderColor, Color insideColor) {
+        Gui.drawRect(left, top, left + right, top + bottom, insideColor.getRGB());
+        Gui.drawRect(left, top, left + lineWidth, top + bottom, borderColor.getRGB());
+        Gui.drawRect(left, top, left + lineWidth, top + bottom, borderColor.getRGB());
     }
 
     public static void renderBB(AxisAlignedBB box, Color color, RenderMode mode) {

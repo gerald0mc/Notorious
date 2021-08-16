@@ -44,8 +44,8 @@ public class HackManager {
         addHack(new ClickGUI());
         addHack(new DiscordRPC());
         addHack(new Font());
+        addHack(new FriendList());
         addHack(new HackList());
-        addHack(new SkeetWatermark());
         addHack(new WaterMark());
 
         // combat
@@ -96,6 +96,7 @@ public class HackManager {
         addHack(new Fullbright());
         addHack(new HellenKeller());
         addHack(new PenisESP());
+        addHack(new ShulkerRender());
         addHack(new SkyColor());
         addHack(new StorageESP());
         addHack(new TargetHUD());

@@ -39,7 +39,7 @@ public class Panel extends AbstractDragComponent {
         }else {
             color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
-        Gui.drawRect(x, y, x + width, y + height, color);
+        Gui.drawRect(x, y, x + width, y + height - 2, color);
         if(font.isEnabled()) {
             Notorious.INSTANCE.fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, Color.WHITE);
         }else {

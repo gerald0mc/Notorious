@@ -11,15 +11,15 @@ public class TotemPopCounter extends Hack {
 
     public void onDeath(String name, int pops, int entId) {
         final String s = pops == 1 ? "" : "s";
-        notorious.messageManager.sendRemovableMessage(name + " has died after popping " + ChatFormatting.GREEN + pops + ChatFormatting.RESET + " totem" + s, entId);
+        notorious.messageManager.sendRemovableMessage(ChatFormatting.RED + name + ChatFormatting.RESET + " has died after popping " + ChatFormatting.GREEN + pops + ChatFormatting.RESET + " totem" + s, entId);
     }
 
     @SubscribeEvent
     public void onPop(TotemPopEvent event) {
         if (event.getPopCount() == 1) {
-            notorious.messageManager.sendRemovableMessage(event.getName() + " has popped a totem", event.getEntityId());
+            notorious.messageManager.sendRemovableMessage(ChatFormatting.RED + event.getName() + ChatFormatting.RESET + " has popped a totem", event.getEntityId());
         } else {
-            notorious.messageManager.sendRemovableMessage(event.getName() + " has popped " + ChatFormatting.GREEN + event.getPopCount() + ChatFormatting.RESET + " totems", event.getEntityId());
+            notorious.messageManager.sendRemovableMessage(ChatFormatting.RED + event.getName() + ChatFormatting.RESET + " has popped " + ChatFormatting.GREEN + event.getPopCount() + ChatFormatting.RESET + " totems", event.getEntityId());
         }
     }
 }

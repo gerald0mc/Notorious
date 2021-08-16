@@ -11,7 +11,9 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.setting.StringSetting;
 import me.gavin.notorious.util.ColorUtil;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,6 +35,10 @@ public class ChatModifications extends Hack {
     public final BooleanSetting chatSuffix = new BooleanSetting("ChatSuffix", true);
     @RegisterSetting
     public final BooleanSetting chatTimestamps = new BooleanSetting("ChatTimestamps", true);
+    @RegisterSetting
+    public final BooleanSetting nameHighlight = new BooleanSetting("NameHighlight", false);
+    @RegisterSetting
+    public final BooleanSetting friendHighlight = new BooleanSetting("FriendHighlight", true);
     @RegisterSetting
     public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
 
@@ -86,6 +92,23 @@ public class ChatModifications extends Hack {
             String time = new SimpleDateFormat("k:mm").format(new Date());
             TextComponentString text = new TextComponentString(ChatFormatting.GRAY + "<" + time + ">" + " " + ChatFormatting.RESET);
             event.setMessage(text.appendSibling(event.getMessage()));
+        }
+        String name = mc.player.getName().toLowerCase();
+        if (friendHighlight.getValue()) {
+            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">")) {
+                notorious.friend.getFriends().forEach(f -> {
+                    if (event.getMessage().getUnformattedText().contains(f.getName())) {
+                        event.getMessage().setStyle(event.getMessage().getStyle().setColor(TextFormatting.LIGHT_PURPLE));
+                    }
+                });
+            }
+        }
+        if (nameHighlight.getValue()) {
+            String s = ChatFormatting.GOLD + "" + ChatFormatting.BOLD + mc.player.getName() + ChatFormatting.RESET;
+            Style style = event.getMessage().getStyle();
+            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">") && event.getMessage().getUnformattedText().toLowerCase().contains(name)) {
+                event.getMessage().getStyle().setParentStyle(style.setBold(true).setColor(TextFormatting.GOLD));
+            }
         }
     }
 }

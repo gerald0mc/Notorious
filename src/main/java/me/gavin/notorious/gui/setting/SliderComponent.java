@@ -38,12 +38,12 @@ public class SliderComponent extends SettingComponent {
         }else {
             color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
-        Gui.drawRect(x, y, x + width, y + height, 0xCF000000);
+        Gui.drawRect(x, y, x + width, y + height, new Color(0, 0, 0, 150).getRGB());
         Gui.drawRect(x, y, x + (int) sliderWidth, y + height, color);
         if(font.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 5f, Color.WHITE);
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 2f, Color.WHITE);
         }else {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName() + " <" + setting.getValue() + ">", x + 9f, y + 2f, new Color(255, 255, 255).getRGB());
         }
     }
 

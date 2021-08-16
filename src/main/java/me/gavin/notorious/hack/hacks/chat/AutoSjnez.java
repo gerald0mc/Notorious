@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class AutoSjnez extends Hack {
 
     @RegisterSetting
-    public final NumSetting delay = new NumSetting("Delay", 2, 1, 5, 1);
+    public final NumSetting delay = new NumSetting("Delay", 10, 1, 15, 1);
     @RegisterSetting
     public final BooleanSetting autoMessageSjnez = new BooleanSetting("AutoMSGSjnez", false);
 
@@ -25,7 +25,7 @@ public class AutoSjnez extends Hack {
         if(mc.player != null && mc.world != null) {
             if (timer.hasTicksPassed((long) (delay.getValue() * 20))) {
                 for(EntityPlayer e : mc.world.playerEntities) {
-                    if(autoMessageSjnez.isEnabled() && e.getDisplayNameString().equalsIgnoreCase("sjnez")) {
+                    if(autoMessageSjnez.isEnabled() && e.getDisplayNameString().equals("Sjnez")) {
                         mc.player.sendChatMessage("/msg " + e.getDisplayNameString() + " LMFAO FUCK YOU SAMUEL J NEZZBIT LLLLLLLLL");
                     }
                 }

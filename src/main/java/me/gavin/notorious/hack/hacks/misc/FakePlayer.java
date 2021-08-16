@@ -31,10 +31,10 @@ public class FakePlayer extends Hack {
 
     @Override
     protected void onEnable() {
-        UUID playerUUID = mc.player.getUniqueID();
         if (mc.world == null || mc.player == null) {
             disable();
         }else {
+            UUID playerUUID = mc.player.getUniqueID();
             fakePlayer = new EntityOtherPlayerMP(mc.world, new GameProfile(UUID.fromString(playerUUID.toString()), "gerald0mc"));
             fakePlayer.copyLocationAndAnglesFrom(mc.player);
             fakePlayer.inventory.copyInventory(mc.player.inventory);

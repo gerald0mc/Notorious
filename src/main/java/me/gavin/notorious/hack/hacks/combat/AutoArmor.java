@@ -29,19 +29,19 @@ public class AutoArmor extends Hack {
                 if(itemSlot instanceof ItemArmor) {
                     ItemArmor itemArmor = (ItemArmor) itemSlot;
                     if(!hasBoots && itemArmor.armorType == EntityEquipmentSlot.FEET) {
-                        InventoryUtil.moveItemToSlot(slot, 8);
+                        InventoryUtil.moveArmorToSlot(slot, 8);
                         hasBoots = true;
                     }
                     if(!hasLegs && itemArmor.armorType == EntityEquipmentSlot.LEGS) {
-                        InventoryUtil.moveItemToSlot(slot, 7);
+                        InventoryUtil.moveArmorToSlot(slot, 7);
                         hasLegs = true;
                     }
                     if(!hasChest && itemArmor.armorType == EntityEquipmentSlot.CHEST) {
-                        InventoryUtil.moveItemToSlot(slot, 6);
+                        InventoryUtil.moveArmorToSlot(slot, 6);
                         hasChest = true;
                     }
                     if(!hasHelmet && itemArmor.armorType == EntityEquipmentSlot.HEAD) {
-                        InventoryUtil.moveItemToSlot(slot, 5);
+                        InventoryUtil.moveArmorToSlot(slot, 5);
                         hasHelmet = true;
                     }
                 }

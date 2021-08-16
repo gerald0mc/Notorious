@@ -36,7 +36,7 @@ public class HackList extends Hack {
     @RegisterSetting
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255, 255);
     @RegisterSetting
-    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 4, 0.1f, 30, 0.1f);
+    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 0.1f, 0.1f, 30, 0.1f);
 
     public HackList() {
         if(!isEnabled()) {
@@ -78,8 +78,10 @@ public class HackList extends Hack {
                     x = ((startPos) * -MathHelper.clamp(AnimationUtil.getSmooth2Animation(250, System.currentTimeMillis() - hack.lastDisabledTime), 0.0, 1.0));
                 }
                 double y = yOffset;
-                if(((WaterMark)Notorious.INSTANCE.hackManager.getHack(WaterMark.class)).isEnabled()) {
+                if(Notorious.INSTANCE.hackManager.getHack(WaterMark.class).isEnabled() && Notorious.INSTANCE.hackManager.getHack(WaterMark.class).renderMode.getMode().equals("Basic")) {
                     y = yOffset + 9;
+                }else if(Notorious.INSTANCE.hackManager.getHack(WaterMark.class).isEnabled() && Notorious.INSTANCE.hackManager.getHack(WaterMark.class).renderMode.getMode().equals("Skeet")){
+                    y = yOffset + 12;
                 }else {
                     y = yOffset;
                 }

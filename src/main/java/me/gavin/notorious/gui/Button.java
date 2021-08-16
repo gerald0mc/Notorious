@@ -56,24 +56,24 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
         }else {
             colorRainbow = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor();
         }
-        Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? 0xCC0C0C0C : 0xCC000000);
+        Gui.drawRect(x, y, x + width, y + height, isMouseInside(mouseX, mouseY) ? new Color(0, 0, 0, 150).getRGB() : new Color(0, 0, 0, 100).getRGB());
         if(open) {
             if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 5f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 2f, Color.WHITE);
             }else {
-                mc.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 5f, new Color(255, 255, 255).getRGB());
+                mc.fontRenderer.drawStringWithShadow("-", x + width - 8f, y + 2f, new Color(255, 255, 255).getRGB());
             }
         }else {
             if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("+", x + width - 8f, y + 5f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("+", x + width - 8f, y + 2f, Color.WHITE);
             }else {
-                mc.fontRenderer.drawStringWithShadow("+", x + width - 8f, y + 5f, new Color(255, 255, 255).getRGB());
+                mc.fontRenderer.drawStringWithShadow("+", x + width - 8f, y + 2f, new Color(255, 255, 255).getRGB());
             }
         }
         if(font.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 3f, hack.isEnabled() ? colorRainbow : new Color(255, 255, 255, 255));
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? colorRainbow : new Color(255, 255, 255, 255));
         }else {
-            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 3f, hack.isEnabled() ? intRainbow : -1);
+            mc.fontRenderer.drawStringWithShadow(hack.getName(), x + 2f, y + 2f, hack.isEnabled() ? intRainbow : -1);
         }
 
         if (open) {

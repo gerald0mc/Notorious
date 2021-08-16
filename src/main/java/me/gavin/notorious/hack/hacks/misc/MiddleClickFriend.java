@@ -20,18 +20,16 @@ public class MiddleClickFriend extends Hack {
     public void onUpdate(PlayerLivingUpdateEvent event) {
         if(!Mouse.isButtonDown(2)) {
             hasClicked = false;
-            return;
-        }
-        if(!hasClicked) {
-            hasClicked = true;
-            final RayTraceResult result = mc.objectMouseOver;
-            if(result == null || result.typeOfHit != RayTraceResult.Type.ENTITY || !(result.entityHit instanceof EntityPlayer))
-                return;
-            for(Friend f : notorious.friend.getFriends()) {
-                if(notorious.friend.isFriend(mc.objectMouseOver.entityHit.getName())) {
+        }else {
+            if (!hasClicked) {
+                hasClicked = true;
+                final RayTraceResult result = mc.objectMouseOver;
+                if (result == null || result.typeOfHit != RayTraceResult.Type.ENTITY || !(result.entityHit instanceof EntityPlayer))
+                    return;
+                if (notorious.friend.isFriend(mc.objectMouseOver.entityHit.getName())) {
                     notorious.friend.delFriend(mc.objectMouseOver.entityHit.getName());
                     notorious.messageManager.sendMessage(ChatFormatting.RED + "Removed " + ChatFormatting.LIGHT_PURPLE + mc.objectMouseOver.entityHit.getName() + ChatFormatting.WHITE + " from friends list");
-                }else {
+                } else {
                     notorious.friend.addFriend(mc.objectMouseOver.entityHit.getName());
                     notorious.messageManager.sendMessage(ChatFormatting.GREEN + "Added " + ChatFormatting.LIGHT_PURPLE + mc.objectMouseOver.entityHit.getName() + ChatFormatting.WHITE + " to friends list");
                 }
