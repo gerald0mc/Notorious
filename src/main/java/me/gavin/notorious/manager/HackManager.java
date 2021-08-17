@@ -96,6 +96,7 @@ public class HackManager {
         addHack(new Fullbright());
         addHack(new HellenKeller());
         addHack(new PenisESP());
+        addHack(new PopChams());
         addHack(new SkyColor());
         addHack(new StorageESP());
         addHack(new TargetHUD());
