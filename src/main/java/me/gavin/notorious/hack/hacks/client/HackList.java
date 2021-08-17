@@ -28,7 +28,7 @@ public class HackList extends Hack {
     @RegisterSetting
     public final ModeSetting listMode = new ModeSetting("ListMode", "Pretty", "Pretty", "Basic");
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB");
+    public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB", "ClientSync");
     @RegisterSetting
     public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
     @RegisterSetting
@@ -36,7 +36,7 @@ public class HackList extends Hack {
     @RegisterSetting
     public final ColorSetting rgb = new ColorSetting("RGB", 255, 255, 255, 255);
     @RegisterSetting
-    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 4, 0.1f, 30, 0.1f);
+    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 0.1f, 0.1f, 30, 0.1f);
 
     public HackList() {
         if(!isEnabled()) {
@@ -68,8 +68,10 @@ public class HackList extends Hack {
                 }
                 if(mode.getMode().equals("Flow")) {
                     color = ColorUtil.getRGBWave(length.getValue(), saturation.getValue(), yOffset * 20L);
-                }else {
+                }else if(mode.getMode().equals("RGB")){
                     color = rgb.getAsColor().getRGB();
+                }else {
+                    color = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
                 }
                 double x;
                 if(hack.isEnabled()) {
@@ -78,8 +80,10 @@ public class HackList extends Hack {
                     x = ((startPos) * -MathHelper.clamp(AnimationUtil.getSmooth2Animation(250, System.currentTimeMillis() - hack.lastDisabledTime), 0.0, 1.0));
                 }
                 double y = yOffset;
-                if(((WaterMark)Notorious.INSTANCE.hackManager.getHack(WaterMark.class)).isEnabled()) {
+                if(Notorious.INSTANCE.hackManager.getHack(WaterMark.class).isEnabled() && Notorious.INSTANCE.hackManager.getHack(WaterMark.class).renderMode.getMode().equals("Basic")) {
                     y = yOffset + 9;
+                }else if(Notorious.INSTANCE.hackManager.getHack(WaterMark.class).isEnabled() && Notorious.INSTANCE.hackManager.getHack(WaterMark.class).renderMode.getMode().equals("Skeet")){
+                    y = yOffset + 12;
                 }else {
                     y = yOffset;
                 }

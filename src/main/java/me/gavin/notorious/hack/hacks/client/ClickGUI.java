@@ -15,6 +15,8 @@ public class ClickGUI extends Hack {
     @RegisterSetting
     public final ColorSetting guiColor = new ColorSetting("RGBColor", 255, 0, 0, 255);
     @RegisterSetting
+    public final NumSetting backgroundAlpha = new NumSetting("BackgroundAlpha", 150, 1, 255, 1);
+    @RegisterSetting
     public final NumSetting length = new NumSetting("Length", 8f, 1f, 15f, 1f);
     @RegisterSetting
     public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);

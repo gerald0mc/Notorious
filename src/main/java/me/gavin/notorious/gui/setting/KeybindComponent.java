@@ -34,19 +34,19 @@ public class KeybindComponent extends SettingComponent {
         }else {
             color = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).guiColor.getAsColor().getRGB();
         }
-        Gui.drawRect(x, y, x + width, y + height, 0xCF000000);
+        Gui.drawRect(x, y, x + width, y + height, new Color(0, 0, 0, (int) Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).backgroundAlpha.getValue()).getRGB());
         Gui.drawRect(x, y, x + 2, y + height, color);
         if (listening) {
             if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 5f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 1f, Color.WHITE);
             }else {
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 1f, new Color(255, 255, 255).getRGB());
             }
         } else {
             if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 5f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 1f, Color.WHITE);
             }else {
-                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 5f, new Color(255, 255, 255).getRGB());
+                Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 1f, new Color(255, 255, 255).getRGB());
             }
         }
     }

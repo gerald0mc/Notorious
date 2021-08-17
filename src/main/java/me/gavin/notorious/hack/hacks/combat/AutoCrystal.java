@@ -7,7 +7,6 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.mixin.mixins.accessor.ICPacketUseEntityMixin;
-import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
@@ -16,6 +15,7 @@ import me.gavin.notorious.util.BlockUtil;
 import me.gavin.notorious.util.NColor;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,7 +23,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSpawnObject;
 import net.minecraft.potion.Potion;
@@ -39,9 +38,6 @@ import net.minecraft.world.Explosion;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RegisterHack(name = "AutoGerald", description = "ez", category = Hack.Category.Combat)
 public class AutoCrystal extends Hack {
 
@@ -54,17 +50,7 @@ public class AutoCrystal extends Hack {
     @RegisterSetting
     public NumSetting placeDistance = new NumSetting("PlaceRange", 4f, 1f, 6f, 1f);
     @RegisterSetting
-    public NumSetting minDmg = new NumSetting("MinDmg", 4f, 0.1f, 10.0f, 1f);
-    @RegisterSetting
-    public NumSetting maxSelfDmg = new NumSetting("MaxSelfDmg", 15f, 1f, 30f, 1f);
-    @RegisterSetting
-    public NumSetting breakDelay = new NumSetting("BreakDelay", 2f, 0f, 20f, 1f);
-    @RegisterSetting
-    public NumSetting placeDelay = new NumSetting("PlaceDelay", 2f, 0f, 20f, 1f);
-    @RegisterSetting
     public ModeSetting logic = new ModeSetting("Logic", "PlaceBreak", "PlaceBreak", "BreakPlace");
-    @RegisterSetting
-    public ModeSetting switchMode = new ModeSetting("SwitchMode", "Silent", "Silent", "Normal", "None");
     @RegisterSetting
     public ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
     @RegisterSetting
@@ -72,14 +58,9 @@ public class AutoCrystal extends Hack {
     @RegisterSetting
     public ColorSetting outlineColor = new ColorSetting("Outline", new NColor(255, 255, 255, 255));
     @RegisterSetting
-    public BooleanSetting setDead = new BooleanSetting("SetDead", true);
-    @RegisterSetting
-    public BooleanSetting fastPlace = new BooleanSetting("FastPlace",true);
-    @RegisterSetting
     public BooleanSetting fastBreak = new BooleanSetting("FastBreak", false);
 
     public EntityPlayer targetPlayer = null;
-    private EntityEnderCrystal targetCrystal = null;
     private BlockPos blockPos;
     private boolean box = false;
     private boolean outline = false;
@@ -134,13 +115,6 @@ public class AutoCrystal extends Hack {
         }else {
             box = true;
             outline = false;
-        }
-        if(blockPos != null) {
-            AxisAlignedBB bb = new AxisAlignedBB(blockPos);
-            if(box)
-                RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
-            if(outline)
-                RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
         }
     }
 

@@ -1,10 +1,5 @@
 package me.gavin.notorious.hack.hacks.render;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import me.gavin.notorious.Notorious;
-import me.gavin.notorious.event.events.PacketEvent;
-import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
-import me.gavin.notorious.friend.Friends;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -24,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketEntityStatus;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -45,6 +39,8 @@ public class TargetHUD extends Hack {
     public final NumSetting range = new NumSetting("Range", 4, 1, 6, 1);
     @RegisterSetting
     public final BooleanSetting autoCrystalTarget = new BooleanSetting("AutoCrystalTarget", true);
+    @RegisterSetting
+    public final BooleanSetting friendSkip = new BooleanSetting("FriendSkip", false);
     @RegisterSetting
     public final BooleanSetting background = new BooleanSetting("Background", true);
     @RegisterSetting
@@ -82,6 +78,8 @@ public class TargetHUD extends Hack {
                     .orElse(null);
         }
         if(entityPlayer != null) {
+            if(friendSkip.isEnabled() && notorious.friend.isFriend(entityPlayer.getName()))
+                return;
             if(entityPlayer.getDistance(mc.player) <= range.getValue()) {
                 ////////////////////////////////////////////////background////////////////////////////////////////////////
                 if(background.isEnabled()) {
@@ -93,7 +91,7 @@ public class TargetHUD extends Hack {
                 }
                 ////////////////////////////////////////////////name////////////////////////////////////////////////
                 if(name.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, -1);
+                    mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, notorious.friend.isFriend(entityPlayer.getName()) ? new Color(0, 255, 234).getRGB() : -1);
                 }
                 ////////////////////////////////////////////////health////////////////////////////////////////////////
                 int healthInt = (int) (entityPlayer.getHealth() + entityPlayer.getAbsorptionAmount());
