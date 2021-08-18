@@ -33,8 +33,12 @@ public class PopChams extends Hack {
             }
 
             GlStateManager.pushMatrix();
-            GlStateManager.color(1f, 1f, 1f, 1f);
+            GlStateManager.enableBlend();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+            GlStateManager.color(1f, 0f, 0f, 0.5f);
             mc.getRenderManager().renderEntityStatic(entry.getKey(), event.getPartialTicks(), false);
+            GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             GlStateManager.popMatrix();
         }
     }
@@ -48,8 +52,14 @@ public class PopChams extends Hack {
                 final EntityOtherPlayerMP fakeEntity = new EntityOtherPlayerMP(mc.world, player.getGameProfile());
                 fakeEntity.copyLocationAndAnglesFrom(player);
                 fakeEntity.rotationYawHead = player.rotationYawHead;
+                fakeEntity.prevRotationYawHead = player.rotationYawHead;
+                fakeEntity.rotationYaw = player.rotationYaw;
+                fakeEntity.prevRotationYaw = player.rotationYaw;
+                fakeEntity.rotationPitch = player.rotationPitch;
+                fakeEntity.prevRotationPitch = player.rotationPitch;
+                fakeEntity.cameraYaw = fakeEntity.rotationYaw;
+                fakeEntity.cameraPitch = fakeEntity.rotationPitch;
                 popFakePlayerMap.put(fakeEntity, System.currentTimeMillis());
-                System.out.println("added a thingy");
             }
         }
     }

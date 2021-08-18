@@ -1,6 +1,7 @@
 package me.gavin.notorious.hack.hacks.render;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -52,7 +53,7 @@ public class FuckedDetector extends Hack {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent event) {
+    public void onTick(PlayerLivingUpdateEvent event) {
         fuckedEntities.clear();
         for (EntityPlayer e : mc.world.playerEntities) {
             if (e.equals(mc.player) && !self.isEnabled())

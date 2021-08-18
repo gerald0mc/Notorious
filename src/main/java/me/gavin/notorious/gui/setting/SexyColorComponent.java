@@ -51,7 +51,7 @@ public class SexyColorComponent extends SettingComponent {
             @Override
             public void drawPicker(int mouseX, int mouseY, float partialTicks) {
                 RenderUtil.drawSideGradientRect(x, y, x + width, y + height, 0xFFFFFFFF, Color.getHSBColor(colorSetting.getHue().getValue(), 1f, 1f).getRGB());
-                RenderUtil.drawGradientRect(x, y, x + width, y + height, 0x00000000, 0xFF000000);
+                RenderUtil.drawGradientRect(x, y, x + width, y + height, 0xFF000000, 0x00000000);
                 Gui.drawRect(x + (int)sliderWidth - 1, y + (int)sliderHeight - 1, x + (int)sliderWidth + 1, y + (int)sliderHeight + 1, 0xFF909090);
             }
         };

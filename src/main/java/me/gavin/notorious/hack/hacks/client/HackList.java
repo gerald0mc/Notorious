@@ -11,6 +11,7 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.AnimationUtil;
 import me.gavin.notorious.util.ColorUtil;
+import me.gavin.notorious.util.MathUtil;
 import me.gavin.notorious.util.NColor;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -28,7 +29,7 @@ public class HackList extends Hack {
     @RegisterSetting
     public final ModeSetting listMode = new ModeSetting("ListMode", "Pretty", "Pretty", "Basic");
     @RegisterSetting
-    public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB", "ClientSync");
+    public final ModeSetting mode = new ModeSetting("Mode", "Flow", "Flow", "RGB", "Sexy", "ClientSync");
     @RegisterSetting
     public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
     @RegisterSetting
@@ -68,8 +69,11 @@ public class HackList extends Hack {
                 }
                 if(mode.getMode().equals("Flow")) {
                     color = ColorUtil.getRGBWave(length.getValue(), saturation.getValue(), yOffset * 20L);
-                }else if(mode.getMode().equals("RGB")){
+                }else if(mode.getMode().equals("RGB")) {
                     color = rgb.getAsColor().getRGB();
+                } else if (mode.getMode().equals("Sexy")) {
+                    final float value = ColorUtil.getColorFlow(yOffset / 60.0, 400.0, new Color(0x00d5ff), new Color(0xff4ae7)).getRGB();
+                    color = ColorUtil.normalizedFade(value, new Color(0x03adfc), new Color(0x006a9c)).getRGB();
                 }else {
                     color = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
                 }
