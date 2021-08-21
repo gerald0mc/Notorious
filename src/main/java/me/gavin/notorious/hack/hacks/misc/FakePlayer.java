@@ -67,7 +67,7 @@ public class FakePlayer extends Hack {
             final SPacketExplosion explosion = (SPacketExplosion) event.getPacket();
             if (fakePlayer.getDistance(explosion.getX(), explosion.getY(), explosion.getZ()) <= 15) {
                 final double damage = AutoCrystal.calculateDamage(explosion.getX(), explosion.getY(), explosion.getZ(), fakePlayer);
-                if (damage > 0) {
+                if (damage > 0 && pops.isEnabled()) {
                     fakePlayer.setHealth((float) (fakePlayer.getHealth() - MathHelper.clamp(damage,0, 999)));
                 }
             }

@@ -2,6 +2,7 @@ package me.gavin.notorious.hack.hacks.render;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.Notorious;
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -59,6 +60,13 @@ public class ESP extends Hack {
     public void onDisable() {
         for(Entity e : mc.world.loadedEntityList) {
             e.setGlowing(false);
+        }
+    }
+
+    @SubscribeEvent
+    public void onUpdate(PlayerLivingUpdateEvent event) {
+        for(Entity e : mc.world.loadedEntityList) {
+
         }
     }
 
