@@ -33,7 +33,7 @@ public class HackManager {
 
         // chat
         addHack(new ArmorNotify());
-        addHack(new AutoSjnez());
+        addHack(new AutoDox());
         addHack(new ChatModifications());
         addHack(new ChorusPredict());
         addHack(new PotionAlert());
@@ -44,9 +44,7 @@ public class HackManager {
         addHack(new ClickGUI());
         addHack(new DiscordRPC());
         addHack(new Font());
-        addHack(new FriendList());
-        addHack(new HackList());
-        addHack(new WaterMark());
+        addHack(new HUD());
 
         // combat
         addHack(new AntiCrystal());
@@ -96,7 +94,8 @@ public class HackManager {
         addHack(new Fullbright());
         addHack(new HellenKeller());
         addHack(new PenisESP()); 
-        addHack(new PopChams());
+        addHack(new PopESP());
+        addHack(new RBandESP());
         addHack(new ShulkerRender());
         addHack(new SkyColor());
         addHack(new StorageESP());

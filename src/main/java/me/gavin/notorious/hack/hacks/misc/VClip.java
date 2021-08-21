@@ -14,19 +14,8 @@ public class VClip extends Hack {
     @RegisterSetting
     public final NumSetting blockToClip = new NumSetting("BlocksToClip", 1, -20, 20, 1);
 
-    public BlockPos originalPos;
-
-    @SubscribeEvent
-    public void onUpdate(PlayerLivingUpdateEvent event) {
-        if(mc.player.getPosition() == originalPos) {
-            notorious.messageManager.sendMessage("VClip failed tp'd back to previous pos.");
-        }
-        toggle();
-    }
-
     @Override
     public void onEnable() {
-        originalPos = mc.player.getPosition();
         if(!mc.player.onGround) {
             notorious.messageManager.sendMessage("Please be on the ground for VClip to work.");
         }

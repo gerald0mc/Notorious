@@ -22,8 +22,6 @@ public class SkyColor extends Hack {
     @RegisterSetting
     public final ColorSetting rgba = new ColorSetting("SkyColor", 125, 0, 255, 255);
     @RegisterSetting
-    public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
-    @RegisterSetting
     public final BooleanSetting fog = new BooleanSetting("Fog", true);
 
     @SubscribeEvent
@@ -46,21 +44,4 @@ public class SkyColor extends Hack {
             event.setCanceled(true);
         }
     }
-
-//    @SubscribeEvent
-//    public void onUpdate(TickEvent event) {
-//        if(rainbow.getValue()) {
-//            doRainbow();
-//        }
-//    }
-//
-//    public void doRainbow() {
-//        float[] tick_color = {
-//                (System.currentTimeMillis() % (360 * 32)) / (360f * 32)
-//        };
-//        int color_rgb_o = Color.HSBtoRGB(tick_color[0], 0.8f, 0.8f);
-//        rgba.getRed().setValue((color_rgb_o >> 16) & 0xFF);
-//        rgba.getGreen().setValue((color_rgb_o >> 8) & 0xFF);
-//        rgba.getBlue().setValue(color_rgb_o & 0xFF);
-//    }
 }

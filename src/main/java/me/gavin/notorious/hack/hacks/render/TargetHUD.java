@@ -106,7 +106,7 @@ public class TargetHUD extends Hack {
                     healthColor = new Color(0, 0, 0, 255);
                 }
                 if(health.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow("HP:" + String.valueOf(healthInt), x.getValue() + 5, y.getValue() + 15, healthColor.getRGB());
+                    mc.fontRenderer.drawStringWithShadow("HP:" + healthInt, x.getValue() + 5, y.getValue() + 15, healthColor.getRGB());
                 }
                 ////////////////////////////////////////////////player view////////////////////////////////////////////////
                 if(playerView.isEnabled()) {
@@ -114,12 +114,22 @@ public class TargetHUD extends Hack {
                     GuiInventory.drawEntityOnScreen((int) x.getValue() + 115, (int) y.getValue() + 48, 20, 0, 0, entityPlayer);
                 }
                 ////////////////////////////////////////////////ping////////////////////////////////////////////////
+                Color pingColor = null;
+                if(getPing(entityPlayer) < 49) {
+                    pingColor = new Color(0, 255, 0, 255);
+                }else if(getPing(entityPlayer) < 99) {
+                    pingColor = new Color(255, 255, 0, 255);
+                }else if(getPing(entityPlayer) >= 100) {
+                    pingColor = new Color(255, 0, 0, 255);
+                }else {
+                    pingColor = new Color(0, 0, 0, 255);
+                }
                 if(ping.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow("Ping:" + String.valueOf(getPing(entityPlayer)), x.getValue() + 5, y.getValue() + 25, -1);
+                    mc.fontRenderer.drawStringWithShadow("Ping:" + getPing(entityPlayer), x.getValue() + 5, y.getValue() + 25, pingColor.getRGB());
                 }
                 ////////////////////////////////////////////////fucked detector////////////////////////////////////////////////
                 String fuckedDetector = "";
-                Color fuckedColor = null;
+                Color fuckedColor;
                 if(isFucked(entityPlayer)) {
                     fuckedDetector = "FUCKED";
                     fuckedColor = new Color(0, 255, 0, 255);
