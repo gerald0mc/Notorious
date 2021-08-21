@@ -35,10 +35,9 @@ public class PopChams extends Hack {
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
             GlStateManager.enableAlpha();
-            GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.color(1f, 0f, 0f, 0.5f);
             mc.getRenderManager().renderEntityStatic(entry.getKey(), event.getPartialTicks(), false);
-            GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             GlStateManager.popMatrix();
         }
     }

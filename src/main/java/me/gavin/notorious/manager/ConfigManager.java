@@ -92,25 +92,27 @@ public class ConfigManager {
                 hack.toggle();
 
             for (Setting setting : hack.getSettings()) {
-                if (setting instanceof BooleanSetting) {
-                    if (object.get(setting.getName()).getAsBoolean())
-                        ((BooleanSetting) setting).toggle();
-                } else if (setting instanceof ModeSetting) {
-                    if (object.has(setting.getName())) {
-                        final int index = ((ModeSetting) setting).getIndex(object.get(setting.getName()).getAsString());
-                        if (index != -1) {
-                            ((ModeSetting) setting).setMode(object.get(setting.getName()).getAsString());
+                if (object.get(setting.getName()) != null) {
+                    if (setting instanceof BooleanSetting) {
+                        if (object.get(setting.getName()).getAsBoolean())
+                            ((BooleanSetting) setting).toggle();
+                    } else if (setting instanceof ModeSetting) {
+                        if (object.has(setting.getName())) {
+                            final int index = ((ModeSetting) setting).getIndex(object.get(setting.getName()).getAsString());
+                            if (index != -1) {
+                                ((ModeSetting) setting).setMode(object.get(setting.getName()).getAsString());
+                            }
                         }
+                    } else if (setting instanceof NumSetting) {
+                        ((NumSetting) setting).setValue(object.get(setting.getName()).getAsFloat());
+                    } else if (setting instanceof ColorSetting) {
+                        final Color tempColor = new Color(object.get(setting.getName()).getAsInt());
+                        final float[] hsb = Color.RGBtoHSB(tempColor.getRed(), tempColor.getGreen(), tempColor.getBlue(), null);
+                        final ColorSetting colorSetting = (ColorSetting) setting;
+                        colorSetting.getHue().setValue(hsb[0]);
+                        colorSetting.getSaturation().setValue(hsb[1]);
+                        colorSetting.getBrightness().setValue(hsb[2]);
                     }
-                } else if (setting instanceof NumSetting) {
-                    ((NumSetting)setting).setValue(object.get(setting.getName()).getAsFloat());
-                } else if (setting instanceof ColorSetting) {
-                    final Color tempColor = new Color(object.get(setting.getName()).getAsInt());
-                    final float[] hsb = Color.RGBtoHSB(tempColor.getRed(), tempColor.getGreen(), tempColor.getBlue(), null);
-                    final ColorSetting colorSetting = (ColorSetting) setting;
-                    colorSetting.getHue().setValue(hsb[0]);
-                    colorSetting.getSaturation().setValue(hsb[1]);
-                    colorSetting.getBrightness().setValue(hsb[2]);
                 }
             }
         }

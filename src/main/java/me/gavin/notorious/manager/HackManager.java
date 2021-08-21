@@ -103,6 +103,7 @@ public class HackManager {
         addHack(new TargetHUD());
         addHack(new ViewModel());
         addHack(new VoidESP());
+        addHack(new Chams());
 
         // world
         addHack(new BedFucker());
