@@ -1,6 +1,5 @@
 package me.gavin.notorious.hack.hacks.chat;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -11,8 +10,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@RegisterHack(name = "VisualRange", description = "Sends a message in chat when a player enters your range.", category = Hack.Category.Chat)
-public class VisualRange extends Hack {
+@RegisterHack(name = "AutoGroom", description = "ez", category = Hack.Category.Chat)
+public class AutoGroom extends Hack {
 
     private List<String> peopleInArea;
     private List<String> peopleNearbyNew;
@@ -35,7 +34,7 @@ public class VisualRange extends Hack {
         if(peopleNearbyNew.size() > 0) {
             for(String name : peopleNearbyNew) {
                 if(!peopleInArea.contains(name)) {
-                    notorious.messageManager.sendMessage(ChatFormatting.RED + name + ChatFormatting.RESET + " has entered your Visual Range");
+                    mc.player.sendChatMessage("/msg " + name + " hewwo wittle kitten, come be my wittle discord girl? | discord.gg/BU9g9HgGBa");
                     peopleInArea.add(name);
                 }
             }
@@ -44,7 +43,7 @@ public class VisualRange extends Hack {
             for(String name : peopleInArea) {
                 if(!peopleNearbyNew.contains(name)) {
                     peopleToRemove.add(name);
-                    notorious.messageManager.sendMessage(ChatFormatting.RED + name + ChatFormatting.RESET + " has left your Visual Range");
+                    mc.player.sendChatMessage("/msg " + name + " ow no pwease dont weave me my wittle kitten UWU");
                 }
             }
             if(peopleToRemove.size() > 0) {

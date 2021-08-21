@@ -43,8 +43,6 @@ public class ConfigManager {
 
     public void save() throws IOException {
         for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
-            if(hack.getName().equals("FullBright") || hack.getName().equals("DiscordRPC"))
-                return;
             final JsonObject hackObj = new JsonObject();
             hackObj.addProperty("name", hack.getName());
             hackObj.addProperty("bind", hack.getBind());

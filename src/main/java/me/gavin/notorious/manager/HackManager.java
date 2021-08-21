@@ -34,6 +34,7 @@ public class HackManager {
         // chat
         addHack(new ArmorNotify());
         addHack(new AutoDox());
+        addHack(new AutoGroom());
         addHack(new ChatModifications());
         addHack(new ChorusPredict());
         addHack(new PotionAlert());
@@ -45,11 +46,10 @@ public class HackManager {
         addHack(new DiscordRPC());
         addHack(new Font());
         addHack(new HUD());
+        addHack(new Save());
 
         // combat
-        addHack(new AntiCrystal());
         addHack(new AnvilBurrow());
-        addHack(new AutoArmor());
         addHack(new AutoCrystal());
         addHack(new BurrowBreaker());
         addHack(new KillAura());
@@ -57,7 +57,6 @@ public class HackManager {
         addHack(new StrictAutoTot());
         addHack(new PacketAutoCity());
         addHack(new Quiver());
-        addHack(new WebAura());
 
         // misc
         addHack(new AutoLog());
@@ -93,6 +92,7 @@ public class HackManager {
         addHack(new FuckedDetector());
         addHack(new Fullbright());
         addHack(new HellenKeller());
+        addHack(new NoRender());
         addHack(new PenisESP()); 
         addHack(new PopESP());
         addHack(new RBandESP());

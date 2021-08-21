@@ -27,7 +27,6 @@ public class ColorUtil {
     }
 
     public static Color normalizedFade(float value, Color startColor, Color endColor) {
-
         final float sr = startColor.getRed() / 255f;
         final float sg = startColor.getGreen() / 255f;
         final float sb = startColor.getBlue() / 255f;

@@ -11,6 +11,8 @@ import me.gavin.notorious.util.TotemPopListener;
 import me.gavin.notorious.util.font.CFontLoader;
 import me.gavin.notorious.util.font.CFontRenderer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.Display;
 
 import java.io.IOException;
@@ -50,12 +52,6 @@ public class Notorious {
         MinecraftForge.EVENT_BUS.register(this);
         Display.setTitle(NotoriousMod.NAME_VERSION);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                configManager.save();
-                // ignoring the exception is OK because it will not print the stack trace anyways
-                // (due to it being ran as a shutdown hook)
-            } catch (IOException ignored) { }
-        }));
+        Runtime.getRuntime().addShutdownHook(new ShutDownHook());
     }
 }

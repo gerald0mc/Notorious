@@ -16,9 +16,9 @@ public class TotemPopCounter extends Hack {
 
     @SubscribeEvent
     public void onPop(TotemPopEvent event) {
-        if (event.getPopCount() == 1) {
+        if(event.getPopCount() == 1) {
             notorious.messageManager.sendRemovableMessage(ChatFormatting.RED + event.getName() + ChatFormatting.RESET + " has popped a totem", event.getEntityId());
-        } else {
+        }else {
             notorious.messageManager.sendRemovableMessage(ChatFormatting.RED + event.getName() + ChatFormatting.RESET + " has popped " + ChatFormatting.GREEN + event.getPopCount() + ChatFormatting.RESET + " totems", event.getEntityId());
         }
     }

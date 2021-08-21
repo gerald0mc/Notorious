@@ -45,11 +45,15 @@ public class HUD extends Hack {
     @RegisterSetting
     public final ColorSetting rgbWatermark = new ColorSetting("RGBWatermark", 255, 255, 255, 255);
     @RegisterSetting
-    public final ColorSetting rgbArrayList = new ColorSetting("RGBHackList", 255, 255, 255, 255);
+    public final ColorSetting rgbArrayList = new ColorSetting("RGBHackList", 255, 0, 255, 255);
+    @RegisterSetting
+    public final ColorSetting rgbArrayList2 = new ColorSetting("RGBHackList2", 0, 0, 255, 255);
     @RegisterSetting
     public final ColorSetting rgbFriendList = new ColorSetting("RGBFriendList", 255, 255, 255, 255);
     @RegisterSetting
     public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
+    @RegisterSetting
+    public final NumSetting sexySpeed = new NumSetting("SexyColorSpeed", 350, 1, 750, 1);
     @RegisterSetting
     public final NumSetting saturation = new NumSetting("Saturation", 0.5f, 0.1f, 1f, 0.1f);
     @RegisterSetting
@@ -163,8 +167,7 @@ public class HUD extends Hack {
                     }else if(arrayListMode.getMode().equals("RGB")) {
                         color = rgbArrayList.getAsColor().getRGB();
                     }else if(arrayListMode.getMode().equals("Sexy")) {
-                        final float value = ColorUtil.getColorFlow(yOffset / 60.0, 400.0, new Color(0x00d5ff), new Color(0xff4ae7)).getRGB();
-                        color = ColorUtil.normalizedFade(value, new Color(0x03adfc), new Color(0x006a9c)).getRGB();
+                        color = ColorUtil.getColorFlow(yOffset / 60.0, (int) sexySpeed.getValue(), rgbArrayList.getAsColor(), rgbArrayList2.getAsColor()).getRGB();
                     }else {
                         color = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
                     }

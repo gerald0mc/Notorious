@@ -6,6 +6,8 @@ import club.minnced.discord.rpc.DiscordRichPresence;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DiscordUtil {
