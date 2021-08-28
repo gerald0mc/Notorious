@@ -49,6 +49,8 @@ public class SpeedMine extends Hack {
 	public void onTick(TickEvent.ClientTickEvent event) {
 		if (mc.player == null || mc.world == null) return;
 
+		if (pos == null || facing == null) return;
+
 		if (modeSetting.getMode().equalsIgnoreCase("Breaker"))
 			mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, facing));
 
@@ -67,6 +69,8 @@ public class SpeedMine extends Hack {
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
 		if (mc.player == null || mc.world == null) return;
 
+		if (pos == null || facing == null) return;
+
 		if (render.getValue() && pos != null) {
 			RenderUtil.renderFilledBB(new AxisAlignedBB(pos), color.getAsColor());
 			RenderUtil.renderOutlineBB(new AxisAlignedBB(pos), color.getAsColor());
@@ -76,6 +80,7 @@ public class SpeedMine extends Hack {
 	@SubscribeEvent
 	public void onBlockClick(BlockEvent.Click event) {
 		if (mc.player == null || mc.world == null) return;
+
 		if (!canBreak(event.getPos())) return;
 
 		if (pos != null && facing != null) {
@@ -103,6 +108,7 @@ public class SpeedMine extends Hack {
 	@SubscribeEvent
 	public void onBlockDamage(BlockEvent.Damage event) {
 		if (mc.player == null || mc.world == null) return;
+
 		if (modeSetting.getMode().equalsIgnoreCase("Damage") && ((IPlayerControllerMPMixin) mc.playerController).getCurBlockDamageMP() >= endDamage.getValue())
 			((IPlayerControllerMPMixin) mc.playerController).setCurBlockDamageMP(1f);
 	}
@@ -110,6 +116,7 @@ public class SpeedMine extends Hack {
 	@SubscribeEvent
 	public void onBlockDestroy(BlockEvent.Destroy event) {
 		if (mc.player == null || mc.world == null) return;
+
 		reset();
 
 		if (silent.getValue())
