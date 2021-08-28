@@ -3,10 +3,7 @@ package me.gavin.notorious;
 import me.gavin.notorious.event.EventProcessor;
 import me.gavin.notorious.friend.Friends;
 import me.gavin.notorious.gui.ClickGuiScreen;
-import me.gavin.notorious.manager.ConfigManager;
-import me.gavin.notorious.manager.HackManager;
-import me.gavin.notorious.manager.MessageManager;
-import me.gavin.notorious.manager.RotationManager;
+import me.gavin.notorious.manager.*;
 import me.gavin.notorious.util.TotemPopListener;
 import me.gavin.notorious.util.font.CFontLoader;
 import me.gavin.notorious.util.font.CFontRenderer;
@@ -30,6 +27,7 @@ public class Notorious {
     public final TotemPopListener popListener;
     public final Friends friend;
     public final ConfigManager configManager;
+    public final NotificationManager notificationManager;
 
     public Notorious() {
         INSTANCE = this;
@@ -42,6 +40,7 @@ public class Notorious {
         popListener = new TotemPopListener();
         friend = new Friends();
         configManager = new ConfigManager();
+        notificationManager = new NotificationManager();
 
         new EventProcessor();
 
