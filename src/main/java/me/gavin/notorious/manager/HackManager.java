@@ -80,6 +80,7 @@ public class HackManager {
         addHack(new FastPlace());
         addHack(new MiddleClickXP());
         addHack(new PacketMine());
+        addHack(new SpeedMine());
         addHack(new ToggleSilentXP());
 
         // render
