@@ -9,10 +9,12 @@ import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.InventoryUtil;
+import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.init.Items;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -30,10 +32,7 @@ public class SpeedMine extends Hack {
 	public final BooleanSetting silent = new BooleanSetting("Silent Switch", true);
 
 	public final BooleanSetting render = new BooleanSetting("Render", true);
-	public final ColorSetting miningColor = new ColorSetting("Mining Color", new Color(0xffff0000));
-	public final ColorSetting finishedColor = new ColorSetting("Finished Color", new Color(0xff00ff00));
-	public final NumSetting outlineWidth = new NumSetting("Outline Width", 1.5f, 0f, 5f, .5f);
-	public final NumSetting outlineAlpha = new NumSetting("Outline Alpha", 255, 0, 255, 5);
+	public final ColorSetting color = new ColorSetting("Mining Color", new Color(0xffaaffee));
 
 	private BlockPos pos;
 	private EnumFacing facing;
@@ -58,7 +57,10 @@ public class SpeedMine extends Hack {
 
 	@SubscribeEvent
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
-
+		if (render.getValue() && pos != null) {
+			RenderUtil.renderFilledBB(new AxisAlignedBB(pos), color.getAsColor());
+			RenderUtil.renderOutlineBB(new AxisAlignedBB(pos), color.getAsColor());
+		}
 	}
 
 	@SubscribeEvent
