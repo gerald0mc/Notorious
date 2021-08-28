@@ -1,11 +1,13 @@
 package me.gavin.notorious.util;
 
 import me.gavin.notorious.stuff.IMinecraft;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,11 +18,13 @@ import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.Sphere;
 
 import java.awt.*;
+import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11.GL_FLAT;
 import static org.lwjgl.opengl.GL11.GL_SMOOTH;
 
 public class RenderUtil implements IMinecraft {
+    private final static Frustum frustrum = new Frustum();
 
     public static void prepare() {
         GlStateManager.pushMatrix();
@@ -225,6 +229,12 @@ public class RenderUtil implements IMinecraft {
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
+    }
+
+    public static boolean isInViewFrustrum(AxisAlignedBB bb) {
+        Entity current = Minecraft.getMinecraft().getRenderViewEntity();
+        frustrum.setPosition(Objects.requireNonNull(current).posX, current.posY, current.posZ);
+        return frustrum.isBoundingBoxInFrustum(bb);
     }
 
     private enum RenderMode {

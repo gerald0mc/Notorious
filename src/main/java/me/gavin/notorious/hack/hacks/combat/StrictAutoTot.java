@@ -19,11 +19,11 @@ public class StrictAutoTot extends Hack {
     }
 
     @SubscribeEvent
-    public void onUpdate(PlayerLivingUpdateEvent event) {
+    public void onUpdate(TickEvent event) {
         int slot;
         slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
-        if(slot != -1) {
-            InventoryUtil.moveItemToSlot(slot, 45);
-        }
+        if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING)
+            if(slot != -1)
+                InventoryUtil.moveItemToSlot(slot, 45);
     }
 }

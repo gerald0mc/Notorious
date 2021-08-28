@@ -23,6 +23,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
+import java.util.Calendar;
 import java.util.Objects;
 
 @RegisterHack(name = "HUD", description = "ez", category = Hack.Category.Client)
@@ -33,15 +34,21 @@ public class HUD extends Hack {
     @RegisterSetting
     public final BooleanSetting waterMark = new BooleanSetting("Watermark", true);
     @RegisterSetting
-    public final ModeSetting watermarkMode = new ModeSetting("WaterMarkColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
-    @RegisterSetting
     public final BooleanSetting arrayList = new BooleanSetting("HackList", true);
-    @RegisterSetting
-    public final ModeSetting arrayListMode = new ModeSetting("HackListColor", "Flow", "Flow", "RGB", "Sexy", "ClientSync");
     @RegisterSetting
     public final BooleanSetting friendList = new BooleanSetting("FriendList", true);
     @RegisterSetting
+    public final BooleanSetting welcomer = new BooleanSetting("Welcomer", true);
+    @RegisterSetting
+    public final ModeSetting watermarkMode = new ModeSetting("WaterMarkColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
+    @RegisterSetting
+    public final ModeSetting arrayListMode = new ModeSetting("HackListColor", "Flow", "Flow", "RGB", "Sexy", "ClientSync");
+    @RegisterSetting
     public final ModeSetting friendListMode = new ModeSetting("FriendListColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
+    @RegisterSetting
+    public final ModeSetting welcomerMode = new ModeSetting("WelcomerType", "Normal", "Normal", "Subscribe");
+    @RegisterSetting
+    public final ModeSetting welcomerColor = new ModeSetting("FriendListColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
     @RegisterSetting
     public final ColorSetting rgbWatermark = new ColorSetting("RGBWatermark", 255, 255, 255, 255);
     @RegisterSetting
@@ -50,6 +57,8 @@ public class HUD extends Hack {
     public final ColorSetting rgbArrayList2 = new ColorSetting("RGBHackList2", 0, 0, 255, 255);
     @RegisterSetting
     public final ColorSetting rgbFriendList = new ColorSetting("RGBFriendList", 255, 255, 255, 255);
+    @RegisterSetting
+    public final ColorSetting rgbWelcomer = new ColorSetting("RGBWelcomer", 255, 255, 255, 255);
     @RegisterSetting
     public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
     @RegisterSetting
@@ -76,6 +85,10 @@ public class HUD extends Hack {
     public final NumSetting xFriendList = new NumSetting("XFriendList", 2.0f, 0.1f, 1000.0f, 0.1f);
     @RegisterSetting
     public final NumSetting yFriendList = new NumSetting("YFriendList", 2.0f, 0.1f, 600.0f, 0.1f);
+    @RegisterSetting
+    public final NumSetting xWelcomer = new NumSetting("XWelcomer", 2.0f, 0.1f, 1000.0f, 0.1f);
+    @RegisterSetting
+    public final NumSetting yWelcomer = new NumSetting("YWelcomer", 2.0f, 0.1f, 600.0f, 0.1f);
 
     @SubscribeEvent
     public void onRenderWatermark(RenderGameOverlayEvent.Text event) {
@@ -228,6 +241,35 @@ public class HUD extends Hack {
                     yOffset += mc.fontRenderer.FONT_HEIGHT + 0.5;
                 }
             }
+        }
+        if(welcomer.isEnabled()) {
+            int color;
+            Font font = Notorious.INSTANCE.hackManager.getHack(Font.class);
+            if(welcomerColor.getMode().equals("ClientSync")) {
+                color = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
+            }else if(welcomerColor.getMode().equals("RGB")) {
+                color = rgbWelcomer.getAsColor().getRGB();
+            }else {
+                color = ColorUtil.getRainbow(6f, 1f);
+            }
+            if(font.isEnabled()) {
+                notorious.fontRenderer.drawStringWithShadow(welcomerMode.getMode().equals("Normal") ? WelcomeMessages() + mc.player.getDisplayNameString() : "Sub to " + mc.player.getDisplayNameString() + " on YouTube", xWelcomer.getValue(), yWelcomer.getValue(), new Color(color));
+            }else {
+                mc.fontRenderer.drawStringWithShadow(welcomerMode.getMode().equals("Normal") ? WelcomeMessages() + mc.player.getDisplayNameString() : "Sub to " + mc.player.getDisplayNameString() + " on YouTube", xWelcomer.getValue(), yWelcomer.getValue(), color);
+            }
+        }
+    }
+
+    private String WelcomeMessages(){
+        final int timeOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if(timeOfDay < 12) {
+            return "Good Morning, ";
+        } else if (timeOfDay < 16) {
+            return "Good Afternoon, ";
+        } else if (timeOfDay < 21) {
+            return "Good Evening, ";
+        } else {
+            return "Good Night, ";
         }
     }
 

@@ -30,25 +30,18 @@ public class Chams extends Hack {
 
     @RegisterSetting
     private final BooleanSetting players = new BooleanSetting("Players", true);
-
     @RegisterSetting
     private final BooleanSetting animals = new BooleanSetting("Animals", false);
-
     @RegisterSetting
     private final BooleanSetting mobs = new BooleanSetting("Mobs", false);
-
     @RegisterSetting
     private final BooleanSetting walls = new BooleanSetting("Walls", true);
-
     @RegisterSetting
     private final BooleanSetting texture = new BooleanSetting("Texture", true);
-
     @RegisterSetting
     private final NumSetting lineWidth = new NumSetting("Line Width", 1f, 0.1f, 3f, 0.1f);
-
     @RegisterSetting
     private final ColorSetting color = new ColorSetting("Color", Color.CYAN);
-
     @RegisterSetting
     private final ModeSetting mode = new ModeSetting("Style", "Normal", "Normal", "Wireframe", "Color");
 
@@ -102,8 +95,8 @@ public class Chams extends Hack {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        this.glColor();
         GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+        this.glColor();
     }
 
     private void endColor() {

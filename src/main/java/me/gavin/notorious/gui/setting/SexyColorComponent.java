@@ -62,7 +62,7 @@ public class SexyColorComponent extends SettingComponent {
         Font font = Notorious.INSTANCE.hackManager.getHack(Font.class);
         Gui.drawRect(x, y, x + width, y + height, colorSetting.getAsColor().getRGB());
         if(font.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(colorSetting.getName(), x + 9f, y + 1f, new Color(255, 255, 255, 255));
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(colorSetting.getName(), x + 9f, y + 3f, new Color(255, 255, 255, 255));
         }else {
             mc.fontRenderer.drawStringWithShadow(colorSetting.getName(), x + 9f, y + 1f, -1);
         }

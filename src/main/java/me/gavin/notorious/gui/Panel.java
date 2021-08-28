@@ -41,7 +41,7 @@ public class Panel extends AbstractDragComponent {
         }
         Gui.drawRect(x, y, x + width, y + height - 2, color);
         if(font.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, Color.WHITE);
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 5f, Color.WHITE);
         }else {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(category.name(), x + 3f, y + 3f, new Color(255, 255, 255).getRGB());
         }

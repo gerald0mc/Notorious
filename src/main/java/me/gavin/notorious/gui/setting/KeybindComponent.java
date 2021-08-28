@@ -38,13 +38,13 @@ public class KeybindComponent extends SettingComponent {
         Gui.drawRect(x, y, x + 2, y + height, color);
         if (listening) {
             if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 1f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 3f, Color.WHITE);
             }else {
                 Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: Listening...", x + 9f, y + 1f, new Color(255, 255, 255).getRGB());
             }
         } else {
             if(font.isEnabled()) {
-                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 1f, Color.WHITE);
+                Notorious.INSTANCE.fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 3f, Color.WHITE);
             }else {
                 Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Bind: <" + Keyboard.getKeyName(setting.getBind()) + ">", x + 9f, y + 1f, new Color(255, 255, 255).getRGB());
             }

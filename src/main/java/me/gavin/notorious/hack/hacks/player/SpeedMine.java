@@ -93,8 +93,10 @@ public class SpeedMine extends Hack {
 			int pick = InventoryUtil.getItemSlot(Items.DIAMOND_PICKAXE);
 			if (pick != -1)
 				mc.player.connection.sendPacket(new CPacketHeldItemChange(pick));
-			else
-				mc.player.sendMessage(new TextComponentString("[Notorious] no pick retard"));
+			else {
+				notorious.messageManager.sendError("No pickaxe");
+				toggle();
+			}
 		}
 
 		if (!modeSetting.getMode().equalsIgnoreCase("Damage")) {

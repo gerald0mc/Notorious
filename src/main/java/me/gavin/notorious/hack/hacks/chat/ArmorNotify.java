@@ -29,20 +29,18 @@ public class ArmorNotify extends Hack {
 
     @SubscribeEvent
     public void onChat(PlayerLivingUpdateEvent event) {
-        for(Friend f : notorious.friend.getFriends()) {
-            for(Entity e : mc.world.loadedEntityList) {
-                boolean armorDurability = getArmorDurability();
-                if(e.equals(mc.player))
-                    return;
-                if(e instanceof EntityPlayer) {
-                    if(notorious.friend.isFriend(e.getName())) {
-                        if(armorDurability) {
-                            mc.player.sendChatMessage("/msg " + e.getName() + " Hey bro you need to mend your armor :o");
-                            hasAnnounced = true;
-                        }
-                        if(armorAboveSeventyFive()) {
-                            hasAnnounced = false;
-                        }
+        for(Entity e : mc.world.loadedEntityList) {
+            boolean armorDurability = getArmorDurability();
+            if(e.equals(mc.player))
+                return;
+            if(e instanceof EntityPlayer) {
+                if(notorious.friend.isFriend(e.getName())) {
+                    if(armorDurability && !hasAnnounced) {
+                        mc.player.sendChatMessage("/msg " + ((EntityPlayer) e).getDisplayNameString() + " Hey bro you need to mend your armor :o");
+                        hasAnnounced = true;
+                    }
+                    if(armorAboveSeventyFive()) {
+                        hasAnnounced = false;
                     }
                 }
             }

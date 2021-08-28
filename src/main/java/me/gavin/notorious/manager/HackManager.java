@@ -38,6 +38,7 @@ public class HackManager {
         addHack(new ChatModifications());
         addHack(new ChorusPredict());
         addHack(new PotionAlert());
+        addHack(new StringTestModule());
         addHack(new TotemPopCounter());
         addHack(new VisualRange());
 

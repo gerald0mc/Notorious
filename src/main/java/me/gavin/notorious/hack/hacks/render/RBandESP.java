@@ -61,8 +61,8 @@ public class RBandESP extends Hack {
 
     @SubscribeEvent
     public void onPacket(PacketEvent.Receive event) {
-        if(event.getPacket() instanceof SPacketPlayerPosLook) {
-            for(EntityPlayer e : mc.world.playerEntities) {
+        for(EntityPlayer e : mc.world.playerEntities) {
+            if(event.getPacket() instanceof SPacketPlayerPosLook) {
                 if (mc.world.getEntityByID(e.getEntityId()) != null) {
                     final Entity entity = mc.world.getEntityByID(e.getEntityId());
                     if (entity instanceof EntityPlayer) {

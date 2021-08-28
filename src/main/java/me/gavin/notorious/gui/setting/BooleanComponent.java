@@ -35,7 +35,7 @@ public class BooleanComponent extends SettingComponent {
         Gui.drawRect(x, y, x + width, y + height, setting.isEnabled() ? color : new Color(0, 0, 0, (int) Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).backgroundAlpha.getValue()).getRGB());
         Gui.drawRect(x, y, x + 2, y + height, color);
         if(font.isEnabled()) {
-            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName(), x + 9f, y + 1f, Color.WHITE);
+            Notorious.INSTANCE.fontRenderer.drawStringWithShadow(setting.getName(), x + 9f, y + 3f, Color.WHITE);
         }else {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(setting.getName(), x + 9f, y + 1f, new Color(255, 255, 255).getRGB());
         }

@@ -148,7 +148,8 @@ public class TargetHUD extends Hack {
                 String pops = "0";
                 if (notorious.popListener.popMap.get(entityPlayer.getName()) != null)
                     pops = notorious.popListener.popMap.get(entityPlayer.getName()).toString();
-                mc.fontRenderer.drawStringWithShadow(pops, x.getValue() + 158, y.getValue() + 32, -1);
+                if(totemPopCounter.isEnabled())
+                    mc.fontRenderer.drawStringWithShadow(pops, x.getValue() + 158, y.getValue() + 32, -1);
                 ////////////////////////////////////////////////armor////////////////////////////////////////////////
                 if(armor.isEnabled()) {
                     int yOffset = 10;

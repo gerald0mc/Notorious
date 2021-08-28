@@ -7,10 +7,7 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Keyboard;
 
 @RegisterHack(name = "AutoRespawn", description = "Respawn automatically", category = Hack.Category.Misc)
 public class AutoRespawn extends Hack {

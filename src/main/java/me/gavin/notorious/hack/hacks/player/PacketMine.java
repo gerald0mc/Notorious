@@ -4,6 +4,8 @@ import me.gavin.notorious.event.events.PlayerDamageBlockEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.mixin.mixins.accessor.IRenderGlobal;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.util.RenderUtil;
@@ -30,6 +32,8 @@ public class PacketMine extends Hack {
     public final ColorSetting outlineColor = new ColorSetting("Outline", new Color(117, 0, 255, 255));
     @RegisterSetting
     public final ColorSetting boxColor = new ColorSetting("Box", new Color(117, 0, 255, 65));
+    @RegisterSetting
+    public final BooleanSetting fade = new BooleanSetting("Fade", true);
 
     private BlockPos renderBlock;
     public boolean fill;
@@ -48,7 +52,7 @@ public class PacketMine extends Hack {
 
     @SubscribeEvent
     public void onTick(TickEvent event) {
-        if (renderBlock != null && PacketMine.mc.world.getBlockState(renderBlock).getBlock() == Blocks.AIR) {
+        if (renderBlock != null && mc.world.getBlockState(renderBlock).getBlock() == Blocks.AIR) {
             renderBlock = null;
         }
     }
@@ -65,11 +69,25 @@ public class PacketMine extends Hack {
             fill = true;
             outline = false;
         }
+        ((IRenderGlobal) mc.renderGlobal).getDamagedBlocks().forEach((integer, destroyBlockProgress) -> {
+            if (renderBlock != null) {
+                AxisAlignedBB bb = mc.world.getBlockState(renderBlock).getSelectedBoundingBox(mc.world, renderBlock);
+                if (fade.isEnabled())
+                    bb = bb.shrink((3 - (destroyBlockProgress.getPartialBlockDamage()) / (2.0 + (2.0 / 3.0))) / 9.0);
+                if (outline)
+                    RenderUtil.renderOutlineBB(bb, new Color(255, 255, 255));
+                if (fill)
+                    RenderUtil.renderFilledBB(bb, new Color(255, 255, 255, 255));
+            }
+        });
     }
 
     private boolean canBreak(BlockPos pos) {
         final IBlockState blockState = mc.world.getBlockState(pos);
         final Block block = blockState.getBlock();
+
+        if(mc.world.getBlockState(pos).getBlock() == Blocks.AIR)
+            return false;
 
         return block.getBlockHardness(blockState, mc.world, pos) != -1;
     }
