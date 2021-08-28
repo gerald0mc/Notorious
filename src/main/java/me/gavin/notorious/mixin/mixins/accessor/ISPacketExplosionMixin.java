@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(SPacketExplosion.class)
-public interface ISpacketExplosionMixin {
+public interface ISPacketExplosionMixin {
 
     @Accessor("motionX")
     void setMotionXAccessor(float value);

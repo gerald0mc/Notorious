@@ -11,6 +11,7 @@
 	"MixinRenderItem",
 	"ModelPlayerMixin",
 	"NetworkManagerMixin",
+	"PlayerControllerMPMixin",
 	"RenderManagerMixin",
 	"accessor.ICPacketPlayerMixin",
 	"accessor.ICPacketUseEntityMixin",
@@ -19,7 +20,6 @@
 	"accessor.IMinecraftMixin",
 	"accessor.IPlayerControllerMPMixin",
 	"accessor.IRenderGlobal",
-	"accessor.ISpacketExplosionMixin",
-	"PlayerControllerMPMixin"
+	"accessor.ISPacketExplosionMixin"
   ]
 }
