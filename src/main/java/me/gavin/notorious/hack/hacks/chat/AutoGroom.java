@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@RegisterHack(name = "AutoGroom", description = "ez", category = Hack.Category.Chat)
+@RegisterHack(name = "AutoGroom", description = "SyndicateNA simulator", category = Hack.Category.Chat)
 public class AutoGroom extends Hack {
 
     private List<String> peopleInArea;
