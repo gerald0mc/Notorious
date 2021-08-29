@@ -26,7 +26,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Decomp Workspace
-        run: ./gradlew setupDecompWorkspace
+        run: ./gradlew setupdecompworkspace
 
       - name: Build
         run: ./gradlew build
