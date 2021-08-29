@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.render;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -64,6 +65,17 @@ public class TargetHUD extends Hack {
     @RegisterSetting
     public final BooleanSetting hands = new BooleanSetting("OffhandMainhand", true);
 
+    public String nameString;
+
+    @Override
+    public String getMetaData() {
+        if(nameString != null) {
+            return " [" + ChatFormatting.GRAY + nameString + ChatFormatting.RESET + "]";
+        }else {
+            return "";
+        }
+    }
+
     @SubscribeEvent
     public void onUpdate(RenderGameOverlayEvent.Text event) {
         EntityPlayer entityPlayer;
@@ -81,6 +93,7 @@ public class TargetHUD extends Hack {
             if(friendSkip.isEnabled() && notorious.friend.isFriend(entityPlayer.getName()))
                 return;
             if(entityPlayer.getDistance(mc.player) <= range.getValue()) {
+                nameString = entityPlayer.getDisplayNameString();
                 ////////////////////////////////////////////////background////////////////////////////////////////////////
                 if(background.isEnabled()) {
                     Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());

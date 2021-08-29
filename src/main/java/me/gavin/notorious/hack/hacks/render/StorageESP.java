@@ -81,7 +81,7 @@ public class StorageESP extends Hack {
                 if(colorMode.getMode().equals("Custom")) {
                     GL11.glLineWidth(lineWidth.getValue());
                     if(outline)
-                        RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+                        RenderUtil.renderOutlineBB(bb, new Color(outlineColor.getAsColor().getRed(), outlineColor.getAsColor().getGreen(), outlineColor.getAsColor().getBlue(), outlineColor.getAsColor().getAlpha()));
                     if(fill)
                         RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
                 }

@@ -34,16 +34,12 @@ public class SpeedMine extends Hack {
 	@RegisterSetting
 	public final NumSetting range = new NumSetting("Range", 5, 0, 10, 1);
 	@RegisterSetting
-	public final BooleanSetting silent = new BooleanSetting("Silent Switch", true);
-	@RegisterSetting
 	public final BooleanSetting render = new BooleanSetting("Render", true);
 	@RegisterSetting
 	public final ColorSetting color = new ColorSetting("Mining Color", new Color(0xffaaffee));
 
 	private BlockPos pos;
 	private EnumFacing facing;
-
-	private int oldSlot = -1;
 
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event) {
@@ -88,17 +84,6 @@ public class SpeedMine extends Hack {
 			facing = event.getFacing();
 		}
 
-		if (silent.getValue()) {
-			oldSlot = mc.player.inventory.currentItem;
-			int pick = InventoryUtil.getItemSlot(Items.DIAMOND_PICKAXE);
-			if (pick != -1)
-				mc.player.connection.sendPacket(new CPacketHeldItemChange(pick));
-			else {
-				notorious.messageManager.sendError("No pickaxe");
-				toggle();
-			}
-		}
-
 		if (!modeSetting.getMode().equalsIgnoreCase("Damage")) {
 			mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, facing));
 			mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, facing));
@@ -118,11 +103,7 @@ public class SpeedMine extends Hack {
 	@SubscribeEvent
 	public void onBlockDestroy(BlockEvent.Destroy event) {
 		if (mc.player == null || mc.world == null) return;
-
 		reset();
-
-		if (silent.getValue())
-			mc.player.connection.sendPacket(new CPacketHeldItemChange(oldSlot));
 	}
 
 	public void reset() {

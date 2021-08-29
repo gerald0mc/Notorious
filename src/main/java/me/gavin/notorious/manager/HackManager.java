@@ -33,6 +33,7 @@ public class HackManager {
 
         // chat
         addHack(new ArmorNotify());
+        addHack(new AutoChad());
         addHack(new AutoDox());
         addHack(new AutoGroom());
         addHack(new ChatModifications());
@@ -47,6 +48,7 @@ public class HackManager {
         addHack(new DiscordRPC());
         addHack(new Font());
         addHack(new HUD());
+        addHack(new Notification());
         addHack(new Save());
 
         // combat

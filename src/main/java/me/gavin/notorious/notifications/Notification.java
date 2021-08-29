@@ -1,5 +1,6 @@
 package me.gavin.notorious.notifications;
 
+import me.gavin.notorious.Notorious;
 import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -28,11 +29,19 @@ public class Notification implements IMinecraft {
 
 		ScaledResolution sr = new ScaledResolution(mc);
 
-		Gui.drawRect(sr.getScaledWidth() - width, sr.getScaledHeight() - 40, sr.getScaledWidth(), sr.getScaledHeight() - 5, 0x7F000000);
-		Gui.drawRect(sr.getScaledWidth() - width, sr.getScaledHeight() - 40, sr.getScaledWidth() - width + 5, sr.getScaledHeight() - 5, type.color.getRGB());
+		if(Notorious.INSTANCE.hackManager.getHack(me.gavin.notorious.hack.hacks.client.Notification.class).style.getMode().equals("Normal")) {
+			Gui.drawRect(sr.getScaledWidth() - width, sr.getScaledHeight() - 40, sr.getScaledWidth(), sr.getScaledHeight() - 5, 0x7F000000);
+			Gui.drawRect(sr.getScaledWidth() - width, sr.getScaledHeight() - 40, sr.getScaledWidth() - width + 5, sr.getScaledHeight() - 5, type.color.getRGB());
+		}else {
+			Gui.drawRect(sr.getScaledWidth() - width, sr.getScaledHeight() - 20, sr.getScaledWidth(), sr.getScaledHeight() - 5, 0x7F000000);
+		}
 
-		mc.fontRenderer.drawString(title, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 2 - 35, -1);
-		mc.fontRenderer.drawString(message, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 15, -1);
+		if(Notorious.INSTANCE.hackManager.getHack(me.gavin.notorious.hack.hacks.client.Notification.class).style.getMode().equals("Normal")) {
+			mc.fontRenderer.drawString(title, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 2 - 35, -1);
+			mc.fontRenderer.drawString(message, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 15, -1);
+		}else {
+			mc.fontRenderer.drawString(message, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 15, -1);
+		}
 	}
 
 	public long timeLeft() {

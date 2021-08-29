@@ -49,7 +49,8 @@ public class PopESP extends Hack {
             GL11.glLineWidth(lineWidth.getValue());
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-            renderEntity(entry.getKey(), event.getPartialTicks(), false);
+            this.glColor();
+            mc.getRenderManager().renderEntityStatic(entry.getKey(), 0, false);
             GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
             GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
             GL11.glEnable(GL11.GL_LIGHTING);
@@ -85,27 +86,26 @@ public class PopESP extends Hack {
         GL11.glColor4f(clr.getRed() / 255f, clr.getGreen() / 255f, clr.getBlue() / 255f, color.getAlpha().getValue());
     }
 
-    public void renderEntity(Entity entityIn, float partialTicks, boolean p_188388_3_) {
-        if (entityIn.ticksExisted == 0) {
-            entityIn.lastTickPosX = entityIn.posX;
-            entityIn.lastTickPosY = entityIn.posY;
-            entityIn.lastTickPosZ = entityIn.posZ;
-        }
-
-        double d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double)partialTicks;
-        double d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double)partialTicks;
-        double d2 = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double)partialTicks;
-        float f = entityIn.prevRotationYaw + (entityIn.rotationYaw - entityIn.prevRotationYaw) * partialTicks;
-        int i = entityIn.getBrightnessForRender();
-
-        if (entityIn.isBurning()) {
-            i = 15728880;
-        }
-
-        int j = i % 65536;
-        int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-        this.glColor();
-        mc.getRenderManager().renderEntity(entityIn, d0 - mc.getRenderManager().viewerPosX, d1 - mc.getRenderManager().viewerPosY, d2 - mc.getRenderManager().viewerPosZ, f, partialTicks, p_188388_3_);
-    }
+//    public void renderEntity(Entity entityIn, float partialTicks, boolean p_188388_3_) {
+//        if (entityIn.ticksExisted == 0) {
+//            entityIn.lastTickPosX = entityIn.posX;
+//            entityIn.lastTickPosY = entityIn.posY;
+//            entityIn.lastTickPosZ = entityIn.posZ;
+//        }
+//
+//        double d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double)partialTicks;
+//        double d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double)partialTicks;
+//        double d2 = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double)partialTicks;
+//        float f = entityIn.prevRotationYaw + (entityIn.rotationYaw - entityIn.prevRotationYaw) * partialTicks;
+//        int i = entityIn.getBrightnessForRender();
+//
+//        if (entityIn.isBurning()) {
+//            i = 15728880;
+//        }
+//
+//        int j = i % 65536;
+//        int k = i / 65536;
+//        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+//        mc.getRenderManager().renderEntity(entityIn, d0 - mc.getRenderManager().viewerPosX, d1 - mc.getRenderManager().viewerPosY, d2 - mc.getRenderManager().viewerPosZ, f, partialTicks, p_188388_3_);
+//    }
 }

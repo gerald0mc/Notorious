@@ -36,6 +36,9 @@ public class NotificationManager {
 			currentNotification = notificationQueue.poll();
 			currentNotification.show();
 		}
+		if(currentNotification != null && (long) notificationQueue.size() > 1) {
+			notificationQueue.remove();
+		}
 	}
 
 	@SubscribeEvent
