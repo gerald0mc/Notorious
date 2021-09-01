@@ -9,8 +9,8 @@ import me.gavin.notorious.notifications.Notification;
 import me.gavin.notorious.notifications.NotificationType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@RegisterHack(name = "TotemPopCounter", description = "Counts totem pops", category = Hack.Category.Chat)
-public class TotemPopCounter extends Hack {
+@RegisterHack(name = "PopCounter", description = "Counts totem pops", category = Hack.Category.Chat)
+public class PopCounter extends Hack {
 
 	public void onDeath(String name, int pops, int entId) {
 		final String s = pops == 1 ? "" : "s";

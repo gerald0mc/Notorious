@@ -38,6 +38,7 @@ public class BlockUtil implements IMinecraft {
     public static List<Block> actualBlocks = Arrays.asList(Blocks.GRASS, Blocks.DIRT, Blocks.END_STONE);
     public static List<Block> rightclickableBlocks = Arrays.asList(Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.ENDER_CHEST, Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX, Blocks.ANVIL, Blocks.WOODEN_BUTTON, Blocks.STONE_BUTTON, Blocks.UNPOWERED_COMPARATOR, Blocks.UNPOWERED_REPEATER, Blocks.POWERED_REPEATER, Blocks.POWERED_COMPARATOR, Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.BREWING_STAND, Blocks.DISPENSER, Blocks.DROPPER, Blocks.LEVER, Blocks.NOTEBLOCK, Blocks.JUKEBOX, Blocks.BEACON, Blocks.BED, Blocks.FURNACE, Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR, Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR, Blocks.DARK_OAK_DOOR, Blocks.CAKE, Blocks.ENCHANTING_TABLE, Blocks.DRAGON_EGG, Blocks.HOPPER, Blocks.REPEATING_COMMAND_BLOCK, Blocks.COMMAND_BLOCK, Blocks.CHAIN_COMMAND_BLOCK, Blocks.CRAFTING_TABLE);
     public static List<Block> unSafeBlocks = Arrays.asList(Blocks.OBSIDIAN, Blocks.BEDROCK, Blocks.ENDER_CHEST, Blocks.ANVIL);
+    public static Vec3d[] holeOffsets = new Vec3d[]{new Vec3d(-1.0, 0.0, 0.0), new Vec3d(1.0, 0.0, 0.0), new Vec3d(0.0, 0.0, -1.0), new Vec3d(0.0, 0.0, 1.0), new Vec3d(0.0, -1.0, 0.0)};
 
     public static ArrayList<BlockPos> getSurroundingBlocks(int radius, boolean motion) {
         final ArrayList<BlockPos> posList = new ArrayList<>();
@@ -221,6 +222,42 @@ public class BlockUtil implements IMinecraft {
 
     public static boolean canBeClicked(BlockPos pos) {
         return BlockUtil.getBlock(pos).canCollideCheck(BlockUtil.getState(pos), false);
+    }
+
+    public static BlockPos[] toBlockPos(Vec3d[] vec3ds) {
+        BlockPos[] list = new BlockPos[vec3ds.length];
+        for (int i = 0; i < vec3ds.length; ++i) {
+            list[i] = new BlockPos(vec3ds[i]);
+        }
+        return list;
+    }
+
+    public static List<BlockPos> getSphere(float radius, boolean ignoreAir) {
+        ArrayList<BlockPos> sphere = new ArrayList <> ( );
+        BlockPos pos = new BlockPos(BlockUtil.mc.player.getPositionVector());
+        int posX = pos.getX();
+        int posY = pos.getY();
+        int posZ = pos.getZ();
+        int radiuss = (int)radius;
+        int x = posX - radiuss;
+        while ((float)x <= (float)posX + radius) {
+            int z = posZ - radiuss;
+            while ((float)z <= (float)posZ + radius) {
+                int y = posY - radiuss;
+                while ((float)y < (float)posY + radius) {
+                    if ((float)((posX - x) * (posX - x) + (posZ - z) * (posZ - z) + (posY - y) * (posY - y)) < radius * radius) {
+                        BlockPos position = new BlockPos(x, y, z);
+                        if (!ignoreAir || BlockUtil.mc.world.getBlockState(position).getBlock() != Blocks.AIR) {
+                            sphere.add(position);
+                        }
+                    }
+                    ++y;
+                }
+                ++z;
+            }
+            ++x;
+        }
+        return sphere;
     }
 
     private static Block getBlock(BlockPos pos) {

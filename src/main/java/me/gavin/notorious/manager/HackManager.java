@@ -35,12 +35,14 @@ public class HackManager {
         addHack(new ArmorNotify());
         addHack(new AutoChad());
         addHack(new AutoDox());
+        addHack(new AutoEZ());
         addHack(new AutoGroom());
         addHack(new ChatModifications());
         addHack(new ChorusPredict());
         addHack(new PotionAlert());
-        addHack(new StringTestModule());
-        addHack(new TotemPopCounter());
+        //addHack(new StringTestModule());
+        addHack(new ToggleMessage());
+        addHack(new PopCounter());
         addHack(new VisualRange());
 
         // client
@@ -57,17 +59,18 @@ public class HackManager {
         addHack(new BurrowBreaker());
         addHack(new KillAura());
         addHack(new Offhand());
-        addHack(new StrictAutoTot());
-        addHack(new PacketAutoCity());
+        addHack(new AutoTotem());
+        addHack(new PacketCity());
         addHack(new Quiver());
 
         // misc
         addHack(new AutoLog());
         addHack(new AutoRespawn());
+        addHack(new CopyCoords());
         addHack(new CopyIP());
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
-        addHack(new MiddleClickFriend());
+        addHack(new HClip());
         addHack(new VClip());
         addHack(new WeaknessLog());
 
@@ -81,10 +84,10 @@ public class HackManager {
         // player
         addHack(new AutoSuicide());
         addHack(new FastPlace());
-        addHack(new MiddleClickXP());
+        addHack(new MiddleClick());
         addHack(new PacketMine());
         addHack(new SpeedMine());
-        addHack(new ToggleSilentXP());
+        addHack(new ToggleXP());
 
         // render
         addHack(new AntiFog());
@@ -96,6 +99,7 @@ public class HackManager {
         addHack(new FuckedDetector());
         addHack(new Fullbright());
         addHack(new HellenKeller());
+        addHack(new HoleESP());
         addHack(new NoRender());
         addHack(new PenisESP()); 
         addHack(new PopESP());

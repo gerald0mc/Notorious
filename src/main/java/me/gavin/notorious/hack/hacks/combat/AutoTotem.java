@@ -10,8 +10,8 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-@RegisterHack(name = "StrictAutoTot", description = "ez", category = Hack.Category.Combat)
-public class StrictAutoTot extends Hack {
+@RegisterHack(name = "AutoTotem", description = "ez", category = Hack.Category.Combat)
+public class AutoTotem extends Hack {
 
     @Override
     public void onEnable() {

@@ -57,7 +57,7 @@ public class TargetHUD extends Hack {
     @RegisterSetting
     public final BooleanSetting fucked = new BooleanSetting("FuckedDetector", true);
     @RegisterSetting
-    public final BooleanSetting totemPopCounter = new BooleanSetting("TotemPopCounter", true);
+    public final BooleanSetting totemPopCounter = new BooleanSetting("PopCounter", true);
     @RegisterSetting
     public final BooleanSetting armor = new BooleanSetting("Armor", true);
     @RegisterSetting

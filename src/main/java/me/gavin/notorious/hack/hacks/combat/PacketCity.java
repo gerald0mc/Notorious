@@ -33,8 +33,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
 import java.util.List;
 
-@RegisterHack(name = "PacketAutoCity", description = "ez", category = Hack.Category.Combat)
-public class PacketAutoCity extends Hack {
+@RegisterHack(name = "PacketCity", description = "ez", category = Hack.Category.Combat)
+public class PacketCity extends Hack {
 
     @RegisterSetting
     public final NumSetting range = new NumSetting("Range", 7, 0, 9, 1);

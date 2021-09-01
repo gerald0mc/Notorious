@@ -15,8 +15,8 @@ import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@RegisterHack(name = "ToggleSilentXP", description = "Ez", category = Hack.Category.Player)
-public class ToggleSilentXP extends Hack {
+@RegisterHack(name = "ToggleXP", description = "Ez", category = Hack.Category.Player)
+public class ToggleXP extends Hack {
     @RegisterSetting
     public final BooleanSetting footXP = new BooleanSetting("FootXP", true);
 

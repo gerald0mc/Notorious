@@ -1,6 +1,7 @@
 package me.gavin.notorious.hack.hacks.player;
 
 import me.gavin.notorious.event.events.BlockEvent;
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -42,7 +43,7 @@ public class SpeedMine extends Hack {
 	private EnumFacing facing;
 
 	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent event) {
+	public void onTick(PlayerLivingUpdateEvent event) {
 		if (mc.player == null || mc.world == null) return;
 
 		if (pos == null || facing == null) return;
@@ -68,8 +69,9 @@ public class SpeedMine extends Hack {
 		if (pos == null || facing == null) return;
 
 		if (render.getValue() && pos != null) {
-			RenderUtil.renderFilledBB(new AxisAlignedBB(pos), color.getAsColor());
-			RenderUtil.renderOutlineBB(new AxisAlignedBB(pos), color.getAsColor());
+			AxisAlignedBB bb = new AxisAlignedBB(new BlockPos(pos));
+			RenderUtil.renderFilledBB(bb, color.getAsColor());
+			RenderUtil.renderOutlineBB(bb, color.getAsColor());
 		}
 	}
 

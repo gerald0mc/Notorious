@@ -25,7 +25,7 @@ public class Notification implements IMinecraft {
 	}
 
 	public void draw() {
-		int width = 200;
+		int width = mc.fontRenderer.getStringWidth(message);
 
 		ScaledResolution sr = new ScaledResolution(mc);
 
