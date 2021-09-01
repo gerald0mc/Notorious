@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import me.gavin.notorious.util.auth.*;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -28,6 +29,9 @@ public class NotoriousMod {
     public static final String MOD_NAME = "Notorious";
     public static final String VERSION = "beta-0.5.5";
     public static final String NAME_VERSION = MOD_NAME + " " + VERSION;
+    public static final String HWID_URL = ""; //pastebin url goes here
+
+    public static List<String> hwidList = new ArrayList<>();
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
@@ -42,6 +46,21 @@ public class NotoriousMod {
         } catch (IOException e) {
             e.printStackTrace();;
         }
+            
+        this.Verify();
+    }
+        
+    public void Verify(){
+        
+        hwidList = NetworkUtil.getHWIDList();
+
+        
+        if(!hwidList.contains(HWIDUtil.getEncryptedHWID())){
+            
+            FrameUtil.Display();
+            throw new NoStackTraceThrowable("Verify HWID Failed!");
+        }
+
     }
 
     @SubscribeEvent
