@@ -44,16 +44,20 @@ public class DamageUtil implements IMinecraft {
     }
 
     public static float getBlastReduction(final EntityLivingBase entity, float damage, final Explosion explosion) {
-        if (entity instanceof EntityPlayer) {
-            final EntityPlayer player = (EntityPlayer) entity;
-            final DamageSource source = DamageSource.causeExplosionDamage(explosion);
+        try {
+            if (entity instanceof EntityPlayer) {
+                final EntityPlayer player = (EntityPlayer) entity;
+                final DamageSource source = DamageSource.causeExplosionDamage(explosion);
 
-            damage = CombatRules.getDamageAfterAbsorb(damage, (float) player.getTotalArmorValue(), (float) player.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
-            final float modifier = MathHelper.clamp((float) EnchantmentHelper.getEnchantmentModifierDamage(player.getArmorInventoryList(), source), 0.0f, 20.0f);
-            damage *= 1.0f - modifier / 25.0f;
+                damage = CombatRules.getDamageAfterAbsorb(damage, (float) player.getTotalArmorValue(), (float) player.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
+                final float modifier = MathHelper.clamp((float) EnchantmentHelper.getEnchantmentModifierDamage(player.getArmorInventoryList(), source), 0.0f, 20.0f);
+                damage *= 1.0f - modifier / 25.0f;
 
-            if (entity.isPotionActive(Objects.requireNonNull(Potion.getPotionById(11)))) damage -= damage / 4.0f;
-            return damage;
+                if (entity.isPotionActive(Objects.requireNonNull(Potion.getPotionById(11)))) damage -= damage / 4.0f;
+                return damage;
+            }
+        } catch (NullPointerException exception){
+            exception.printStackTrace();
         }
 
         damage = CombatRules.getDamageAfterAbsorb(damage, (float) entity.getTotalArmorValue(), (float) entity.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());

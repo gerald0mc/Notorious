@@ -51,7 +51,7 @@ public class NotoriousMod {
             e.printStackTrace();;
         }
             
-        //this.verify();
+        this.verify();
     }
         
     public void verify(){
