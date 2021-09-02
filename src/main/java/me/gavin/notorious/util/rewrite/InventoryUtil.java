@@ -1,5 +1,6 @@
-package me.gavin.notorious.util;
+package me.gavin.notorious.util.rewrite;
 
+import me.gavin.notorious.util.Instance;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;

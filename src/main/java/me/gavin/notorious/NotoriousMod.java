@@ -1,16 +1,20 @@
 package me.gavin.notorious;
 
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
+import me.gavin.notorious.util.auth.FrameUtil;
+import me.gavin.notorious.util.auth.HWIDUtil;
+import me.gavin.notorious.util.auth.NetworkUtil;
+import me.gavin.notorious.util.auth.NoStackTraceThrowable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import me.gavin.notorious.util.auth.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Gav06
@@ -47,10 +51,10 @@ public class NotoriousMod {
             e.printStackTrace();;
         }
             
-        this.Verify();
+        //this.verify();
     }
         
-    public void Verify(){
+    public void verify(){
         
         hwidList = NetworkUtil.getHWIDList();
 

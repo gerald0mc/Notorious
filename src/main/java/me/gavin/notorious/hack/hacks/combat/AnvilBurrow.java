@@ -6,7 +6,7 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.mixin.mixins.accessor.IMinecraftMixin;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.util.BlockUtil;
-import me.gavin.notorious.util.InventoryUtil;
+import me.gavin.notorious.util.rewrite.InventoryUtil;
 import me.gavin.notorious.util.MathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.List;

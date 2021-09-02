@@ -6,7 +6,7 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
-import me.gavin.notorious.util.InventoryUtil;
+import me.gavin.notorious.util.rewrite.InventoryUtil;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;

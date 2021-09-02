@@ -1,12 +1,9 @@
 package me.gavin.notorious.hack.hacks.combat;
 
-import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
-import me.gavin.notorious.util.InventoryUtil;
-import net.minecraft.client.gui.inventory.GuiInventory;
+import me.gavin.notorious.util.rewrite.InventoryUtil;
 import net.minecraft.init.Items;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 

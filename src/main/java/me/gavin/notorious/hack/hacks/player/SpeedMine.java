@@ -10,18 +10,13 @@ import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
-import me.gavin.notorious.util.InventoryUtil;
 import me.gavin.notorious.util.RenderUtil;
-import net.minecraft.init.Items;
-import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 
