@@ -8,6 +8,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 
 public class InventoryUtil implements Instance {
+    /* NOTE TO DEVS!!!
+        - In the old findItem method, the minimum was 0 and the maximum was 36
+        - In the new one, it should be 0 and 35 if you're looking through the whole inventory
+        - In the new one, it should be 0 and 9 if you're looking through the hotbar
+        - In the new one, it should be 100 and 103 if you're looking through the armor slots
+     */
+
+    /* Getting item to use in moveItemToSlot (minimum - maximum)
+        - Crafting Output (0 - 0)
+        - Crafting Input (1 - 4)
+        - Armor (5 - 8)
+        - Whole Inventory (9 - 35)
+        - Hotbar (36 - 44)
+        - Offhand Slot (45 - 45)
+     */
+
     public static int findItem(Item item, int minimum, int maximum){
         for (int i = minimum; i <= maximum; i++){
             ItemStack stack = mc.player.inventory.getStackInSlot(i);
