@@ -1,25 +1,17 @@
 package me.gavin.notorious.hack.hacks.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
-import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.InventoryUtil;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSword;
-import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Mouse;
 
 /**
  * @author gerald0mc
@@ -52,6 +44,8 @@ public class Offhand extends Hack {
 
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
+        if (mc.player == null || mc.world == null) return;
+
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
             slot = InventoryUtil.getItemSlot(Items.END_CRYSTAL);
         }
@@ -70,7 +64,7 @@ public class Offhand extends Hack {
         if(mode.getMode().equals("Strict")) {
             if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING) {
                 if(slot != -1)
-                    switchToShit();
+                    switchToSlot();
             }
         }
     }
@@ -78,16 +72,16 @@ public class Offhand extends Hack {
     public void doSwitch(Item item) {
         if (mc.player.getHeldItemOffhand().getItem() != item && mc.player.getHealth() > health.getValue()) {
             if (slot != -1) {
-                switchToShit();
+                switchToSlot();
             }
         } else if (mc.player.getHealth() < health.getValue()) {
             if (slot != -1) {
-                switchToShit();
+                switchToSlot();
             }
         }
     }
 
-    public void switchToShit() {
+    public void switchToSlot() {
         mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
         mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 45, 0, ClickType.PICKUP, mc.player);
         mc.playerController.windowClick(mc.player.inventoryContainer.windowId, slot, 0, ClickType.PICKUP, mc.player);
