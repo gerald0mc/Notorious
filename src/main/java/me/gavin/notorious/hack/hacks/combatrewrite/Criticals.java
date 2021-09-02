@@ -19,7 +19,7 @@ public class Criticals extends Hack {
     public void onPacketSend(PacketEvent.Send event){
         if (event.getPacket() instanceof CPacketUseEntity){
             CPacketUseEntity packet = (CPacketUseEntity) event.getPacket();
-            if (packet.getAction() == CPacketUseEntity.Action.ATTACK && !(packet.getEntityFromWorld(mc.world) instanceof EntityEnderCrystal)){
+            if (packet.getAction() == CPacketUseEntity.Action.ATTACK && !(packet.getEntityFromWorld(mc.world) instanceof EntityEnderCrystal) && !AutoCrystal.isPredicting){
                 if (!mc.player.onGround) return;
                 if (mc.player.isInWater() || mc.player.isInLava()) return;
 

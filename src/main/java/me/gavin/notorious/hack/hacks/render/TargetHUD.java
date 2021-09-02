@@ -4,7 +4,7 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.hack.hacks.combat.AutoCrystal;
+import me.gavin.notorious.hack.hacks.combatrewrite.AutoCrystal;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.ColorUtil;
@@ -43,8 +43,6 @@ public class TargetHUD extends Hack {
     @RegisterSetting
     public final BooleanSetting friendSkip = new BooleanSetting("FriendSkip", false);
     @RegisterSetting
-    public final BooleanSetting background = new BooleanSetting("Background", true);
-    @RegisterSetting
     public final BooleanSetting rainbowLine = new BooleanSetting("RainbowLine", true);
     @RegisterSetting
     public final BooleanSetting name = new BooleanSetting("Name", true);
@@ -80,7 +78,7 @@ public class TargetHUD extends Hack {
     public void onUpdate(RenderGameOverlayEvent.Text event) {
         EntityPlayer entityPlayer;
         if(autoCrystalTarget.isEnabled()) {
-            entityPlayer = notorious.hackManager.getHack(AutoCrystal.class).targetPlayer;
+            entityPlayer = AutoCrystal.target;
         }else {
             entityPlayer = (EntityPlayer) mc.world.loadedEntityList.stream()
                     .filter(entity -> entity instanceof EntityPlayer)
@@ -94,19 +92,15 @@ public class TargetHUD extends Hack {
                 return;
             if(entityPlayer.getDistance(mc.player) <= range.getValue()) {
                 nameString = entityPlayer.getDisplayNameString();
-                ////////////////////////////////////////////////background////////////////////////////////////////////////
-                if(background.isEnabled()) {
-                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
-                }
-                ////////////////////////////////////////////////rainbow line////////////////////////////////////////////////
+                Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
                 if(rainbowLine.isEnabled()) {
                     Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
                 }
-                ////////////////////////////////////////////////name////////////////////////////////////////////////
+
                 if(name.isEnabled()) {
                     mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, notorious.friend.isFriend(entityPlayer.getName()) ? new Color(0, 255, 234).getRGB() : -1);
                 }
-                ////////////////////////////////////////////////health////////////////////////////////////////////////
+
                 int healthInt = (int) (entityPlayer.getHealth() + entityPlayer.getAbsorptionAmount());
                 Color healthColor = null;
                 if(healthInt > 19) {

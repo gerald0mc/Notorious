@@ -48,8 +48,13 @@ public class InventoryUtil implements Instance {
 
     public static void switchToSlot(final int slot, final boolean silent) {
         mc.player.connection.sendPacket(new CPacketHeldItemChange(slot));
-        mc.player.inventory.currentItem = slot;
-        mc.playerController.updateController();
+        if (!silent) mc.player.inventory.currentItem = slot;
+
+        if (mc.player.connection.getNetworkManager().isChannelOpen()) {
+            mc.player.connection.getNetworkManager().processReceivedPackets();
+        } else {
+            mc.player.connection.getNetworkManager().handleDisconnection();
+        }
     }
 
     public static void moveItemToSlot(Integer startSlot, Integer endSlot) {

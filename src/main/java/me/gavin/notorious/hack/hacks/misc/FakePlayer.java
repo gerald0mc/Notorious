@@ -7,8 +7,8 @@ import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
-import me.gavin.notorious.hack.hacks.combat.AutoCrystal;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.util.rewrite.DamageUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
@@ -66,7 +66,7 @@ public class FakePlayer extends Hack {
         if (event.getPacket() instanceof SPacketExplosion) {
             final SPacketExplosion explosion = (SPacketExplosion) event.getPacket();
             if (fakePlayer.getDistance(explosion.getX(), explosion.getY(), explosion.getZ()) <= 15) {
-                final double damage = AutoCrystal.calculateDamage(explosion.getX(), explosion.getY(), explosion.getZ(), fakePlayer);
+                final double damage = DamageUtil.calculateDamage(explosion.getX(), explosion.getY(), explosion.getZ(), fakePlayer);
                 if (damage > 0 && pops.isEnabled()) {
                     fakePlayer.setHealth((float) (fakePlayer.getHealth() - MathHelper.clamp(damage,0, 999)));
                 }

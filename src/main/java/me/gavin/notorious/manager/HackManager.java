@@ -6,6 +6,7 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.hack.hacks.chat.*;
 import me.gavin.notorious.hack.hacks.client.*;
 import me.gavin.notorious.hack.hacks.combat.*;
+import me.gavin.notorious.hack.hacks.combatrewrite.AutoCrystal;
 import me.gavin.notorious.hack.hacks.combatrewrite.Criticals;
 import me.gavin.notorious.hack.hacks.misc.*;
 import me.gavin.notorious.hack.hacks.movement.*;
@@ -56,7 +57,6 @@ public class HackManager {
 
         // combat
         addHack(new AnvilBurrow());
-        addHack(new AutoCrystal());
         addHack(new BurrowBreaker());
         addHack(new KillAura());
         addHack(new Offhand());
@@ -65,6 +65,7 @@ public class HackManager {
         addHack(new Quiver());
 
         // combatrewrite
+        addHack(new AutoCrystal());
         addHack(new Criticals());
 
         // misc

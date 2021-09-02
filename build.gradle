@@ -122,7 +122,7 @@ jar {
                 'TweakOrder': 0,
                 'FMLCorePluginContainsFMLMod': 'true',
                 'FMLCorePlugin': "me.gavin.notorious.mixin.NotoriousMixinLoader",
-                'ForceLoadAsMod': 'true',
+                'ForceLoadAsMod': 'true'
         )
     }
 }
