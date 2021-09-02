@@ -33,7 +33,7 @@ public class NotoriousMod {
     public static final String MOD_NAME = "Notorious";
     public static final String VERSION = "beta-0.5.5";
     public static final String NAME_VERSION = MOD_NAME + " " + VERSION;
-    public static final String HWID_URL = ""; //pastebin url goes here
+    public static final String HWID_URL = "https://pastebin.com/raw/mpkynL3v"; 
 
     public static List<String> hwidList = new ArrayList<>();
 
