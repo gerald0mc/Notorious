@@ -24,11 +24,11 @@ public class AutoChad extends Hack {
 
     @SubscribeEvent
     public void onUpdate(TickEvent event) {
-        if (mc.player != null && mc.world != null) {
-            if (timer.hasTicksPassed((long) (delay.getValue() * 20))) {
-                mc.player.sendChatMessage("youtube.com/channel/UCRpxbpHD4IMS9fZmAirFaDg");
-                timer.reset();
-            }
+        if (mc.player == null || mc.world == null) return;
+
+        if (timer.hasTicksPassed((long) (delay.getValue() * 20))) {
+            mc.player.sendChatMessage("youtube.com/channel/UCRpxbpHD4IMS9fZmAirFaDg");
+            timer.reset();
         }
     }
 }

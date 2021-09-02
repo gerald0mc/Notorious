@@ -51,7 +51,9 @@ public class PacketMine extends Hack {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent event) {
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (mc.player == null || mc.world == null) return;
+
         if (renderBlock != null && mc.world.getBlockState(renderBlock).getBlock() == Blocks.AIR) {
             renderBlock = null;
         }

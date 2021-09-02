@@ -43,7 +43,7 @@ public class Offhand extends Hack {
     }
 
     @SubscribeEvent
-    public void onUpdate(TickEvent event) {
+    public void onUpdate(TickEvent.ClientTickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {

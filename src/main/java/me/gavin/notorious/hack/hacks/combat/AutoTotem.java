@@ -19,7 +19,9 @@ public class AutoTotem extends Hack {
     }
 
     @SubscribeEvent
-    public void onUpdate(TickEvent event) {
+    public void onUpdate(TickEvent.ClientTickEvent event) {
+        if (mc.player == null || mc.world == null) return;
+
         int slot;
         slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
         if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING)
