@@ -69,10 +69,10 @@ public class AnvilBurrow extends Hack {
     }
 
     private void switchToAnvil() {
-        slot = InventoryUtil.getItemSlot(anvil);
+        slot = InventoryUtil.findItem(anvil, 0, 9);
         if(mc.player.getHeldItemMainhand().getItem() != anvil) {
             if (slot != -1)
-                InventoryUtil.switchToSlot(slot);
+                InventoryUtil.switchToSlot(slot, false);
         }
     }
 

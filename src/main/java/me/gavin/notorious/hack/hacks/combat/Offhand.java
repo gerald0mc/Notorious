@@ -47,13 +47,13 @@ public class Offhand extends Hack {
         if (mc.player == null || mc.world == null) return;
 
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
-            slot = InventoryUtil.getItemSlot(Items.END_CRYSTAL);
+            slot = InventoryUtil.findItem(Items.END_CRYSTAL, 0, 44);
         }
         if(offhandMode.getMode().equals("Gapple") && mode.getMode().equals("Smart") && mc.player.getHealth() > health.getValue()) {
-            slot = InventoryUtil.getItemSlot(Items.GOLDEN_APPLE);
+            slot = InventoryUtil.findItem(Items.GOLDEN_APPLE, 0, 44);
         }
         if(mc.player.getHealth() < health.getValue() || mode.getMode().equals("Strict")){
-            slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
+            slot = InventoryUtil.findItem(Items.TOTEM_OF_UNDYING, 0, 44);
         }
         if(offhandMode.getMode().equals("Crystal") && mode.getMode().equals("Smart")) {
             doSwitch(Items.END_CRYSTAL);

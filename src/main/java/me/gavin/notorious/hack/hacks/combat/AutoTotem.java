@@ -23,9 +23,9 @@ public class AutoTotem extends Hack {
         if (mc.player == null || mc.world == null) return;
 
         int slot;
-        slot = InventoryUtil.getItemSlot(Items.TOTEM_OF_UNDYING);
+        slot = InventoryUtil.findItem(Items.TOTEM_OF_UNDYING, 0, 45);
         if(mc.player.getHeldItemOffhand().getItem() != Items.TOTEM_OF_UNDYING)
             if(slot != -1)
-                InventoryUtil.moveItemToSlot(slot, 45);
+                InventoryUtil.moveItemToSlot(slot, 44);
     }
 }
