@@ -1,10 +1,7 @@
 package me.gavin.notorious;
 
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
-import me.gavin.notorious.util.auth.FrameUtil;
-import me.gavin.notorious.util.auth.HWIDUtil;
-import me.gavin.notorious.util.auth.NetworkUtil;
-import me.gavin.notorious.util.auth.NoStackTraceThrowable;
+import me.gavin.notorious.util.auth.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -35,8 +32,6 @@ public class NotoriousMod {
     public static final String NAME_VERSION = MOD_NAME + " " + VERSION;
     public static final String HWID_URL = ""; //pastebin url goes here
 
-    public static List<String> hwidList = new ArrayList<>();
-
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         new Notorious();
@@ -50,21 +45,8 @@ public class NotoriousMod {
         } catch (IOException e) {
             e.printStackTrace();;
         }
-            
-        this.verify();
-    }
-        
-    public void verify(){
-        
-        hwidList = NetworkUtil.getHWIDList();
 
-        
-        if(!hwidList.contains(HWIDUtil.getEncryptedHWID())){
-            
-            FrameUtil.Display();
-            throw new NoStackTraceThrowable("Verify HWID Failed!");
-        }
-
+        //Display.setTitle(NotoriousMod.NAME_VERSION);
     }
 
     @SubscribeEvent

@@ -1,6 +1,7 @@
 package me.gavin.notorious.util.auth;
 
 import com.google.common.hash.Hashing;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.hardware.Processor;
@@ -42,7 +43,7 @@ public class HWIDUtil {
                     rawHwid += ch;
                 }
             } catch (IOException e) {
-                Runtime.getRuntime().exit(0);
+                FMLCommonHandler.instance().exitJava(0, false);
             }
         }
 

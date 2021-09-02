@@ -45,7 +45,6 @@ public class Notorious {
         new EventProcessor();
 
         MinecraftForge.EVENT_BUS.register(this);
-        Display.setTitle(NotoriousMod.NAME_VERSION);
 
         Runtime.getRuntime().addShutdownHook(new ShutDownHook());
     }
