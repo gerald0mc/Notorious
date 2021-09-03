@@ -39,7 +39,7 @@ public class SkyColor extends Hack {
 
     @SubscribeEvent
     public void fog_density(final EntityViewRenderEvent.FogDensity event) {
-        if(fog.getValue()) {
+        if(fog.isEnabled()) {
             event.setDensity(0.0f);
             event.setCanceled(true);
         }

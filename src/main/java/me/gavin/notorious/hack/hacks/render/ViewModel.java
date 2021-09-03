@@ -35,34 +35,9 @@ public class ViewModel extends Hack {
     @RegisterSetting
     public final NumSetting scaleZ = new NumSetting("ScaleZ", 100, 0, 200, 1);
 
-    @RegisterSetting
-    public final ModeSetting animation = new ModeSetting("Animation", "None", "None", "RotateSide");
-    @RegisterSetting
-    public final NumSetting animationSpeed = new NumSetting("AnimationSpeed", 10, 1, 100, 1);
-
     public static ViewModel INSTANCE;
-    public Timer timer = new Timer();
 
     {
         INSTANCE = this;
-    }
-
-    @SubscribeEvent
-    public void onUpdate(PlayerLivingUpdateEvent event) {
-        if(timer.passed(animationSpeed.getValue())) {
-            doAnimations();
-            timer.reset();
-        }
-    }
-
-    public void doAnimations() {
-        if(animation.getMode().equals("RotateSide")) {
-            while (rotateZ.getValue() <= 200) {
-                rotateZ.setValue(rotateZ.getValue() + 1);
-            }
-            if(rotateZ.getValue() == 200) {
-                rotateZ.setValue(-70);
-            }
-        }
     }
 }
