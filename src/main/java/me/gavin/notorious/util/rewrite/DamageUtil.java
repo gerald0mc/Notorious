@@ -32,7 +32,8 @@ public class DamageUtil implements IMinecraft {
         float doubleSize = 12.0F;
         double size = entity.getDistance(posX, posY, posZ) / (double) doubleSize;
         Vec3d vec3d = new Vec3d(posX, posY, posZ);
-        double value = (1.0D - size) * entity.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+        double blockDensity = entity.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+        double value = (1.0D - size) * blockDensity;
         float damage = (float) ((int) ((value * value + value) / 2.0D * 7.0D * (double) doubleSize + 1.0D));
         double finalDamage = 1.0D;
 
@@ -44,20 +45,15 @@ public class DamageUtil implements IMinecraft {
     }
 
     public static float getBlastReduction(final EntityLivingBase entity, float damage, final Explosion explosion) {
-        try {
-            if (entity instanceof EntityPlayer) {
-                final EntityPlayer player = (EntityPlayer) entity;
-                final DamageSource source = DamageSource.causeExplosionDamage(explosion);
+        if (entity instanceof EntityPlayer) {
+            final EntityPlayer player = (EntityPlayer) entity;
+            final DamageSource source = DamageSource.causeExplosionDamage(explosion);
 
-                damage = CombatRules.getDamageAfterAbsorb(damage, (float) player.getTotalArmorValue(), (float) player.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
-                final float modifier = MathHelper.clamp((float) EnchantmentHelper.getEnchantmentModifierDamage(player.getArmorInventoryList(), source), 0.0f, 20.0f);
-                damage *= 1.0f - modifier / 25.0f;
+            damage = CombatRules.getDamageAfterAbsorb(damage, (float) player.getTotalArmorValue(), (float) player.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
+            damage *= 1.0f - MathHelper.clamp((float) EnchantmentHelper.getEnchantmentModifierDamage(player.getArmorInventoryList(), source), 0.0f, 20.0f) / 25.0f;
 
-                if (entity.isPotionActive(Objects.requireNonNull(Potion.getPotionById(11)))) damage -= damage / 4.0f;
-                return damage;
-            }
-        } catch (NullPointerException exception){
-            exception.printStackTrace();
+            if (entity.isPotionActive(Objects.requireNonNull(Potion.getPotionById(11)))) damage -= damage / 4.0f;
+            return damage;
         }
 
         damage = CombatRules.getDamageAfterAbsorb(damage, (float) entity.getTotalArmorValue(), (float) entity.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());

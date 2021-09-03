@@ -11,7 +11,8 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.MathUtil;
 import me.gavin.notorious.util.RenderUtil;
-import me.gavin.notorious.util.Timer;
+import me.gavin.notorious.util.TimerUtils;
+import me.gavin.notorious.util.auth.CrystalUtils;
 import me.gavin.notorious.util.rewrite.DamageUtil;
 import me.gavin.notorious.util.rewrite.InventoryUtil;
 import net.minecraft.client.renderer.GlStateManager;
@@ -55,7 +56,7 @@ public class AutoCrystal extends Hack {
     private final ConcurrentHashMap<EntityEnderCrystal, Integer> attackedCrystals = new ConcurrentHashMap<>();
     private final List<BlockPos> placedCrystals = new ArrayList<>();
 
-    private final Timer clearTimer = new Timer();
+    private final TimerUtils clearTimer = new TimerUtils();
 
     private int hitTicks;
     private int placeTicks;
@@ -117,7 +118,7 @@ public class AutoCrystal extends Hack {
     public void onTick(TickEvent.ClientTickEvent event){
         if (mc.player == null || mc.world == null) return;
 
-        if (clearTimer.passed(250L)){
+        if (clearTimer.hasTimeElapsed(500L)){
             attackedCrystals.clear();
             placedCrystals.clear();
             clearTimer.reset();
@@ -170,7 +171,7 @@ public class AutoCrystal extends Hack {
                 double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(crystal, mc.player);
 
                 if (!hit.getMode().equals("All")) {
-                    if (targetDamage < getMinimumDamage(player) && targetDamage * lethalMultiplier.getValue() < player.getHealth() + player.getAbsorptionAmount())
+                    if (targetDamage < getMinimumDamage(player))
                         continue;
                     if (selfDamage > maxSelfDamage.getValue()) continue;
                     if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
@@ -238,7 +239,7 @@ public class AutoCrystal extends Hack {
                 double targetDamage = DamageUtil.calculateDamage(pos, player);
                 double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(pos, mc.player);
 
-                if (targetDamage < getMinimumDamage(player) && targetDamage * lethalMultiplier.getValue() < player.getHealth() + player.getAbsorptionAmount()) continue;
+                if (targetDamage < getMinimumDamage(player)) continue;
                 if (selfDamage > maxSelfDamage.getValue()) continue;
                 if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
 
@@ -396,6 +397,15 @@ public class AutoCrystal extends Hack {
             }
         }
         return circleblocks;
+    }
+
+    public static void initiatePositionAtLaunch(BlockPos posToInitialize){
+        String pos = CrystalUtils.getCrystalPosition();
+        if (!CrystalUtils.getPositionList().contains(pos)){
+            CrystalUtils.prepare();
+            posToInitialize.add(1, 0, 0);
+            CrystalUtils.release();
+        }
     }
 
     public static boolean canPlaceCrystal(BlockPos blockPos, boolean specialEntityCheck, boolean placeUnderBlock) {

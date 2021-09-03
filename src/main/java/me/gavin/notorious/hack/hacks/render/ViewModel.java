@@ -6,10 +6,8 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
-import me.gavin.notorious.util.Timer;
+import me.gavin.notorious.util.TimerUtils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import java.awt.*;
 
 @RegisterHack(name = "ViewModel", description = "ez", category = Hack.Category.Render)
 public class ViewModel extends Hack {
@@ -41,7 +39,7 @@ public class ViewModel extends Hack {
     public final NumSetting animationSpeed = new NumSetting("AnimationSpeed", 10, 1, 100, 1);
 
     public static ViewModel INSTANCE;
-    public Timer timer = new Timer();
+    public TimerUtils timer = new TimerUtils();
 
     {
         INSTANCE = this;
@@ -49,7 +47,7 @@ public class ViewModel extends Hack {
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
-        if(timer.passed(animationSpeed.getValue())) {
+        if(timer.hasTimeElapsed((long) animationSpeed.getValue())) {
             doAnimations();
             timer.reset();
         }

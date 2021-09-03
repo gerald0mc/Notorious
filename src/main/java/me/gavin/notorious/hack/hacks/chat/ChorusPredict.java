@@ -8,7 +8,7 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.util.RenderUtil;
-import me.gavin.notorious.util.Timer;
+import me.gavin.notorious.util.TimerUtils;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,7 +28,7 @@ public class ChorusPredict extends Hack {
     @RegisterSetting
     public final BooleanSetting render = new BooleanSetting("Render", true);
 
-    private final Timer timer = new Timer();
+    private final TimerUtils timer = new TimerUtils();
     private BlockPos chorusPos;
 
     @SubscribeEvent
@@ -46,7 +46,7 @@ public class ChorusPredict extends Hack {
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         if(chorusPos != null) {
-            if(timer.passed(2000L)) {
+            if(timer.hasTimeElapsed(2000L)) {
                 chorusPos = null;
                 return;
             }
