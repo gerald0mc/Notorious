@@ -352,6 +352,8 @@ public class AutoCrystal extends Hack {
         for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)){
             if (player.isDead || player.getHealth() <= 0) continue;
             if (mc.player.getDistanceSq(player) > Math.pow(targetRange.getValue(), 2)) continue;
+            if (notorious.friend.isFriend(player.getName())) continue;
+            if (player.equals(mc.player) && player.getName().equals(mc.player.getName())) continue;
             if (optimalPlayer == null) optimalPlayer = player;
 
             if (player.getHealth() + player.getAbsorptionAmount() < optimalPlayer.getHealth() + optimalPlayer.getAbsorptionAmount()) {
