@@ -44,24 +44,6 @@ public class TargetHUD extends Hack {
     public final BooleanSetting friendSkip = new BooleanSetting("FriendSkip", false);
     @RegisterSetting
     public final BooleanSetting rainbowLine = new BooleanSetting("RainbowLine", true);
-    @RegisterSetting
-    public final BooleanSetting name = new BooleanSetting("Name", true);
-    @RegisterSetting
-    public final BooleanSetting health = new BooleanSetting("Health", true);
-    @RegisterSetting
-    public final BooleanSetting playerView = new BooleanSetting("PlayerView", true);
-    @RegisterSetting
-    public final BooleanSetting ping = new BooleanSetting("Ping", true);
-    @RegisterSetting
-    public final BooleanSetting fucked = new BooleanSetting("FuckedDetector", true);
-    @RegisterSetting
-    public final BooleanSetting totemPopCounter = new BooleanSetting("PopCounter", true);
-    @RegisterSetting
-    public final BooleanSetting armor = new BooleanSetting("Armor", true);
-    @RegisterSetting
-    public final BooleanSetting surroundBlocks = new BooleanSetting("SurroundBlocks", true);
-    @RegisterSetting
-    public final BooleanSetting hands = new BooleanSetting("OffhandMainhand", true);
 
     public String nameString;
 
@@ -96,11 +78,9 @@ public class TargetHUD extends Hack {
                 if(rainbowLine.isEnabled()) {
                     Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
                 }
-
-                if(name.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, notorious.friend.isFriend(entityPlayer.getName()) ? new Color(0, 255, 234).getRGB() : -1);
-                }
-
+                ////////////////////////////////////////////////name////////////////////////////////////////////////
+                mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, notorious.friend.isFriend(entityPlayer.getName()) ? new Color(0, 255, 234).getRGB() : -1);
+                ////////////////////////////////////////////////health////////////////////////////////////////////////
                 int healthInt = (int) (entityPlayer.getHealth() + entityPlayer.getAbsorptionAmount());
                 Color healthColor = null;
                 if(healthInt > 19) {
@@ -112,14 +92,10 @@ public class TargetHUD extends Hack {
                 }else {
                     healthColor = new Color(0, 0, 0, 255);
                 }
-                if(health.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow("HP:" + healthInt, x.getValue() + 5, y.getValue() + 15, healthColor.getRGB());
-                }
+                mc.fontRenderer.drawStringWithShadow("HP:" + healthInt, x.getValue() + 5, y.getValue() + 15, healthColor.getRGB());
                 ////////////////////////////////////////////////player view////////////////////////////////////////////////
-                if(playerView.isEnabled()) {
-                    GlStateManager.color(1f, 1f, 1f);
-                    GuiInventory.drawEntityOnScreen((int) x.getValue() + 115, (int) y.getValue() + 48, 20, 0, 0, entityPlayer);
-                }
+                GlStateManager.color(1f, 1f, 1f);
+                GuiInventory.drawEntityOnScreen((int) x.getValue() + 115, (int) y.getValue() + 48, 20, 0, 0, entityPlayer);
                 ////////////////////////////////////////////////ping////////////////////////////////////////////////
                 Color pingColor = null;
                 if(getPing(entityPlayer) < 49) {
@@ -131,9 +107,7 @@ public class TargetHUD extends Hack {
                 }else {
                     pingColor = new Color(0, 0, 0, 255);
                 }
-                if(ping.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow("Ping:" + getPing(entityPlayer), x.getValue() + 5, y.getValue() + 25, pingColor.getRGB());
-                }
+                mc.fontRenderer.drawStringWithShadow("Ping:" + getPing(entityPlayer), x.getValue() + 5, y.getValue() + 25, pingColor.getRGB());
                 ////////////////////////////////////////////////fucked detector////////////////////////////////////////////////
                 String fuckedDetector = "";
                 Color fuckedColor;
@@ -146,42 +120,33 @@ public class TargetHUD extends Hack {
                 }else {
                     fuckedColor = new Color(0, 0, 0, 255);
                 }
-                if(fucked.isEnabled()) {
-                    mc.fontRenderer.drawStringWithShadow(fuckedDetector, x.getValue() + 5, y.getValue() + 35, fuckedColor.getRGB());
-                }
+                mc.fontRenderer.drawStringWithShadow(fuckedDetector, x.getValue() + 5, y.getValue() + 35, fuckedColor.getRGB());
                 ////////////////////////////////////////////////totem pop counter////////////////////////////////////////////////
                 final ItemStack itemStack = new ItemStack(Items.TOTEM_OF_UNDYING);
                 renderItem(itemStack, (int) x.getValue() + 142, (int) y.getValue() + 26);
                 String pops = "0";
                 if (notorious.popListener.popMap.get(entityPlayer.getName()) != null)
                     pops = notorious.popListener.popMap.get(entityPlayer.getName()).toString();
-                if(totemPopCounter.isEnabled())
-                    mc.fontRenderer.drawStringWithShadow(pops, x.getValue() + 158, y.getValue() + 32, -1);
+                mc.fontRenderer.drawStringWithShadow(pops, x.getValue() + 158, y.getValue() + 32, -1);
                 ////////////////////////////////////////////////armor////////////////////////////////////////////////
-                if(armor.isEnabled()) {
-                    int yOffset = 10;
-                    for (ItemStack stack : entityPlayer.getArmorInventoryList()) {
-                        if (stack == null) continue;
-                        ItemStack armourStack = stack.copy();
-                        renderItem(armourStack, (int) x.getValue() + 125, yOffset + (int) y.getValue() + 26);
-                        yOffset -= 12;
-                    }
+                int yOffset = 10;
+                for (ItemStack stack : entityPlayer.getArmorInventoryList()) {
+                    if (stack == null) continue;
+                    ItemStack armourStack = stack.copy();
+                    renderItem(armourStack, (int) x.getValue() + 125, yOffset + (int) y.getValue() + 26);
+                    yOffset -= 13;
                 }
                 ////////////////////////////////////////////////surround blocks////////////////////////////////////////////////
-                if(surroundBlocks.isEnabled()) {
-                    ArrayList<Block> surroundblocks = getSurroundBlocks(entityPlayer);
-                    renderItem(new ItemStack(surroundblocks.get(0)), (int) x.getValue() + 73, (int) y.getValue() + 10);
-                    renderItem(new ItemStack(surroundblocks.get(1)), (int) x.getValue() + 61, (int) y.getValue() + 21);
-                    renderItem(new ItemStack(surroundblocks.get(2)), (int) x.getValue() + 73, (int) y.getValue() + 32);
-                    renderItem(new ItemStack(surroundblocks.get(3)), (int) x.getValue() + 85, (int) y.getValue() + 21);
-                }
+                ArrayList<Block> surroundblocks = getSurroundBlocks(entityPlayer);
+                renderItem(new ItemStack(surroundblocks.get(0)), (int) x.getValue() + 73, (int) y.getValue() + 10);
+                renderItem(new ItemStack(surroundblocks.get(1)), (int) x.getValue() + 61, (int) y.getValue() + 21);
+                renderItem(new ItemStack(surroundblocks.get(2)), (int) x.getValue() + 73, (int) y.getValue() + 32);
+                renderItem(new ItemStack(surroundblocks.get(3)), (int) x.getValue() + 85, (int) y.getValue() + 21);
                 ////////////////////////////////////////////////mainhand and offhand////////////////////////////////////////////////
-                if(hands.isEnabled()) {
-                    final ItemStack mainHand = new ItemStack(entityPlayer.getHeldItemMainhand().getItem());
-                    final ItemStack offHand = new ItemStack(entityPlayer.getHeldItemOffhand().getItem());
-                    renderItem(mainHand, (int) x.getValue() + 160, (int) y.getValue() + 5);
-                    renderItem(offHand, (int) x.getValue() + 142, (int) y.getValue() + 5);
-                }
+                final ItemStack mainHand = new ItemStack(entityPlayer.getHeldItemMainhand().getItem());
+                final ItemStack offHand = new ItemStack(entityPlayer.getHeldItemOffhand().getItem());
+                renderItem(mainHand, (int) x.getValue() + 160, (int) y.getValue() + 5);
+                renderItem(offHand, (int) x.getValue() + 142, (int) y.getValue() + 5);
             }
         }
     }

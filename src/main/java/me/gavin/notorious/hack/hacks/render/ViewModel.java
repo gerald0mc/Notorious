@@ -6,8 +6,10 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
-import me.gavin.notorious.util.TimerUtils;
+import me.gavin.notorious.util.Timer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import java.awt.*;
 
 @RegisterHack(name = "ViewModel", description = "ez", category = Hack.Category.Render)
 public class ViewModel extends Hack {
@@ -33,34 +35,9 @@ public class ViewModel extends Hack {
     @RegisterSetting
     public final NumSetting scaleZ = new NumSetting("ScaleZ", 100, 0, 200, 1);
 
-    @RegisterSetting
-    public final ModeSetting animation = new ModeSetting("Animation", "None", "None", "RotateSide");
-    @RegisterSetting
-    public final NumSetting animationSpeed = new NumSetting("AnimationSpeed", 10, 1, 100, 1);
-
     public static ViewModel INSTANCE;
-    public TimerUtils timer = new TimerUtils();
 
     {
         INSTANCE = this;
-    }
-
-    @SubscribeEvent
-    public void onUpdate(PlayerLivingUpdateEvent event) {
-        if(timer.hasTimeElapsed((long) animationSpeed.getValue())) {
-            doAnimations();
-            timer.reset();
-        }
-    }
-
-    public void doAnimations() {
-        if(animation.getMode().equals("RotateSide")) {
-            while (rotateZ.getValue() <= 200) {
-                rotateZ.setValue(rotateZ.getValue() + 1);
-            }
-            if(rotateZ.getValue() == 200) {
-                rotateZ.setValue(-70);
-            }
-        }
     }
 }
