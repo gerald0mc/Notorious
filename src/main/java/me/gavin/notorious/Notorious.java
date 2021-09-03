@@ -26,8 +26,8 @@ public class Notorious {
     public final RotationManager rotationManager;
     public final TotemPopListener popListener;
     public final Friends friend;
-    public final ConfigManager configManager;
     public final NotificationManager notificationManager;
+    public final ConfigManager configManager;
 
     public Notorious() {
         INSTANCE = this;
@@ -39,13 +39,14 @@ public class Notorious {
         rotationManager = new RotationManager();
         popListener = new TotemPopListener();
         friend = new Friends();
-        configManager = new ConfigManager();
         notificationManager = new NotificationManager();
+        configManager = new ConfigManager();
 
         new EventProcessor();
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        Runtime.getRuntime().addShutdownHook(new ShutDownHook());
+        configManager.load();
+        configManager.attach();
     }
 }

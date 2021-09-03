@@ -1,145 +1,203 @@
 package me.gavin.notorious.manager;
 
 import com.google.gson.*;
-import com.google.gson.stream.JsonWriter;
 import me.gavin.notorious.Notorious;
 import me.gavin.notorious.NotoriousMod;
-import me.gavin.notorious.friend.Friend;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.setting.*;
-import net.minecraft.client.Minecraft;
 
-import java.awt.*;
 import java.io.*;
-import java.util.Iterator;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class ConfigManager {
-
-    private final JsonParser parser;
-    private final Gson gson;
-    private final File saveDir;
-    private final File hackDir;
-    private final File otherDir;
-
-    public ConfigManager() {
-        parser = new JsonParser();
-        gson = new GsonBuilder().setPrettyPrinting().create();
-        saveDir = makeDir(new File(Minecraft.getMinecraft().gameDir, NotoriousMod.MOD_ID));
-        otherDir = makeDir(new File(saveDir, "other"));
-        hackDir = makeDir(new File(saveDir, "hacks"));
-    }
-
-    private File makeDir(File file) {
-        if (!file.exists())
-            file.mkdir();
-        return file;
-    }
-
-    private File makeFile(File file) throws IOException {
-        if (!file.exists())
-            file.createNewFile();
-        return file;
-    }
-
-    public void save() throws IOException {
-        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
-            final JsonObject hackObj = new JsonObject();
-            hackObj.addProperty("name", hack.getName());
-            hackObj.addProperty("bind", hack.getBind());
-            hackObj.addProperty("enabled", hack.isEnabled());
-
-            for (Setting setting : hack.getSettings()) {
-                if (setting instanceof BooleanSetting) {
-                    hackObj.addProperty(setting.getName(), ((BooleanSetting)setting).getValue());
-                } else if (setting instanceof ModeSetting) {
-                    hackObj.addProperty(setting.getName(), ((ModeSetting)setting).getMode());
-                } else if (setting instanceof NumSetting) {
-                    hackObj.addProperty(setting.getName(), ((NumSetting)setting).getValue());
-                } else if (setting instanceof ColorSetting) {
-                    hackObj.addProperty(setting.getName(), ((ColorSetting)setting).getAsColor().getRGB());
-                }
-            }
-
-            final File saveFile = makeFile(new File(hackDir, hack.getName() +".json"));
-            final FileWriter writer = new FileWriter(saveFile);
-            write(hackObj, writer);
+    public void load(){
+        try {
+            loadHacks();
+            loadToggles();
+            loadBinds();
+        } catch (IOException exception){
+            exception.printStackTrace();
         }
-
-        final JsonArray friendList = new JsonArray();
-        for (Friend friend : Notorious.INSTANCE.friend.getFriends()) {
-            final JsonObject obj = new JsonObject();
-            obj.addProperty("name", friend.getName());
-            friendList.add(obj);
-        }
-        write(friendList, new FileWriter(makeFile(new File(otherDir, "friends.json"))));
     }
 
-    public void load() throws IOException {
-        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()) {
-            final File file = new File(hackDir, hack.getName() + ".json");
-            if (!file.exists())
-                continue;
+    public void save(){
+        try {
+            registerFolders();
+            saveHacks();
+            saveToggles();
+            saveBinds();
+        } catch (IOException exception){
+            exception.printStackTrace();
+        }
+    }
 
-            final FileReader reader = new FileReader(file);
-            final JsonObject object = (JsonObject) parser.parse(reader);
-            reader.close();
+    public void attach(){
+        Runtime.getRuntime().addShutdownHook(new SaveThread());
+    }
 
-            if (!object.get("name").getAsString().equals(hack.getName()))
-                continue;
+    public void registerFolders() throws IOException {
+        if (!Files.exists(Paths.get("Notorious/"))) Files.createDirectories(Paths.get("Notorious/"));
+        if (!Files.exists(Paths.get("Notorious/Hacks/"))) Files.createDirectories(Paths.get("Notorious/Hacks/"));
+        if (!Files.exists(Paths.get("Notorious/Client/"))) Files.createDirectories(Paths.get("Notorious/Client/"));
 
-            hack.setBind(object.get("bind").getAsInt());
-            if (object.get("enabled").getAsBoolean())
-                hack.toggle();
+        for (Hack.Category category : Hack.Category.values()){
+            if (!Files.exists(Paths.get("Notorious/Hacks/" + category.toString() + "/"))) Files.createDirectories(Paths.get("Notorious/Hacks/" + category + "/"));
+        }
+    }
 
-            for (Setting setting : hack.getSettings()) {
-                if (object.get(setting.getName()) != null) {
-                    if (setting instanceof BooleanSetting) {
-                        if (object.get(setting.getName()).getAsBoolean())
-                            ((BooleanSetting) setting).toggle();
-                    } else if (setting instanceof ModeSetting) {
-                        if (object.has(setting.getName())) {
-                            final int index = ((ModeSetting) setting).getIndex(object.get(setting.getName()).getAsString());
-                            if (index != -1) {
-                                ((ModeSetting) setting).setMode(object.get(setting.getName()).getAsString());
-                            }
+    public void loadHacks() throws IOException {
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            if (!Files.exists(Paths.get("Notorious/Hacks/" + hack.getCategory().toString() + "/" + hack.getName() + ".json")))
+                return;
+
+            InputStream stream = Files.newInputStream(Paths.get("Notorious/Hacks/" + hack.getCategory().toString() + "/" + hack.getName() + ".json"));
+            JsonObject hackObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
+            if (hackObject.get("Hack") == null) return;
+
+            JsonObject settingObject = hackObject.get("Settings").getAsJsonObject();
+            for (Setting setting : hack.getSettings()){
+                JsonElement dataObject = settingObject.get(setting.getName());
+                try {
+                    if (dataObject != null && dataObject.isJsonPrimitive()){
+                        if (setting instanceof BooleanSetting){
+                            ((BooleanSetting) setting).setValue(dataObject.getAsBoolean());
+                        } else if (setting instanceof NumSetting){
+                            ((NumSetting) setting).setValue(dataObject.getAsFloat());
+                        } else if (setting instanceof ModeSetting){
+                            ((ModeSetting) setting).setMode(dataObject.getAsString());
+                        } else if (setting instanceof StringSetting){
+                            ((StringSetting) setting).setString(dataObject.getAsString());
+                        } else if (setting instanceof ColorSetting){
+                            // This color picker SUCKS! TODO
                         }
-                    } else if (setting instanceof NumSetting) {
-                        ((NumSetting) setting).setValue(object.get(setting.getName()).getAsFloat());
-                    } else if (setting instanceof ColorSetting) {
-                        final Color tempColor = new Color(object.get(setting.getName()).getAsInt());
-                        final float[] hsb = Color.RGBtoHSB(tempColor.getRed(), tempColor.getGreen(), tempColor.getBlue(), null);
-                        final ColorSetting colorSetting = (ColorSetting) setting;
-                        colorSetting.getHue().setValue(hsb[0]);
-                        colorSetting.getSaturation().setValue(hsb[1]);
-                        colorSetting.getBrightness().setValue(hsb[2]);
                     }
+                } catch (NumberFormatException exception){
+                    NotoriousMod.LOGGER.error("Faulty setting found. Stacktrace below. (" + setting.getName() + ")");
+                    exception.printStackTrace();
+                }
+            }
+            stream.close();
+        }
+    }
+
+    public void saveHacks() throws IOException {
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            if (Files.exists(Paths.get("Notorious/Hacks/" + hack.getCategory().toString() + "/" + hack.getName() + ".json")))
+                new File("Notorious/Hacks/" + hack.getCategory().toString() + "/" + hack.getName() + ".json").delete();
+            Files.createFile(Paths.get("Notorious/Hacks/" + hack.getCategory().toString() + "/" + hack.getName() + ".json"));
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            OutputStreamWriter stream = new OutputStreamWriter(new FileOutputStream("Notorious/Hacks/" + hack.getCategory().toString() + "/" + hack.getName() + ".json"), StandardCharsets.UTF_8);
+            JsonObject hackObject = new JsonObject();
+            JsonObject settingObject = new JsonObject();
+            hackObject.add("Hack", new JsonPrimitive(hack.getName()));
+
+            for (Setting setting : hack.getSettings()){
+                if (setting instanceof BooleanSetting){
+                    settingObject.add(setting.getName(), new JsonPrimitive(((BooleanSetting) setting).getValue()));
+                } else if (setting instanceof NumSetting){
+                    settingObject.add(setting.getName(), new JsonPrimitive(((NumSetting) setting).getValue()));
+                } else if (setting instanceof ModeSetting){
+                    settingObject.add(setting.getName(), new JsonPrimitive(((ModeSetting) setting).getMode()));
+                } else if (setting instanceof StringSetting){
+                    settingObject.add(setting.getName(), new JsonPrimitive(((StringSetting) setting).getString()));
+                } else if (setting instanceof ColorSetting){
+                    settingObject.add(setting.getName(), new JsonPrimitive(((ColorSetting) setting).getAsColor().getRGB()));
+                }
+            }
+
+            hackObject.add("Settings", settingObject);
+            stream.write(gson.toJson(new JsonParser().parse(hackObject.toString())));
+            stream.close();
+        }
+    }
+
+    public void loadToggles() throws IOException {
+        if (!Files.exists(Paths.get("Notorious/Client/Toggles.json")))
+            return;
+
+        InputStream stream = Files.newInputStream(Paths.get("Notorious/Client/Toggles.json"));
+        JsonObject hackObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
+        if (hackObject.get("Hacks") == null) return;
+
+        JsonObject toggleObject = hackObject.get("Hacks").getAsJsonObject();
+
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            JsonElement dataObject = toggleObject.get(hack.getName());
+            if (dataObject != null && dataObject.isJsonPrimitive()){
+                if (dataObject.getAsBoolean()){
+                    hack.enable();
                 }
             }
         }
 
-        // friend
-        final File friendFile = new File(otherDir, "friends.json");
-        if (friendFile.exists()) {
-            final JsonArray parsedArray = (JsonArray) parse(new FileReader(friendFile));
+        stream.close();
+    }
 
-            final Iterator<JsonElement> it = parsedArray.iterator();
+    public void saveToggles() throws IOException {
+        if (Files.exists(Paths.get("Notorious/Client/Toggles.json")))
+            new File("Notorious/Client/Toggles.json").delete();
+        Files.createFile(Paths.get("Notorious/Client/Toggles.json"));
 
-            while (it.hasNext()) {
-                final JsonObject obj = (JsonObject) it.next();
-                Notorious.INSTANCE.friend.addFriend(obj.get("name").getAsString());
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        OutputStreamWriter stream = new OutputStreamWriter(new FileOutputStream("Notorious/Client/Toggles.json"), StandardCharsets.UTF_8);
+        JsonObject hackObject = new JsonObject();
+        JsonObject toggleObject = new JsonObject();
+
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            toggleObject.add(hack.getName(), new JsonPrimitive(hack.isEnabled()));
+        }
+
+        hackObject.add("Hacks", toggleObject);
+        stream.write(gson.toJson(new JsonParser().parse(hackObject.toString())));
+        stream.close();
+    }
+
+    public void loadBinds() throws IOException {
+        if (!Files.exists(Paths.get("Notorious/Client/Binds.json")))
+            return;
+
+        InputStream stream = Files.newInputStream(Paths.get("Notorious/Client/Binds.json"));
+        JsonObject hackObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
+        if (hackObject.get("Hacks") == null) return;
+
+        JsonObject bindObject = hackObject.get("Hacks").getAsJsonObject();
+
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            JsonElement dataObject = bindObject.get(hack.getName());
+            if (dataObject != null && dataObject.isJsonPrimitive()){
+                hack.setBind(dataObject.getAsInt());
             }
         }
+
+        stream.close();
     }
 
-    private void write(JsonElement element, Writer writer) throws IOException {
-        gson.toJson(element, writer);
-        writer.flush();
-        writer.close();
+    public void saveBinds() throws IOException {
+        if (Files.exists(Paths.get("Notorious/Client/Binds.json")))
+            new File("Notorious/Client/Binds.json").delete();
+        Files.createFile(Paths.get("Notorious/Client/Binds.json"));
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        OutputStreamWriter stream = new OutputStreamWriter(new FileOutputStream("Notorious/Client/Binds.json"), StandardCharsets.UTF_8);
+        JsonObject hackObject = new JsonObject();
+        JsonObject bindObject = new JsonObject();
+
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            bindObject.add(hack.getName(), new JsonPrimitive(hack.getBind()));
+        }
+
+        hackObject.add("Hacks", bindObject);
+        stream.write(gson.toJson(new JsonParser().parse(hackObject.toString())));
+        stream.close();
     }
 
-    private JsonElement parse(Reader reader) throws IOException {
-        final JsonElement ele = parser.parse(reader);
-        reader.close();
-        return ele;
+    public static class SaveThread extends Thread {
+        @Override
+        public void run(){
+            Notorious.INSTANCE.configManager.save();
+        }
     }
 }

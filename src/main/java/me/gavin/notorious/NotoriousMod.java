@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +34,8 @@ public class NotoriousMod {
     public static final String NAME_VERSION = MOD_NAME + " " + VERSION;
     public static final String HWID_URL = "https://pastebin.com/raw/mpkynL3v"; 
 
+    public static final Logger LOGGER = LogManager.getLogger("Notorious");
+
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         new Notorious();
@@ -40,11 +44,6 @@ public class NotoriousMod {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        try {
-            Notorious.INSTANCE.configManager.load();
-        } catch (IOException e) {
-            e.printStackTrace();;
-        }
 
         //Display.setTitle(NotoriousMod.NAME_VERSION);
     }

@@ -11,6 +11,10 @@ public class BooleanSetting extends Setting implements Toggleable {
         this.value = value;
     }
 
+    public void setValue(boolean value){
+        this.value = value;
+    }
+
     public void toggle() {
         this.value = !value;
     }

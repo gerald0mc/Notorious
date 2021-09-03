@@ -8,14 +8,6 @@ public class Save extends Hack {
 
     @Override
     public void onEnable() {
-        try {
-            notorious.configManager.save();
-            notorious.messageManager.sendMessage("Saved your config");
-            toggle();
-        }catch (Exception var5) {
-            var5.printStackTrace();
-            notorious.messageManager.sendMessage("Save failed for some reason?");
-            toggle();
-        }
+
     }
 }
