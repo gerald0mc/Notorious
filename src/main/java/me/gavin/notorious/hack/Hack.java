@@ -59,6 +59,10 @@ public abstract class Hack implements Toggleable, Bindable, IMinecraft {
         lastDisabledTime = System.currentTimeMillis();
     }
 
+    public void onUpdate(){}
+
+    public void onTick(){}
+
     protected void onEnable() { }
 
     protected void onDisable() { }

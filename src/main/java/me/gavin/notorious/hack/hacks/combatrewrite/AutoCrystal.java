@@ -34,11 +34,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -109,16 +110,11 @@ public class AutoCrystal extends Hack {
     @RegisterSetting public final ColorSetting fillColor = new ColorSetting("FillColor", 255, 255, 255, 255);
     @RegisterSetting public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
 
-    @SubscribeEvent
-    public void onUpdate(LivingEvent.LivingUpdateEvent event){
-        if (mc.player == null || mc.world == null) return;
+    public void onUpdate() {
         doAutoCrystal();
     }
 
-    @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event){
-        if (mc.player == null || mc.world == null) return;
-
+    public void onTick(){
         if (clearTimer.hasTimeElapsed(500L)){
             attackedCrystals.clear();
             placedCrystals.clear();
@@ -153,7 +149,7 @@ public class AutoCrystal extends Hack {
             return;
         }
 
-        for (Entity entity : mc.world.loadedEntityList) {
+        for (Entity entity : new ArrayList<>(mc.world.loadedEntityList)) {
             if (!(entity instanceof EntityEnderCrystal)) continue;
             EntityEnderCrystal crystal = (EntityEnderCrystal) entity;
 
