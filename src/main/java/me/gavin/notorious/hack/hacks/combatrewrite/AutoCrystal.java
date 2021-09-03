@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.combatrewrite;
 
+import me.gavin.notorious.event.events.EntityRemoveEvent;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -344,6 +345,13 @@ public class AutoCrystal extends Hack {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityRemoved(EntityRemoveEvent event){
+        if (event.getEntity() instanceof EntityEnderCrystal){
+            attackedCrystals.remove((EntityEnderCrystal) event.getEntity());
         }
     }
 
