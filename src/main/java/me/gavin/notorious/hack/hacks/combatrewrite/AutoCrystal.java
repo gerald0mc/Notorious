@@ -94,8 +94,8 @@ public class AutoCrystal extends Hack {
 	public final BooleanSetting placeSwing = new BooleanSetting("PlaceSwing", false);
 	@RegisterSetting
 	public final ModeSetting autoSwitch = new ModeSetting("Switch", "None", "None", "Normal", "Silent");
-	// @RegisterSetting
-	// public final ModeSetting timing = new ModeSetting("Timing", "Break", "Break", "Place");
+	@RegisterSetting
+	public final ModeSetting timing = new ModeSetting("Timing", "Break", "Break", "Place");
 	@RegisterSetting
 	public final BooleanSetting rotation = new BooleanSetting("Rotation", false);
 	@RegisterSetting
@@ -246,22 +246,18 @@ public class AutoCrystal extends Hack {
 	}
 
 	public void doAutoCrystal() {
-		/*
+		doTargeting();
 		switch (timing.getMode()) {
 			case "Break": {
-				if (!hit.getMode().equals("None")) hitCrystal();
-				if (place.getValue()) placeCrystal();
+				if (!hit.getMode().equals("None")) doBreak();
+				if (place.getValue()) doPlace();
 			}
 
 			case "Place": {
-				if (place.getValue()) placeCrystal();
-				if (!hit.getMode().equals("None")) hitCrystal();
+				if (place.getValue()) doPlace();
+				if (!hit.getMode().equals("None")) doBreak();
 			}
 		}
-		 */
-		doTargeting();
-		doBreak();
-		doPlace();
 	}
 
 	public void doTargeting() {
@@ -497,14 +493,16 @@ public class AutoCrystal extends Hack {
 
 	private EntityPlayer getTarget() {
 		EntityPlayer optimalPlayer = null;
-		for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)) {
+		for (EntityPlayer player : mc.world.playerEntities) {
 			if (player.isDead || player.getHealth() <= 0) continue;
 			if (player.equals(mc.player)) continue;
-			if (mc.player.getDistanceSq(player) > Math.pow(targetRange.getValue(), 2)) continue;
+			if (mc.player.getDistanceSq(player) > targetRange.getValue() * targetRange.getValue()) continue;
 			if (notorious.friend.isFriend(player.getName())) continue;
 
-			if (optimalPlayer == null)
+			if (optimalPlayer == null) {
 				optimalPlayer = player;
+				continue;
+			}
 
 			if (player.getHealth() + player.getAbsorptionAmount() < optimalPlayer.getHealth() + optimalPlayer.getAbsorptionAmount()) {
 				optimalPlayer = player;
