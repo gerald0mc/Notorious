@@ -1,7 +1,6 @@
 package me.gavin.notorious;
 
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
-import me.gavin.notorious.util.auth.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -9,11 +8,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
-import java.util.ArrayList;
+import org.lwjgl.opengl.Display;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author Gav06
@@ -30,9 +26,9 @@ public class NotoriousMod {
 
     public static final String MOD_ID = "notorious";
     public static final String MOD_NAME = "Notorious";
-    public static final String VERSION = "beta-0.5.5";
+    public static final String VERSION = "beta-0.6";
     public static final String NAME_VERSION = MOD_NAME + " " + VERSION;
-    public static final String HWID_URL = "https://pastebin.com/raw/mpkynL3v"; 
+    public static final String HWID_URL = "https://pastebin.com/raw/twrT83RF";
 
     public static final Logger LOGGER = LogManager.getLogger("Notorious");
 
@@ -45,7 +41,7 @@ public class NotoriousMod {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 
-        //Display.setTitle(NotoriousMod.NAME_VERSION);
+        Display.setTitle(NotoriousMod.NAME_VERSION);
     }
 
     @SubscribeEvent

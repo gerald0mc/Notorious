@@ -75,8 +75,6 @@ public class HackManager {
         addHack(new CopyIP());
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
-        addHack(new HClip());
-        addHack(new VClip());
         addHack(new WeaknessLog());
 
         // movement
@@ -105,6 +103,7 @@ public class HackManager {
         addHack(new Fullbright());
         addHack(new HellenKeller());
         addHack(new HoleESP());
+        addHack(new Nametags());
         addHack(new NoRender());
         addHack(new PenisESP()); 
         addHack(new PopESP());

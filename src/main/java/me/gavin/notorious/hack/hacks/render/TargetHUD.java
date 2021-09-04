@@ -76,7 +76,7 @@ public class TargetHUD extends Hack {
                 nameString = entityPlayer.getDisplayNameString();
                 Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 50, new Color(0, 0, 0, 255).getRGB());
                 if(rainbowLine.isEnabled()) {
-                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 2, ColorUtil.getRainbow(6f, 1f));
+                    Gui.drawRect((int) x.getValue(), (int) y.getValue(), (int) x.getValue() + 190, (int) y.getValue() + 1, ColorUtil.getRainbow(6f, 1f));
                 }
                 ////////////////////////////////////////////////name////////////////////////////////////////////////
                 mc.fontRenderer.drawStringWithShadow(entityPlayer.getName(), x.getValue() + 5, y.getValue() + 5, notorious.friend.isFriend(entityPlayer.getName()) ? new Color(0, 255, 234).getRGB() : -1);

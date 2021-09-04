@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.combatrewrite;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.EntityRemoveEvent;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
@@ -109,6 +110,15 @@ public class AutoCrystal extends Hack {
     @RegisterSetting public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "None", "Fill", "Outline", "Both");
     @RegisterSetting public final ColorSetting fillColor = new ColorSetting("FillColor", 255, 255, 255, 255);
     @RegisterSetting public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+
+    @Override
+    public String getMetaData() {
+        if(target != null) {
+            return " [" + ChatFormatting.GRAY + target.getDisplayNameString() + ChatFormatting.RESET + "]";
+        }else {
+            return "";
+        }
+    }
 
     public void onUpdate() {
         doAutoCrystal();
@@ -341,7 +351,7 @@ public class AutoCrystal extends Hack {
     }
 
     @SubscribeEvent
-    public void onEntityRemoved(EntityRemoveEvent event){
+    public void onEntityRemoved(EntityRemoveEvent event) {
         if (event.getEntity() instanceof EntityEnderCrystal){
             attackedCrystals.remove((EntityEnderCrystal) event.getEntity());
         }
@@ -402,7 +412,7 @@ public class AutoCrystal extends Hack {
     }
 
     public static List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plusY) {
-        List<BlockPos> circleblocks = new ArrayList<>();
+        List<BlockPos> circleBlocks = new ArrayList<>();
         int cx = loc.getX();
         int cy = loc.getY();
         int cz = loc.getZ();
@@ -412,12 +422,12 @@ public class AutoCrystal extends Hack {
                     double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? (cy - y) * (cy - y) : 0);
                     if (dist < r * r && !(hollow && dist < (r - 1) * (r - 1))) {
                         BlockPos l = new BlockPos(x, y + plusY, z);
-                        circleblocks.add(l);
+                        circleBlocks.add(l);
                     }
                 }
             }
         }
-        return circleblocks;
+        return circleBlocks;
     }
 
     public static void initiatePositionAtLaunch(BlockPos posToInitialize){
