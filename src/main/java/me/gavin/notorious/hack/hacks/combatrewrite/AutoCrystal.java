@@ -127,66 +127,62 @@ public class AutoCrystal extends Hack {
         placeTicks++;
     }
 
-    public void doAutoCrystal(){
-        switch (timing.getMode()){
-            case "Break": {
-                if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
-                if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
-            }
+    public void doAutoCrystal() {
+    	target = getTarget();
+        if (target != null) {
+	        switch (timing.getMode()){
+		        case "Break": {
+			        if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
+			        if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
+		        }
 
-            case "Place": {
-                if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
-                if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
-            }
+		        case "Place": {
+			        if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
+			        if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
+		        }
+	        }
         }
     }
 
-    public void hitCrystal(){
-        EntityEnderCrystal targetCrystal = null;
+    public void hitCrystal() {
+	    if (target == null) return;
+
+	    EntityEnderCrystal targetCrystal = null;
         double maxDamage = 0;
 
-        for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)){
-            if (player.getHealth() <= 0) continue;
-            if (player.equals(mc.player)) continue;
-            if (player.getName().equals(mc.player.getName())) continue;
-            if (notorious.friend.isFriend(player.getName())) continue;
-            if (player.getDistanceSq(mc.player) > MathUtil.square(targetRange.getValue())) continue;
+	    for (Entity entity : new ArrayList<>(mc.world.loadedEntityList)) {
+		    if (!(entity instanceof EntityEnderCrystal)) continue;
+		    EntityEnderCrystal crystal = (EntityEnderCrystal) entity;
 
-            for (Entity entity : new ArrayList<>(mc.world.loadedEntityList)) {
-                if (!(entity instanceof EntityEnderCrystal)) continue;
-                EntityEnderCrystal crystal = (EntityEnderCrystal) entity;
+		    if (crystal.isDead) continue;
+		    if (attackedCrystals.containsKey(crystal) && attackedCrystals.get(crystal) > stuckAttempts.getValue() && antiStuck.getValue())
+			    continue;
 
-                if (crystal.isDead) continue;
-                if (attackedCrystals.containsKey(crystal) && attackedCrystals.get(crystal) > stuckAttempts.getValue() && antiStuck.getValue())
-                    continue;
+		    if (mc.player.canEntityBeSeen(crystal)) {
+			    if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitRange.getValue())) continue;
+		    } else {
+			    if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitWallsRange.getValue())) continue;
+		    }
 
-                if (mc.player.canEntityBeSeen(crystal)) {
-                    if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitRange.getValue())) continue;
-                } else {
-                    if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitWallsRange.getValue())) continue;
-                }
+		    double targetDamage = DamageUtil.calculateDamage(crystal, target);
+		    double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(crystal, mc.player);
 
-                double targetDamage = DamageUtil.calculateDamage(crystal, player);
-                double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(crystal, mc.player);
+		    if (!hit.getMode().equals("All")) {
+			    if (targetDamage < getMinimumDamage(target) && targetDamage * lethalMultiplier.getValue() < target.getHealth() + target.getAbsorptionAmount())
+				    continue;
+			    if (selfDamage > maxSelfDamage.getValue()) continue;
+			    if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
+		    }
 
-                if (!hit.getMode().equals("All")) {
-                    if (targetDamage < getMinimumDamage(player) && targetDamage * lethalMultiplier.getValue() < player.getHealth() + player.getAbsorptionAmount())
-                        continue;
-                    if (selfDamage > maxSelfDamage.getValue()) continue;
-                    if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
-                }
-
-                if (hit.getMode().equals("All")) {
-                    targetCrystal = crystal;
-                } else {
-                    if (targetDamage > maxDamage) {
-                        maxDamage = targetDamage;
-                        targetCrystal = crystal;
-                        target = player;
-                    }
-                }
-            }
-        }
+		    if (hit.getMode().equals("All")) {
+			    targetCrystal = crystal;
+		    } else {
+			    if (targetDamage > maxDamage) {
+				    maxDamage = targetDamage;
+				    targetCrystal = crystal;
+			    }
+		    }
+	    }
 
         if (targetCrystal == null) return;
 
@@ -212,7 +208,9 @@ public class AutoCrystal extends Hack {
         hitTicks = 0;
     }
 
-    public void placeCrystal(){
+    public void placeCrystal() {
+		if (target == null) return;
+
         BlockPos targetPosition = null;
         boolean silentSwitched = false;
         double maxDamage = 0;
@@ -224,35 +222,26 @@ public class AutoCrystal extends Hack {
         	positions.add(pos);
         }
 
-        for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)) {
-            if (player.getHealth() <= 0) continue;
-            if (player.equals(mc.player)) continue;
-            if (player.getName().equals(mc.player.getName())) continue;
-            if (notorious.friend.isFriend(player.getName())) continue;
-            if (player.getDistanceSq(mc.player) > MathUtil.square(targetRange.getValue())) continue;
+	    for (BlockPos pos : positions) {
+		    if (!canSeePosition(pos) && raytrace.getValue()) continue;
+		    if (canSeePosition(pos)) {
+			    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeRange.getValue())) continue;
+		    } else {
+			    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeWallsRange.getValue())) continue;
+		    }
 
-            for (BlockPos pos : positions) {
-                if (!canSeePosition(pos) && raytrace.getValue()) continue;
-                if (canSeePosition(pos)) {
-                    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeRange.getValue())) continue;
-                } else {
-                    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeWallsRange.getValue())) continue;
-                }
+		    double targetDamage = DamageUtil.calculateDamage(pos, target);
+		    double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(pos, mc.player);
 
-                double targetDamage = DamageUtil.calculateDamage(pos, player);
-                double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(pos, mc.player);
+		    if (targetDamage < getMinimumDamage(target) && targetDamage * lethalMultiplier.getValue() < target.getHealth() + target.getAbsorptionAmount()) continue;
+		    if (selfDamage > maxSelfDamage.getValue()) continue;
+		    if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
 
-                if (targetDamage < getMinimumDamage(player) && targetDamage * lethalMultiplier.getValue() < player.getHealth() + player.getAbsorptionAmount()) continue;
-                if (selfDamage > maxSelfDamage.getValue()) continue;
-                if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
-
-                if (targetDamage > maxDamage) {
-                    maxDamage = targetDamage;
-                    targetPosition = pos;
-                    target = player;
-                }
-            }
-        }
+		    if (targetDamage > maxDamage) {
+			    maxDamage = targetDamage;
+			    targetPosition = pos;
+		    }
+	    }
 
         boolean weaknessFlag = weaknessCheck.getValue() && mc.player.isPotionActive(MobEffects.WEAKNESS) && mc.player.getHeldItemMainhand().getItem() != Items.DIAMOND_SWORD && !antiWeakness.getMode().equals("Silent");
         if (targetPosition == null || weaknessFlag) {
@@ -316,7 +305,7 @@ public class AutoCrystal extends Hack {
     }
 
     @SubscribeEvent
-    public void onPacketReceive(PacketEvent.Receive event){
+    public void onPacketReceive(PacketEvent.Receive event) {
         if (mc.player == null || mc.world == null) return;
 
         if (event.getPacket() instanceof SPacketSpawnObject && predict.getValue()){
@@ -354,7 +343,7 @@ public class AutoCrystal extends Hack {
         }
     }
 
-    public double getMinimumDamage(EntityPlayer player){
+    public double getMinimumDamage(EntityPlayer player) {
         boolean swordFlag = swordCheck.getValue() && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD;
         boolean armorFlag = armorCheck.getValue() && DamageUtil.shouldBreakArmor(mc.player, armorCheckPercent.getValue());
         boolean flag = swordFlag || armorFlag;
@@ -372,6 +361,32 @@ public class AutoCrystal extends Hack {
         } else {
             return EnumHand.OFF_HAND;
         }
+    }
+
+    private EntityPlayer getTarget() {
+    	EntityPlayer optimal = null;
+	    for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)) {
+		    if (player.getHealth() <= 0) continue;
+		    if (player.equals(mc.player)) continue;
+		    if (player.getName().equals(mc.player.getName())) continue;
+		    if (notorious.friend.isFriend(player.getName())) continue;
+		    if (player.getDistanceSq(mc.player) > MathUtil.square(targetRange.getValue())) continue;
+
+		    if (optimal == null) {
+			    optimal = player;
+		        continue;
+		    }
+
+		    if (optimal.getHealth() > player.getHealth()) {
+			    optimal = player;
+		        continue;
+		    }
+
+		    if (mc.player.getDistance(optimal) > mc.player.getDistance(player)) {
+			    optimal = player;
+		    }
+	    }
+	    return optimal;
     }
 
     private void addAttackedCrystal(EntityEnderCrystal crystal) {
@@ -450,14 +465,14 @@ public class AutoCrystal extends Hack {
         return true;
     }
 
-    public void onEnable(){
+    public void onEnable() {
         target = null;
         renderPosition = null;
         hitTicks = 0;
         placeTicks = 0;
     }
 
-    public void onDisable(){
+    public void onDisable() {
         target = null;
         renderPosition = null;
         hitTicks = 0;

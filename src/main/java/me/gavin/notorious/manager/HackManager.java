@@ -8,6 +8,7 @@ import me.gavin.notorious.hack.hacks.client.*;
 import me.gavin.notorious.hack.hacks.combat.*;
 import me.gavin.notorious.hack.hacks.combatrewrite.AutoCrystal;
 import me.gavin.notorious.hack.hacks.combatrewrite.Criticals;
+import me.gavin.notorious.hack.hacks.combatrewrite.CrystalAura;
 import me.gavin.notorious.hack.hacks.misc.*;
 import me.gavin.notorious.hack.hacks.movement.*;
 import me.gavin.notorious.hack.hacks.player.*;
@@ -67,6 +68,7 @@ public class HackManager {
         // combatrewrite
         addHack(new AutoCrystal());
         addHack(new Criticals());
+        addHack(new CrystalAura());
 
         // misc
         addHack(new AutoLog());
