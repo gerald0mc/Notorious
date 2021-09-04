@@ -218,7 +218,11 @@ public class AutoCrystal extends Hack {
         double maxDamage = 0;
 
         NonNullList<BlockPos> positions = NonNullList.create();
-        positions.addAll(getSphere(new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ)), placeRange.getValue(), (int) placeRange.getValue(), false, true, 0).stream().filter(pos -> mc.world.getBlockState(pos).getBlock() != Blocks.AIR).filter(pos -> canPlaceCrystal(pos, !multiPlace.getValue(), placeUnderBlock.getValue())).collect(Collectors.toList()));
+        for (BlockPos pos : getSphere(new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ)), placeRange.getValue(), (int) placeRange.getValue(), false, true, 0)) {
+        	if (mc.world.getBlockState(pos).getBlock() == Blocks.AIR) continue;
+        	if (!canPlaceCrystal(pos, !multiPlace.getValue(), placeUnderBlock.getValue())) continue;
+        	positions.add(pos);
+        }
 
         for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)) {
             if (player.getHealth() <= 0) continue;
