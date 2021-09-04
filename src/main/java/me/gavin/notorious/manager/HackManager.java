@@ -75,6 +75,7 @@ public class HackManager {
         addHack(new CopyIP());
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
+        addHack(new RubberBandDetect());
         addHack(new WeaknessLog());
 
         // movement

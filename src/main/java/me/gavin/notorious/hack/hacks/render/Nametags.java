@@ -22,7 +22,7 @@ public class Nametags extends Hack {
     public final NumSetting scale = new NumSetting("Scale", 2.5f, 1, 5, 0.1f);
 
     @SubscribeEvent
-    public void onRender2d(RenderGameOverlayEvent event) {
+    public void onRender2d(RenderGameOverlayEvent.Text event) {
         for (EntityPlayer player : mc.world.playerEntities) {
             if (player.equals(mc.player))
                 continue;

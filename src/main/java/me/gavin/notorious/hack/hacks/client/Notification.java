@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Notification extends Hack {
 
     @RegisterSetting
-    public final ModeSetting style = new ModeSetting("Style", "Normal", "Normal", "Basic");
+    public final ModeSetting style = new ModeSetting("Style", "Skeet", "Skeet", "Basic");
     @RegisterSetting
     public final BooleanSetting moduleToggle = new BooleanSetting("ModuleToggle", true);
 

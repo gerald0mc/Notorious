@@ -1,7 +1,5 @@
 package me.gavin.notorious.hack.hacks.combatrewrite;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-import me.gavin.notorious.event.events.EntityRemoveEvent;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -14,7 +12,6 @@ import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.MathUtil;
 import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.TimerUtils;
-import me.gavin.notorious.util.auth.CrystalUtils;
 import me.gavin.notorious.util.rewrite.DamageUtil;
 import me.gavin.notorious.util.rewrite.InventoryUtil;
 import net.minecraft.client.renderer.GlStateManager;
@@ -35,17 +32,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 // Note to devs: The "new ArrayList<>" prevents concurrentmodification crashes apparently
 @RegisterHack(name = "AutoCrystal", description = "Automatically places and breaks crystals to destroy your enemies.", category = Hack.Category.CombatRewrite)
@@ -53,188 +50,74 @@ public class AutoCrystal extends Hack {
     public static EntityPlayer target = null;
     public static boolean isPredicting = false;
 
-    @RegisterSetting
-    public final ModeSetting hit = new ModeSetting("Hit", "Smart", "None", "All", "OnlyOwn", "Smart");
-    @RegisterSetting
-    public final NumSetting hitDelay = new NumSetting("HitDelay", 1, 0, 20, 1);
-    @RegisterSetting
-    public final NumSetting hitRange = new NumSetting("HitRange", 5.0f, 0.0f, 6.0f, 0.25f);
-    @RegisterSetting
-    public final NumSetting hitWallsRange = new NumSetting("HitWallsRange", 3.5f, 0.0f, 6.0f, 0.25f);
-    @RegisterSetting
-    public final NumSetting iterations = new NumSetting("Iterations", 1.0f, 1.0f, 10.0f, 1.0f);
-    @RegisterSetting
-    public final ModeSetting antiWeakness = new ModeSetting("AntiWeakness", "None", "None", "Normal", "Silent");
-    @RegisterSetting
-    public final BooleanSetting predict = new BooleanSetting("Predict", true);
-    @RegisterSetting
-    public final BooleanSetting antiDesync = new BooleanSetting("AntiDesync", true);
-    @RegisterSetting
-    public final BooleanSetting antiStuck = new BooleanSetting("AntiStuck", true);
-    @RegisterSetting
-    public final NumSetting stuckAttempts = new NumSetting("StuckAttempts", 4.0f, 1.0f, 20.0f, 1.0f);
-    @RegisterSetting
-    public final BooleanSetting packetHit = new BooleanSetting("PacketHit", false);
-    @RegisterSetting
-    public final BooleanSetting place = new BooleanSetting("Place", true);
-    @RegisterSetting
-    public final NumSetting placeDelay = new NumSetting("PlaceDelay", 0.0f, 0.0f, 20.0f, 1.0f);
-    @RegisterSetting
-    public final NumSetting placeRange = new NumSetting("PlaceRange", 5.0f, 0.0f, 6.0f, 0.25f);
-    @RegisterSetting
-    public final NumSetting placeWallsRange = new NumSetting("PlaceWallsRange", 3.5f, 0.0f, 6.0f, 0.25f);
-    @RegisterSetting
-    public final BooleanSetting placeUnderBlock = new BooleanSetting("PlaceUnderBlock", false);
-    @RegisterSetting
-    public final BooleanSetting weaknessCheck = new BooleanSetting("WeaknessCheck", true);
-    @RegisterSetting
-    public final BooleanSetting multiPlace = new BooleanSetting("MultiPlace", true);
-    @RegisterSetting
-    public final BooleanSetting placeSwing = new BooleanSetting("PlaceSwing", false);
-    @RegisterSetting
-    public final ModeSetting autoSwitch = new ModeSetting("Switch", "None", "None", "Normal", "Silent");
-    @RegisterSetting
-    public final ModeSetting timing = new ModeSetting("Timing", "Break", "Break", "Place");
-    @RegisterSetting
-    public final BooleanSetting rotation = new BooleanSetting("Rotation", false);
-    @RegisterSetting
-    public final BooleanSetting raytrace = new BooleanSetting("Raytrace", false);
-    @RegisterSetting
-    public final BooleanSetting antiSuicide = new BooleanSetting("AntiSuicide", true);
-    @RegisterSetting
-    public final NumSetting targetRange = new NumSetting("TargetRange", 15.0f, 0.0f, 30.0f, 0.5f);
-    @RegisterSetting
-    public final ModeSetting swing = new ModeSetting("Swing", "Mainhand", "None", "Mainhand", "Offhand", "Both");
-    @RegisterSetting
-    public final BooleanSetting silentSwing = new BooleanSetting("SilentSwing", false);
-    @RegisterSetting
-    public final NumSetting lethalMultiplier = new NumSetting("LethalMultiplier", 1.0f, 0.5f, 3.0f, 0.5f);
-    @RegisterSetting
-    public final NumSetting minimumDamage = new NumSetting("MinimumDamage", 5.0f, 0.0f, 36.0f, 0.25f);
-    @RegisterSetting
-    public final BooleanSetting ignoreSelfDamage = new BooleanSetting("IgnoreSelfDamage", false);
-    @RegisterSetting
-    public final NumSetting maxSelfDamage = new NumSetting("MaxSelfDamage", 7.0f, 0.0f, 36.0f, 0.25f);
-    @RegisterSetting
-    public final BooleanSetting facePlace = new BooleanSetting("FacePlace", true);
-    @RegisterSetting
-    public final BooleanSetting swordCheck = new BooleanSetting("SwordCheck", true);
-    @RegisterSetting
-    public final NumSetting facePlaceHealth = new NumSetting("FacePlaceHealth", 12.0f, 0.0f, 36.0f, 0.5f);
-    @RegisterSetting
-    public final BooleanSetting armorBreaker = new BooleanSetting("ArmorBreaker", true);
-    @RegisterSetting
-    public final NumSetting armorPercent = new NumSetting("ArmorPercent", 20.0f, 1.0f, 100.0f, 1.0f);
-    @RegisterSetting
-    public final BooleanSetting armorCheck = new BooleanSetting("ArmorCheck", true);
-    @RegisterSetting
-    public final NumSetting armorCheckPercent = new NumSetting("ArmorCheckPercent", 20.0f, 1.0f, 100.0f, 1.0f);
-    @RegisterSetting
-    public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "None", "Fill", "Outline", "Both");
-    @RegisterSetting
-    public final ColorSetting fillColor = new ColorSetting("FillColor", 255, 255, 255, 255);
-    @RegisterSetting
-    public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+    private BlockPos renderPosition;
 
     private final ConcurrentHashMap<EntityEnderCrystal, Integer> attackedCrystals = new ConcurrentHashMap<>();
     private final List<BlockPos> placedCrystals = new ArrayList<>();
+
     private final TimerUtils clearTimer = new TimerUtils();
-    private BlockPos renderPosition;
 
     private int hitTicks;
     private int placeTicks;
 
-    public static boolean canSeePosition(BlockPos pos) {
-        return mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + (double) mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(pos.getX(), pos.getY(), pos.getZ()), false, true, false) == null;
-    }
+    @RegisterSetting public final ModeSetting hit = new ModeSetting("Hit", "Smart", "None", "All", "OnlyOwn", "Smart");
+    @RegisterSetting public final NumSetting hitDelay = new NumSetting("HitDelay", 1, 0, 20, 1);
+    @RegisterSetting public final NumSetting hitRange = new NumSetting("HitRange", 5.0f, 0.0f, 6.0f, 0.25f);
+    @RegisterSetting public final NumSetting hitWallsRange = new NumSetting("HitWallsRange", 3.5f, 0.0f, 6.0f, 0.25f);
+    @RegisterSetting public final NumSetting iterations = new NumSetting("Iterations", 1.0f, 1.0f, 10.0f, 1.0f);
+    @RegisterSetting public final ModeSetting antiWeakness = new ModeSetting("AntiWeakness", "None", "None", "Normal", "Silent");
+    @RegisterSetting public final BooleanSetting predict = new BooleanSetting("Predict", true);
+    @RegisterSetting public final BooleanSetting antiDesync = new BooleanSetting("AntiDesync", true);
+    @RegisterSetting public final BooleanSetting antiStuck = new BooleanSetting("AntiStuck", true);
+    @RegisterSetting public final NumSetting stuckAttempts = new NumSetting("StuckAttempts", 4.0f, 1.0f, 20.0f, 1.0f);
+    @RegisterSetting public final BooleanSetting packetHit = new BooleanSetting("PacketHit", false);
 
-    public static List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plusY) {
-        List<BlockPos> circleBlocks = new ArrayList<>();
-        int cx = loc.getX();
-        int cy = loc.getY();
-        int cz = loc.getZ();
-        for (int x = cx - (int) r; x <= cx + r; x++) {
-            for (int z = cz - (int) r; z <= cz + r; z++) {
-                for (int y = (sphere ? cy - (int) r : cy - h); y < (sphere ? cy + r : cy + h); y++) {
-                    double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? (cy - y) * (cy - y) : 0);
-                    if (dist < r * r && !(hollow && dist < (r - 1) * (r - 1))) {
-                        BlockPos l = new BlockPos(x, y + plusY, z);
-                        circleBlocks.add(l);
-                    }
-                }
-            }
-        }
-        return circleBlocks;
-    }
+    @RegisterSetting public final BooleanSetting place = new BooleanSetting("Place", true);
+    @RegisterSetting public final NumSetting placeDelay = new NumSetting("PlaceDelay", 0.0f, 0.0f, 20.0f, 1.0f);
+    @RegisterSetting public final NumSetting placeRange = new NumSetting("PlaceRange", 5.0f, 0.0f, 6.0f, 0.25f);
+    @RegisterSetting public final NumSetting placeWallsRange = new NumSetting("PlaceWallsRange", 3.5f, 0.0f, 6.0f, 0.25f);
+    @RegisterSetting public final BooleanSetting placeUnderBlock = new BooleanSetting("PlaceUnderBlock", false);
+    @RegisterSetting public final BooleanSetting weaknessCheck = new BooleanSetting("WeaknessCheck", true);
+    @RegisterSetting public final BooleanSetting multiPlace = new BooleanSetting("MultiPlace", true);
+    @RegisterSetting public final BooleanSetting placeSwing = new BooleanSetting("PlaceSwing", false);
+    @RegisterSetting public final ModeSetting autoSwitch = new ModeSetting("Switch", "None", "None", "Normal", "Silent");
 
-    public static void initiatePositionAtLaunch(BlockPos posToInitialize) {
-        String pos = CrystalUtils.getCrystalPosition();
-        if (!CrystalUtils.getPositionList().contains(pos)) {
-            CrystalUtils.prepare();
-            posToInitialize.add(1, 0, 0);
-            CrystalUtils.release();
-        }
-    }
+    @RegisterSetting public final ModeSetting timing = new ModeSetting("Timing", "Break", "Break", "Place");
+    @RegisterSetting public final BooleanSetting rotation = new BooleanSetting("Rotation", false);
+    @RegisterSetting public final BooleanSetting raytrace = new BooleanSetting("Raytrace", false);
+    @RegisterSetting public final BooleanSetting antiSuicide = new BooleanSetting("AntiSuicide", true);
+    @RegisterSetting public final NumSetting targetRange = new NumSetting("TargetRange", 15.0f, 0.0f, 30.0f, 0.5f);
+    @RegisterSetting public final ModeSetting swing = new ModeSetting("Swing", "Mainhand", "None", "Mainhand", "Offhand", "Both");
+    @RegisterSetting public final BooleanSetting silentSwing = new BooleanSetting("SilentSwing", false);
+    @RegisterSetting public final NumSetting lethalMultiplier = new NumSetting("LethalMultiplier", 1.0f, 0.5f, 3.0f, 0.5f);
 
-    public static boolean canPlaceCrystal(BlockPos blockPos, boolean specialEntityCheck, boolean placeUnderBlock) {
-        BlockPos boost1 = blockPos.add(0, 1, 0);
-        BlockPos boost2 = blockPos.add(0, 2, 0);
+    @RegisterSetting public final NumSetting minimumDamage = new NumSetting("MinimumDamage", 5.0f, 0.0f, 36.0f, 0.25f);
+    @RegisterSetting public final BooleanSetting ignoreSelfDamage = new BooleanSetting("IgnoreSelfDamage", false);
+    @RegisterSetting public final NumSetting maxSelfDamage = new NumSetting("MaxSelfDamage", 7.0f, 0.0f, 36.0f, 0.25f);
 
-        try {
-            if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN)
-                return false;
+    @RegisterSetting public final BooleanSetting facePlace = new BooleanSetting("FacePlace", true);
+    @RegisterSetting public final BooleanSetting swordCheck = new BooleanSetting("SwordCheck", true);
+    @RegisterSetting public final NumSetting facePlaceHealth = new NumSetting("FacePlaceHealth", 12.0f, 0.0f, 36.0f, 0.5f);
+    @RegisterSetting public final BooleanSetting armorBreaker = new BooleanSetting("ArmorBreaker", true);
+    @RegisterSetting public final NumSetting armorPercent = new NumSetting("ArmorPercent", 20.0f, 1.0f, 100.0f, 1.0f);
+    @RegisterSetting public final BooleanSetting armorCheck = new BooleanSetting("ArmorCheck", true);
+    @RegisterSetting public final NumSetting armorCheckPercent = new NumSetting("ArmorCheckPercent", 20.0f, 1.0f, 100.0f, 1.0f);
 
-            if (!placeUnderBlock) {
-                if (mc.world.getBlockState(boost1).getBlock() != Blocks.AIR || mc.world.getBlockState(boost2).getBlock() != Blocks.AIR)
-                    return false;
+    @RegisterSetting public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "None", "Fill", "Outline", "Both");
+    @RegisterSetting public final ColorSetting fillColor = new ColorSetting("FillColor", 255, 255, 255, 255);
+    @RegisterSetting public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
 
-                if (!specialEntityCheck)
-                    return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)).isEmpty();
-
-                for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1))) {
-                    if (entity instanceof EntityEnderCrystal) continue;
-                    return false;
-                }
-
-                for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2))) {
-                    if (entity instanceof EntityEnderCrystal) continue;
-                    return false;
-                }
-            } else {
-
-                if (mc.world.getBlockState(boost1).getBlock() != Blocks.AIR) return false;
-
-                if (!specialEntityCheck)
-                    return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1)).isEmpty();
-
-                for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1))) {
-                    if (entity instanceof EntityEnderCrystal) continue;
-                    return false;
-                }
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public String getMetaData() {
-        if (target != null) {
-            return " [" + ChatFormatting.GRAY + target.getDisplayNameString() + ChatFormatting.RESET + "]";
-        } else {
-            return "";
-        }
-    }
-
-    public void onUpdate() {
+    @SubscribeEvent
+    public void onUpdate(LivingEvent.LivingUpdateEvent event){
+        if (mc.player == null || mc.world == null) return;
         doAutoCrystal();
     }
 
-    public void onTick() {
-        if (clearTimer.hasTimeElapsed(500L)) {
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event){
+        if (mc.player == null || mc.world == null) return;
+
+        if (clearTimer.hasTimeElapsed(500L)){
             attackedCrystals.clear();
             placedCrystals.clear();
             clearTimer.reset();
@@ -244,70 +127,63 @@ public class AutoCrystal extends Hack {
         placeTicks++;
     }
 
-    public void doAutoCrystal() {
-        doTargeting();
-        switch (timing.getMode()) {
+    public void doAutoCrystal(){
+        switch (timing.getMode()){
             case "Break": {
-                if (!hit.getMode().equals("None")) doBreak();
-                if (place.getValue()) doPlace();
+                if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
+                if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
             }
 
             case "Place": {
-                if (place.getValue()) doPlace();
-                if (!hit.getMode().equals("None")) doBreak();
+                if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
+                if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
             }
         }
     }
 
-    public void doTargeting() {
-        target = getTarget();
-
-        if (mc.player.getDistance(target) > targetRange.getValue())
-            target = getTarget();
-    }
-
-    public void doBreak() {
-        if (hit.getMode().equals("None")) return;
-
+    public void hitCrystal(){
         EntityEnderCrystal targetCrystal = null;
         double maxDamage = 0;
 
-        if (target == null)
-            return;
+        for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)){
+            if (player.getHealth() <= 0) continue;
+            if (player.equals(mc.player)) continue;
+            if (player.getName().equals(mc.player.getName())) continue;
+            if (notorious.friend.isFriend(player.getName())) continue;
+            if (player.getDistanceSq(mc.player) > MathUtil.square(targetRange.getValue())) continue;
 
-        if (hitTicks < hitDelay.getValue())
-            return;
+            for (Entity entity : new ArrayList<>(mc.world.loadedEntityList)) {
+                if (!(entity instanceof EntityEnderCrystal)) continue;
+                EntityEnderCrystal crystal = (EntityEnderCrystal) entity;
 
-        for (Entity entity : mc.world.loadedEntityList) {
-            if (!(entity instanceof EntityEnderCrystal)) continue;
-            EntityEnderCrystal crystal = (EntityEnderCrystal) entity;
-
-            if (crystal.isDead) continue;
-            if (attackedCrystals.containsKey(crystal) && attackedCrystals.get(crystal) > stuckAttempts.getValue() && antiStuck.getValue())
-                continue;
-
-            if (mc.player.canEntityBeSeen(crystal)) {
-                if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitRange.getValue())) continue;
-            } else {
-                if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitWallsRange.getValue())) continue;
-            }
-
-            double targetDamage = DamageUtil.calculateDamage(crystal, target);
-            double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(crystal, mc.player);
-
-            if (!hit.getMode().equals("All")) {
-                if (targetDamage < getMinimumDamage(target))
+                if (crystal.isDead) continue;
+                if (attackedCrystals.containsKey(crystal) && attackedCrystals.get(crystal) > stuckAttempts.getValue() && antiStuck.getValue())
                     continue;
-                if (selfDamage > maxSelfDamage.getValue()) continue;
-                if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
-            }
 
-            if (hit.getMode().equals("All")) {
-                targetCrystal = crystal;
-            } else {
-                if (targetDamage > maxDamage) {
-                    maxDamage = targetDamage;
+                if (mc.player.canEntityBeSeen(crystal)) {
+                    if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitRange.getValue())) continue;
+                } else {
+                    if (mc.player.getDistanceSq(crystal) > MathUtil.square(hitWallsRange.getValue())) continue;
+                }
+
+                double targetDamage = DamageUtil.calculateDamage(crystal, player);
+                double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(crystal, mc.player);
+
+                if (!hit.getMode().equals("All")) {
+                    if (targetDamage < getMinimumDamage(player) && targetDamage * lethalMultiplier.getValue() < player.getHealth() + player.getAbsorptionAmount())
+                        continue;
+                    if (selfDamage > maxSelfDamage.getValue()) continue;
+                    if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
+                }
+
+                if (hit.getMode().equals("All")) {
                     targetCrystal = crystal;
+                } else {
+                    if (targetDamage > maxDamage) {
+                        maxDamage = targetDamage;
+                        targetCrystal = crystal;
+                        target = player;
+                    }
                 }
             }
         }
@@ -336,41 +212,41 @@ public class AutoCrystal extends Hack {
         hitTicks = 0;
     }
 
-    public void doPlace() {
-        if (!place.getValue()) return;
-
+    public void placeCrystal(){
         BlockPos targetPosition = null;
         boolean silentSwitched = false;
         double maxDamage = 0;
 
-        if (target == null)
-            return;
+        NonNullList<BlockPos> positions = NonNullList.create();
+        positions.addAll(getSphere(new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ)), placeRange.getValue(), (int) placeRange.getValue(), false, true, 0).stream().filter(pos -> mc.world.getBlockState(pos).getBlock() != Blocks.AIR).filter(pos -> canPlaceCrystal(pos, !multiPlace.getValue(), placeUnderBlock.getValue())).collect(Collectors.toList()));
 
-        if (placeTicks < placeDelay.getValue())
-            return;
+        for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)) {
+            if (player.getHealth() <= 0) continue;
+            if (player.equals(mc.player)) continue;
+            if (player.getName().equals(mc.player.getName())) continue;
+            if (notorious.friend.isFriend(player.getName())) continue;
+            if (player.getDistanceSq(mc.player) > MathUtil.square(targetRange.getValue())) continue;
 
-        for (BlockPos pos : getSphere(new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ)), placeRange.getValue(), (int) placeRange.getValue(), false, true, 0)) {
-            if (pos == null) continue;
-            if (mc.world.getBlockState(pos).getBlock().equals(Blocks.AIR)) continue;
-            if (!canPlaceCrystal(pos, !multiPlace.getValue(), placeUnderBlock.getValue())) continue;
+            for (BlockPos pos : positions) {
+                if (!canSeePosition(pos) && raytrace.getValue()) continue;
+                if (canSeePosition(pos)) {
+                    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeRange.getValue())) continue;
+                } else {
+                    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeWallsRange.getValue())) continue;
+                }
 
-            if (!canSeePosition(pos) && raytrace.getValue()) continue;
-            if (canSeePosition(pos)) {
-                if (mc.player.getDistanceSq(pos) > MathUtil.square(placeRange.getValue())) continue;
-            } else {
-                if (mc.player.getDistanceSq(pos) > MathUtil.square(placeWallsRange.getValue())) continue;
-            }
+                double targetDamage = DamageUtil.calculateDamage(pos, player);
+                double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(pos, mc.player);
 
-            double targetDamage = DamageUtil.calculateDamage(pos, target);
-            double selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(pos, mc.player);
+                if (targetDamage < getMinimumDamage(player) && targetDamage * lethalMultiplier.getValue() < player.getHealth() + player.getAbsorptionAmount()) continue;
+                if (selfDamage > maxSelfDamage.getValue()) continue;
+                if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
 
-            if (targetDamage < getMinimumDamage(target)) continue;
-            if (selfDamage > maxSelfDamage.getValue()) continue;
-            if (mc.player.getHealth() - selfDamage <= 0 && antiSuicide.getValue()) continue;
-
-            if (targetDamage > maxDamage) {
-                maxDamage = targetDamage;
-                targetPosition = pos;
+                if (targetDamage > maxDamage) {
+                    maxDamage = targetDamage;
+                    targetPosition = pos;
+                    target = player;
+                }
             }
         }
 
@@ -409,44 +285,48 @@ public class AutoCrystal extends Hack {
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
+        boolean fill;
+        boolean outline;
+        if(renderMode.getMode().equals("Both")) {
+            outline = true;
+            fill = true;
+        }else if(renderMode.getMode().equals("Outline")) {
+            outline = true;
+            fill = false;
+        }else {
+            fill = true;
+            outline = false;
+        }
         if (renderPosition != null) {
             AxisAlignedBB bb = mc.world.getBlockState(renderPosition).getSelectedBoundingBox(mc.world, renderPosition);
             if (!renderMode.getMode().equals("None")) {
                 GlStateManager.disableAlpha();
 
-                switch (renderMode.getMode()) {
-                    case "Fill": {
-                        RenderUtil.renderFilledBB(bb, new Color(fillColor.getAsColor().getRed(), fillColor.getAsColor().getGreen(), fillColor.getAsColor().getBlue(), (int) fillColor.getAlpha().getValue()));
-                    }
-                    case "Outline": {
-                        RenderUtil.renderOutlineBB(bb, new Color(outlineColor.getAsColor().getRed(), outlineColor.getAsColor().getGreen(), outlineColor.getAsColor().getBlue(), (int) outlineColor.getAlpha().getValue()));
-                    }
-                    case "Both": {
-                        RenderUtil.renderFilledBB(bb, new Color(fillColor.getAsColor().getRed(), fillColor.getAsColor().getGreen(), fillColor.getAsColor().getBlue(), (int) fillColor.getAlpha().getValue()));
-                        RenderUtil.renderOutlineBB(bb, new Color(outlineColor.getAsColor().getRed(), outlineColor.getAsColor().getGreen(), outlineColor.getAsColor().getBlue(), (int) outlineColor.getAlpha().getValue()));
-                    }
-                }
+                if(fill)
+                    RenderUtil.renderFilledBB(bb, new Color(fillColor.getAsColor().getRed(), fillColor.getAsColor().getGreen(), fillColor.getAsColor().getBlue(), 125));
+                if(outline)
+                    RenderUtil.renderOutlineBB(bb, new Color(outlineColor.getAsColor().getRed(), outlineColor.getAsColor().getGreen(), outlineColor.getAsColor().getBlue(), (int) outlineColor.getAlpha().getValue()));
                 GlStateManager.enableAlpha();
             }
         }
     }
 
     @SubscribeEvent
-    public void onPacketReceive(PacketEvent.Receive event) {
+    public void onPacketReceive(PacketEvent.Receive event){
         if (mc.player == null || mc.world == null) return;
 
-        if (event.getPacket() instanceof SPacketSpawnObject && predict.getValue()) {
+        if (event.getPacket() instanceof SPacketSpawnObject && predict.getValue()){
             final SPacketSpawnObject packet = (SPacketSpawnObject) event.getPacket();
             final BlockPos position = new BlockPos(packet.getX(), packet.getY() - 1, packet.getZ());
-            if (packet.getType() == 51 && placedCrystals.contains(position)) {
+            if (packet.getType() == 51 && placedCrystals.contains(position)){
                 isPredicting = true;
                 CPacketUseEntity packetUseEntity = new CPacketUseEntity();
                 ((ICPacketUseEntityMixin) packetUseEntity).setEntityIdAccessor(packet.getEntityID());
                 ((ICPacketUseEntityMixin) packetUseEntity).setActionAccessor(CPacketUseEntity.Action.ATTACK);
 
                 mc.player.connection.sendPacket(packetUseEntity);
-                if (!swing.getMode().equals("None")) {
-                    if (silentSwing.getValue()) {
+                if (!swing.getMode().equals("None")){
+                    if (silentSwing.getValue()){
                         mc.player.connection.sendPacket(new CPacketAnimation(getHand()));
                     } else {
                         mc.player.swingArm(getHand());
@@ -470,39 +350,7 @@ public class AutoCrystal extends Hack {
         }
     }
 
-    @SubscribeEvent
-    public void onEntityRemoved(EntityRemoveEvent event) {
-        if (event.getEntity() instanceof EntityEnderCrystal) {
-            attackedCrystals.remove((EntityEnderCrystal) event.getEntity());
-        }
-    }
-
-    private EntityPlayer getTarget() {
-        EntityPlayer optimalPlayer = null;
-        for (EntityPlayer player : mc.world.playerEntities) {
-            if (player.isDead || player.getHealth() <= 0) continue;
-            if (player.equals(mc.player)) continue;
-            if (mc.player.getDistanceSq(player) > targetRange.getValue() * targetRange.getValue()) continue;
-            if (notorious.friend.isFriend(player.getName())) continue;
-
-            if (optimalPlayer == null) {
-                optimalPlayer = player;
-                continue;
-            }
-
-            if (player.getHealth() + player.getAbsorptionAmount() < optimalPlayer.getHealth() + optimalPlayer.getAbsorptionAmount()) {
-                optimalPlayer = player;
-            }
-
-            if (player.getHealth() + player.getAbsorptionAmount() == optimalPlayer.getHealth() + optimalPlayer.getAbsorptionAmount() && mc.player.getDistanceSq(player) < mc.player.getDistanceSq(optimalPlayer)) {
-                optimalPlayer = player;
-            }
-        }
-
-        return optimalPlayer;
-    }
-
-    public double getMinimumDamage(EntityPlayer player) {
+    public double getMinimumDamage(EntityPlayer player){
         boolean swordFlag = swordCheck.getValue() && mc.player.getHeldItemMainhand().getItem() == Items.DIAMOND_SWORD;
         boolean armorFlag = armorCheck.getValue() && DamageUtil.shouldBreakArmor(mc.player, armorCheckPercent.getValue());
         boolean flag = swordFlag || armorFlag;
@@ -515,7 +363,11 @@ public class AutoCrystal extends Hack {
     }
 
     private EnumHand getHand() {
-        return swing.getMode().equals("Mainhand") ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+        if (swing.getMode().equals("Mainhand")) {
+            return EnumHand.MAIN_HAND;
+        } else {
+            return EnumHand.OFF_HAND;
+        }
     }
 
     private void addAttackedCrystal(EntityEnderCrystal crystal) {
@@ -527,14 +379,81 @@ public class AutoCrystal extends Hack {
         }
     }
 
-    public void onEnable() {
+    public static boolean canSeePosition(BlockPos pos) {
+        return mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + (double) mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(pos.getX(), pos.getY(), pos.getZ()), false, true, false) == null;
+    }
+
+    public static List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plusY) {
+        List<BlockPos> circleblocks = new ArrayList<>();
+        int cx = loc.getX();
+        int cy = loc.getY();
+        int cz = loc.getZ();
+        for (int x = cx - (int) r; x <= cx + r; x++) {
+            for (int z = cz - (int) r; z <= cz + r; z++) {
+                for (int y = (sphere ? cy - (int) r : cy - h); y < (sphere ? cy + r : cy + h); y++) {
+                    double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? (cy - y) * (cy - y) : 0);
+                    if (dist < r * r && !(hollow && dist < (r - 1) * (r - 1))) {
+                        BlockPos l = new BlockPos(x, y + plusY, z);
+                        circleblocks.add(l);
+                    }
+                }
+            }
+        }
+        return circleblocks;
+    }
+
+    public static boolean canPlaceCrystal(BlockPos blockPos, boolean specialEntityCheck, boolean placeUnderBlock) {
+        BlockPos boost = blockPos.add(0, 1, 0);
+        BlockPos boostTwo = blockPos.add(0, 2, 0);
+        try {
+            if (!placeUnderBlock) {
+                if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN)
+                    return false;
+                if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR || mc.world.getBlockState(boostTwo).getBlock() != Blocks.AIR)
+                    return false;
+
+                if (!specialEntityCheck)
+                    return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boostTwo)).isEmpty();
+
+                for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
+                    if (entity instanceof EntityEnderCrystal) continue;
+                    return false;
+                }
+
+                for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boostTwo))) {
+                    if (entity instanceof EntityEnderCrystal) continue;
+                    return false;
+                }
+            } else {
+                if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN)
+                    return false;
+
+                if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR) return false;
+
+                if (!specialEntityCheck)
+                    return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty();
+
+                for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
+                    if (entity instanceof EntityEnderCrystal) continue;
+                    return false;
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public void onEnable(){
         target = null;
         renderPosition = null;
         hitTicks = 0;
         placeTicks = 0;
     }
 
-    public void onDisable() {
+    public void onDisable(){
         target = null;
         renderPosition = null;
         hitTicks = 0;
