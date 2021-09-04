@@ -46,9 +46,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 // Note to devs: The "new ArrayList<>" prevents concurrentmodification crashes apparently
+// ^^ fuck you - Zihasz
 @RegisterHack(name = "AutoCrystal", description = "Automatically places and breaks crystals to destroy your enemies.", category = Hack.Category.CombatRewrite)
 public class AutoCrystal extends Hack {
 	public static EntityPlayer target = null;
@@ -178,37 +178,37 @@ public class AutoCrystal extends Hack {
 	}
 
 	public static boolean canPlaceCrystal(BlockPos blockPos, boolean specialEntityCheck, boolean placeUnderBlock) {
-		BlockPos boost = blockPos.add(0, 1, 0);
-		BlockPos boostTwo = blockPos.add(0, 2, 0);
+		BlockPos boost1 = blockPos.add(0, 1, 0);
+		BlockPos boost2 = blockPos.add(0, 2, 0);
+
 		try {
+			if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN)
+				return false;
+
 			if (!placeUnderBlock) {
-				if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN)
-					return false;
-				if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR || mc.world.getBlockState(boostTwo).getBlock() != Blocks.AIR)
+				if (mc.world.getBlockState(boost1).getBlock() != Blocks.AIR || mc.world.getBlockState(boost2).getBlock() != Blocks.AIR)
 					return false;
 
 				if (!specialEntityCheck)
-					return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boostTwo)).isEmpty();
+					return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)).isEmpty();
 
-				for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
+				for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1))) {
 					if (entity instanceof EntityEnderCrystal) continue;
 					return false;
 				}
 
-				for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boostTwo))) {
+				for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2))) {
 					if (entity instanceof EntityEnderCrystal) continue;
 					return false;
 				}
 			} else {
-				if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN)
-					return false;
 
-				if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR) return false;
+				if (mc.world.getBlockState(boost1).getBlock() != Blocks.AIR) return false;
 
 				if (!specialEntityCheck)
-					return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty();
+					return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1)).isEmpty();
 
-				for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
+				for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost1))) {
 					if (entity instanceof EntityEnderCrystal) continue;
 					return false;
 				}
@@ -279,7 +279,7 @@ public class AutoCrystal extends Hack {
 		if (hitTicks < hitDelay.getValue())
 			return;
 
-		for (Entity entity : new ArrayList<>(mc.world.loadedEntityList)) {
+		for (Entity entity : mc.world.loadedEntityList) {
 			if (!(entity instanceof EntityEnderCrystal)) continue;
 			EntityEnderCrystal crystal = (EntityEnderCrystal) entity;
 
@@ -350,24 +350,11 @@ public class AutoCrystal extends Hack {
 		if (placeTicks < placeDelay.getValue())
 			return;
 
-		NonNullList<BlockPos> positions = NonNullList.create();
-		positions.addAll(
-				getSphere(
-						new BlockPos(
-								Math.floor(mc.player.posX),
-								Math.floor(mc.player.posY),
-								Math.floor(mc.player.posZ)),
-						placeRange.getValue(),
-						(int) placeRange.getValue(),
-						false,
-						true,
-						0)
-						.stream()
-						.filter(pos -> mc.world.getBlockState(pos).getBlock() != Blocks.AIR)
-						.filter(pos -> canPlaceCrystal(pos, !multiPlace.getValue(), placeUnderBlock.getValue()))
-						.collect(Collectors.toList()));
+		for (BlockPos pos : getSphere(new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ)), placeRange.getValue(), (int) placeRange.getValue(), false, true, 0)) {
+			if (pos == null) continue;
+			if (mc.world.getBlockState(pos).getBlock().equals(Blocks.AIR)) continue;
+			if (!canPlaceCrystal(pos, !multiPlace.getValue(), placeUnderBlock.getValue())) continue;
 
-		for (BlockPos pos : positions) {
 			if (!canSeePosition(pos) && raytrace.getValue()) continue;
 			if (canSeePosition(pos)) {
 				if (mc.player.getDistanceSq(pos) > MathUtil.square(placeRange.getValue())) continue;
@@ -473,7 +460,7 @@ public class AutoCrystal extends Hack {
 		if (event.getPacket() instanceof SPacketSoundEffect && antiDesync.getValue()) {
 			SPacketSoundEffect packet = (SPacketSoundEffect) event.getPacket();
 			if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
-				for (Entity entity : new ArrayList<>(mc.world.loadedEntityList)) {
+				for (Entity entity : mc.world.loadedEntityList) {
 					if (entity instanceof EntityEnderCrystal) {
 						if (entity.getDistanceSq(packet.getX(), packet.getY(), packet.getZ()) <= MathUtil.square(6.0f)) {
 							entity.setDead();
