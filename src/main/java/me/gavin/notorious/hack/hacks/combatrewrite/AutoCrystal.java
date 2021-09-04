@@ -141,6 +141,7 @@ public class AutoCrystal extends Hack {
 	private final List<BlockPos> placedCrystals = new ArrayList<>();
 	private final TimerUtils clearTimer = new TimerUtils();
 	private BlockPos renderPosition;
+
 	private int hitTicks;
 	private int placeTicks;
 
@@ -248,13 +249,13 @@ public class AutoCrystal extends Hack {
 		/*
 		switch (timing.getMode()) {
 			case "Break": {
-				if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
-				if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
+				if (!hit.getMode().equals("None")) hitCrystal();
+				if (place.getValue()) placeCrystal();
 			}
 
 			case "Place": {
-				if (place.getValue() && placeTicks > placeDelay.getValue()) placeCrystal();
-				if (!hit.getMode().equals("None") && hitTicks > hitDelay.getValue()) hitCrystal();
+				if (place.getValue()) placeCrystal();
+				if (!hit.getMode().equals("None")) hitCrystal();
 			}
 		}
 		 */
@@ -271,10 +272,15 @@ public class AutoCrystal extends Hack {
 	}
 
 	public void doBreak() {
+		if (hit.getMode().equals("None")) return;
+
 		EntityEnderCrystal targetCrystal = null;
 		double maxDamage = 0;
 
 		if (target == null)
+			return;
+
+		if (hitTicks < hitDelay.getValue())
 			return;
 
 		for (Entity entity : new ArrayList<>(mc.world.loadedEntityList)) {
@@ -336,11 +342,16 @@ public class AutoCrystal extends Hack {
 	}
 
 	public void doPlace() {
+		if (!place.getValue()) return;
+
 		BlockPos targetPosition = null;
 		boolean silentSwitched = false;
 		double maxDamage = 0;
 
 		if (target == null)
+			return;
+
+		if (placeTicks < placeDelay.getValue())
 			return;
 
 		NonNullList<BlockPos> positions = NonNullList.create();
