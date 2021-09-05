@@ -3,6 +3,8 @@ package me.gavin.notorious.hack.hacks.combatrewrite;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.ColorSetting;
+import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.TimerUtils;
@@ -29,16 +31,19 @@ import java.awt.*;
 public class CrystalAura extends Hack {
 
 	@RegisterSetting
-	private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
-
-	@RegisterSetting
-	private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
-
-	@RegisterSetting
 	private final NumSetting placeDelay = new NumSetting("PlaceDelay", 0, 0, 1000, 1);
-
 	@RegisterSetting
 	private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
+	@RegisterSetting
+	private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
+	@RegisterSetting
+	private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
+	@RegisterSetting
+	public final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "None", "Fill", "Outline", "Both");
+	@RegisterSetting
+	public final ColorSetting fillColor = new ColorSetting("FillColor", 255, 255, 255, 255);
+	@RegisterSetting
+	public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
 
 	private final TimerUtils rTimer = new TimerUtils();
 	private final TimerUtils pTimer = new TimerUtils();
@@ -60,11 +65,24 @@ public class CrystalAura extends Hack {
 
 	@SubscribeEvent
 	public void onRender3D(RenderWorldLastEvent event) {
+		boolean fill;
+		boolean outline;
+		if(renderMode.getMode().equals("Both")) {
+			outline = true;
+			fill = true;
+		}else if(renderMode.getMode().equals("Outline")) {
+			outline = true;
+			fill = false;
+		}else {
+			fill = true;
+			outline = false;
+		}
 		if (renderPos != null) {
 			AxisAlignedBB bb = new AxisAlignedBB(renderPos);
-			RenderUtil.renderFilledBB(bb, new Color(0x22ffffff));
-			RenderUtil.renderOutlineBB(bb, new Color(0xffffffff));
-
+			if(fill)
+				RenderUtil.renderFilledBB(bb, new Color(fillColor.getAsColor().getRed(), fillColor.getAsColor().getGreen(), fillColor.getAsColor().getBlue(), 125));
+			if(outline)
+				RenderUtil.renderOutlineBB(bb, new Color(outlineColor.getAsColor().getRed(), outlineColor.getAsColor().getGreen(), outlineColor.getAsColor().getBlue(), 255));
 			if (rTimer.hasTimeElapsed(500)) {
 				renderPos = null;
 				rTimer.reset();

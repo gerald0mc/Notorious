@@ -20,6 +20,8 @@ public class ClickGUI extends Hack {
     public final NumSetting length = new NumSetting("Length", 8f, 1f, 15f, 1f);
     @RegisterSetting
     public final NumSetting saturation = new NumSetting("Saturation", 0.6f, 0.1f, 1f, 0.1f);
+    @RegisterSetting
+    public final NumSetting scrollSpeed = new NumSetting("ScrollSpeed", 1, 0.1f, 5, 0.1f);
 
     @Override
     protected void onEnable() {

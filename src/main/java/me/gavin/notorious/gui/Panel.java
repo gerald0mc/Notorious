@@ -8,6 +8,7 @@ import me.gavin.notorious.hack.hacks.client.Font;
 import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -30,6 +31,11 @@ public class Panel extends AbstractDragComponent {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        if (Mouse.getEventDWheel() > 0) {
+            y -= (int) Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).scrollSpeed.getValue();
+        } else if (Mouse.getEventDWheel() < 0) {
+            y += (int) Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).scrollSpeed.getValue();
+        }
         Font font = ((Font)Notorious.INSTANCE.hackManager.getHack(Font.class));
         float time = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).length.getValue();
         float saturation = ((ClickGUI)Notorious.INSTANCE.hackManager.getHack(ClickGUI.class)).saturation.getValue();
