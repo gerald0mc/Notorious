@@ -93,6 +93,7 @@ public class CrystalAura extends Hack {
 
 	@Override
 	public void onTick() {
+		if (mc.player == null || mc.world == null) return;
 		doAutoCrystal();
 	}
 
@@ -172,7 +173,7 @@ public class CrystalAura extends Hack {
 		float optimalDmg = 0;
 
 		for (BlockPos block : WorldUtil.getSphere(mc.player.getPosition(), placeRange.getValue(), false)) {
-			if (block == null || target == null) continue;
+			if (block == null || target == null|| mc.player == null) continue;
 
 			if (mc.world.isAirBlock(block)) continue;
 			if (!isPlaceable(block)) continue;
@@ -184,10 +185,10 @@ public class CrystalAura extends Hack {
 				optimal = block;
 
 			float targetDamage = DamageUtil.calculateDamage(block, target);
-			float selfDamage = DamageUtil.calculateDamage(block, mc.player);
+			float selfDamage = ignoreSelfDamage.getValue() ? 0 : DamageUtil.calculateDamage(block, mc.player);
 
 			if (targetDamage < minTDamage.getValue()) continue;
-			if (!ignoreSelfDamage.getValue() || selfDamage < maxSDamage.getValue()) continue;
+			if (selfDamage > maxSDamage.getValue()) continue; // THE FUCKING SIGN (my math is like a 5th grader for some reason)
 
 			if (optimalDmg < targetDamage) {
 				optimal = block;
@@ -202,7 +203,7 @@ public class CrystalAura extends Hack {
 		int crySlot = InventoryUtil.findItem(Items.END_CRYSTAL, 0, 9);
 		int oldSlot = mc.player.inventory.currentItem;
 
-		if (!isHoldingCrystal() && silentSwitch.getValue()) {
+		if (!isHoldingCrystal() && silentSwitch.getValue() && crySlot != -1) {
 			InventoryUtil.switchToSlot(crySlot, silentSwitch.getValue());
 			switched = true;
 		}
