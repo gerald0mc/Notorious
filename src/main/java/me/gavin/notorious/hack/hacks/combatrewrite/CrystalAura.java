@@ -4,6 +4,8 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ColorSetting;
+import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.TimerUtils;
@@ -30,29 +32,22 @@ import java.awt.*;
 @RegisterHack(name = "AutoCrystalRewrite", description = "nigus", category = Hack.Category.CombatRewrite)
 public class CrystalAura extends Hack {
 
-	@RegisterSetting
-	private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
-
-	@RegisterSetting
-	private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
-
-	@RegisterSetting
-	private final NumSetting placeDelay = new NumSetting("PlaceDelay", 0, 0, 1000, 1);
-
-	@RegisterSetting
-	private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
-
-	@RegisterSetting
-	private final NumSetting minTDamage = new NumSetting("MinTargetDamage", 4, 0, 36, 1);
-
-	@RegisterSetting
-	private final NumSetting maxSDamage = new NumSetting("MaxSelfDamage", 10, 0, 36, 1);
-
-	@RegisterSetting
-	private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
-
-	@RegisterSetting
-	private final BooleanSetting entityCheck = new BooleanSetting("EntityCheck", false);
+	//Range
+	@RegisterSetting private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
+	@RegisterSetting private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
+	//Delay
+	@RegisterSetting private final NumSetting placeDelay = new NumSetting("PlaceDelay", 0, 0, 1000, 1);
+	@RegisterSetting private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
+	//Damage
+	@RegisterSetting private final NumSetting minTDamage = new NumSetting("MinTargetDamage", 4, 0, 36, 1);
+	@RegisterSetting private final NumSetting maxSDamage = new NumSetting("MaxSelfDamage", 10, 0, 36, 1);
+	//Render
+	@RegisterSetting private final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
+	@RegisterSetting private final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+	@RegisterSetting private final ColorSetting fillColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+	//Misc
+	@RegisterSetting private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
+	@RegisterSetting private final BooleanSetting entityCheck = new BooleanSetting("EntityCheck", false);
 
 	private final TimerUtils rTimer = new TimerUtils();
 	private final TimerUtils pTimer = new TimerUtils();
