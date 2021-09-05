@@ -9,6 +9,7 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.TimerUtils;
+import me.gavin.notorious.util.rewrite.DamageUtil;
 import me.gavin.notorious.util.zihasz.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -18,7 +19,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,21 +33,38 @@ import java.awt.*;
 public class CrystalAura extends Hack {
 
 	//Range
-	@RegisterSetting private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
-	@RegisterSetting private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
+	@RegisterSetting
+	private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
+	@RegisterSetting
+	private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
+
 	//Delay
-	@RegisterSetting private final NumSetting placeDelay = new NumSetting("PlaceDelay", 0, 0, 1000, 1);
-	@RegisterSetting private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
+	@RegisterSetting
+	private final NumSetting placeDelay = new NumSetting("PlaceDelay", 0, 0, 1000, 1);
+	@RegisterSetting
+	private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
+
 	//Damage
-	@RegisterSetting private final NumSetting minTDamage = new NumSetting("MinTargetDamage", 4, 0, 36, 1);
-	@RegisterSetting private final NumSetting maxSDamage = new NumSetting("MaxSelfDamage", 10, 0, 36, 1);
+	@RegisterSetting
+	private final NumSetting minTDamage = new NumSetting("MinTargetDamage", 4, 0, 36, 1);
+	@RegisterSetting
+	private final NumSetting maxSDamage = new NumSetting("MaxSelfDamage", 10, 0, 36, 1);
+	@RegisterSetting
+	private final BooleanSetting ignoreSelfDamage = new BooleanSetting("IgnoreSelfDamage", false);
+
 	//Render
-	@RegisterSetting private final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
-	@RegisterSetting private final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
-	@RegisterSetting private final ColorSetting fillColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+	@RegisterSetting
+	private final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
+	@RegisterSetting
+	private final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+	@RegisterSetting
+	private final ColorSetting fillColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+
 	//Misc
-	@RegisterSetting private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
-	@RegisterSetting private final BooleanSetting entityCheck = new BooleanSetting("EntityCheck", false);
+	@RegisterSetting
+	private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
+	@RegisterSetting
+	private final BooleanSetting entityCheck = new BooleanSetting("EntityCheck", false);
 
 	private final TimerUtils rTimer = new TimerUtils();
 	private final TimerUtils pTimer = new TimerUtils();
@@ -70,22 +87,27 @@ public class CrystalAura extends Hack {
 	public void onRender3D(RenderWorldLastEvent event) {
 		boolean fill;
 		boolean outline;
-		if(renderMode.getMode().equals("Both")) {
+
+		if (renderMode.getMode().equals("Both")) {
 			outline = true;
 			fill = true;
-		}else if(renderMode.getMode().equals("Outline")) {
+		} else if (renderMode.getMode().equals("Outline")) {
 			outline = true;
 			fill = false;
-		}else {
+		} else {
 			fill = true;
 			outline = false;
 		}
+
 		if (renderPos != null) {
 			AxisAlignedBB bb = new AxisAlignedBB(renderPos);
-			if(fill)
+
+			if (fill)
 				RenderUtil.renderFilledBB(bb, new Color(fillColor.getAsColor().getRed(), fillColor.getAsColor().getGreen(), fillColor.getAsColor().getBlue(), 125));
-			if(outline)
+
+			if (outline)
 				RenderUtil.renderOutlineBB(bb, new Color(outlineColor.getAsColor().getRed(), outlineColor.getAsColor().getGreen(), outlineColor.getAsColor().getBlue(), 255));
+
 			if (rTimer.hasTimeElapsed(500)) {
 				renderPos = null;
 				rTimer.reset();
@@ -96,6 +118,11 @@ public class CrystalAura extends Hack {
 	@Override
 	protected void onDisable() {
 		target = null;
+		renderPos = null;
+
+		rTimer.reset();
+		pTimer.reset();
+		bTimer.reset();
 	}
 
 	private void doAutoCrystal() {
@@ -111,20 +138,29 @@ public class CrystalAura extends Hack {
 
 		// Debugging, just in case the null check fucks up
 		FMLLog.log.info(target);
+		notorious.messageManager.sendMessage(target.getName());
 
 		BlockPos optimal = null;
-		for (BlockPos block : WorldUtil.getSphere(mc.player.getPosition(), placeRange.getValue(), false)) {
+		float optimalDmg = 0;
 
+		for (BlockPos block : WorldUtil.getSphere(mc.player.getPosition(), placeRange.getValue(), false)) {
 			if (mc.world.isAirBlock(block)) continue;
 			if (!isPlaceable(block)) continue;
 			if (!canPlaceCry(block, oneThirteen.getValue(), entityCheck.getValue())) continue;
+			if (mc.player.getDistance(block.getX(), block.getY(), block.getZ()) > placeRange.getValue()) continue; // THE FUCKING SIGN
 
 			if (optimal == null)
 				optimal = block;
 
-			if (target.getDistanceSq(block) < target.getDistanceSq(optimal)) {
+			float targetDamage = DamageUtil.calculateDamage(block, target);
+			float selfDamage = DamageUtil.calculateDamage(block, mc.player);
+
+			if (targetDamage < minTDamage.getValue()) continue;
+			if (!ignoreSelfDamage.getValue() || selfDamage < maxSDamage.getValue()) continue;
+
+			if (optimalDmg < targetDamage) {
 				optimal = block;
-				continue;
+				optimalDmg = targetDamage;
 			}
 		}
 
@@ -177,10 +213,8 @@ public class CrystalAura extends Hack {
 				continue;
 			}
 
-			if (mc.player.getDistance(player) < mc.player.getDistance(optimal)) {
+			if (mc.player.getDistance(player) < mc.player.getDistance(optimal))
 				optimal = player;
-				continue;
-			}
 		}
 
 		return optimal;
