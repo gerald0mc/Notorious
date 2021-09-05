@@ -21,9 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
-import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -40,30 +38,46 @@ import java.awt.*;
 public class CrystalAura extends Hack {
 
 	//Range
-	@RegisterSetting private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
-	@RegisterSetting private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
-	@RegisterSetting private final NumSetting breakRange = new NumSetting("BreakRange", 5, 0, 7, 1);
+	@RegisterSetting
+	private final NumSetting targetRange = new NumSetting("TargetRange", 7, 0, 10, 1);
+	@RegisterSetting
+	private final NumSetting placeRange = new NumSetting("PlaceRange", 5, 0, 7, 1);
+	@RegisterSetting
+	private final NumSetting breakRange = new NumSetting("BreakRange", 5, 0, 7, 1);
 
 	//Delay
-	@RegisterSetting private final NumSetting placeDelay = new NumSetting("PlaceDelay", 0, 0, 1000, 1);
-	@RegisterSetting private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
+	@RegisterSetting
+	private final NumSetting placeDelay = new NumSetting("PlaceDelay", 0, 0, 1000, 1);
+	@RegisterSetting
+	private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
 
 	//Damage
-	@RegisterSetting private final NumSetting minTDamage = new NumSetting("MinTargetDamage", 4, 0, 36, 1);
-	@RegisterSetting private final NumSetting maxSDamage = new NumSetting("MaxSelfDamage", 10, 0, 36, 1);
-	@RegisterSetting private final BooleanSetting ignoreSelfDamage = new BooleanSetting("IgnoreSelfDamage", false);
+	@RegisterSetting
+	private final NumSetting minTDamage = new NumSetting("MinTargetDamage", 4, 0, 36, 1);
+	@RegisterSetting
+	private final NumSetting maxSDamage = new NumSetting("MaxSelfDamage", 10, 0, 36, 1);
+	@RegisterSetting
+	private final BooleanSetting ignoreSelfDamage = new BooleanSetting("IgnoreSelfDamage", false);
 
 	//Misc
-	@RegisterSetting private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
-	@RegisterSetting private final BooleanSetting entityCheck = new BooleanSetting("EntityCheck", false);
-	@RegisterSetting private final BooleanSetting silentSwitch = new BooleanSetting("SilentSwitch", false);
-	@RegisterSetting private final BooleanSetting cancelSwing = new BooleanSetting("CancelSwing", false);
-	@RegisterSetting private final BooleanSetting soundSync = new BooleanSetting("SoundSync", false);
+	@RegisterSetting
+	private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
+	@RegisterSetting
+	private final BooleanSetting entityCheck = new BooleanSetting("EntityCheck", false);
+	@RegisterSetting
+	private final BooleanSetting silentSwitch = new BooleanSetting("SilentSwitch", false);
+	@RegisterSetting
+	private final BooleanSetting cancelSwing = new BooleanSetting("CancelSwing", false);
+	@RegisterSetting
+	private final BooleanSetting soundSync = new BooleanSetting("SoundSync", false);
 
 	//Render
-	@RegisterSetting private final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
-	@RegisterSetting private final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
-	@RegisterSetting private final ColorSetting fillColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+	@RegisterSetting
+	private final ModeSetting renderMode = new ModeSetting("RenderMode", "Both", "Both", "Outline", "Fill");
+	@RegisterSetting
+	private final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
+	@RegisterSetting
+	private final ColorSetting fillColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
 
 	private final TimerUtils rTimer = new TimerUtils();
 	private final TimerUtils pTimer = new TimerUtils();
@@ -214,7 +228,7 @@ public class CrystalAura extends Hack {
 		for (Entity entity : mc.world.loadedEntityList) {
 			if (!(entity instanceof EntityEnderCrystal)) continue;
 			if (entity.isDead) continue;
-			if (mc.player.getDistance(entity) < breakRange.getValue()) continue;
+			if (mc.player.getDistance(entity) > breakRange.getValue()) continue; // THE FUCKING SIGN
 
 			mc.playerController.attackEntity(mc.player, entity);
 		}
