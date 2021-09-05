@@ -3,6 +3,7 @@ package me.gavin.notorious.hack.hacks.combatrewrite;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.RenderUtil;
 import me.gavin.notorious.util.TimerUtils;
@@ -15,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -39,6 +41,12 @@ public class CrystalAura extends Hack {
 
 	@RegisterSetting
 	private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
+
+	@RegisterSetting
+	private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
+
+	@RegisterSetting
+	private final BooleanSetting entityCheck = new BooleanSetting("EntityCheck", false);
 
 	private final TimerUtils rTimer = new TimerUtils();
 	private final TimerUtils pTimer = new TimerUtils();
@@ -96,7 +104,7 @@ public class CrystalAura extends Hack {
 
 			if (mc.world.isAirBlock(block)) continue;
 			if (!isPlaceable(block)) continue;
-			if (!mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(block).expand(0, 1, 0)).isEmpty()) continue;
+			if (!canPlaceCry(block, oneThirteen.getValue(), entityCheck.getValue())) continue;
 
 			if (optimal == null)
 				optimal = block;
@@ -173,6 +181,40 @@ public class CrystalAura extends Hack {
 		Block block = mc.world.getBlockState(pos).getBlock();
 		return block.equals(Blocks.OBSIDIAN) || block.equals(Blocks.BEDROCK);
 	}
+
+	private boolean canPlaceCry(BlockPos pos, boolean oneThirteen, boolean entityCheck) {
+		BlockPos up1 = pos.add(0, 1, 0);
+		BlockPos up2 = pos.add(0, 2, 0);
+
+		// checking 1 block above
+		if (!mc.world.isAirBlock(up1))
+			return false;
+
+		if (entityCheck && !mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(up2)).isEmpty())
+			return false;
+
+		for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(up1))) {
+			if (!(entity instanceof EntityEnderCrystal))
+				return false;
+		}
+
+		// checking 2 block above
+		if (!oneThirteen) {
+			if (!mc.world.isAirBlock(up2))
+				return false;
+
+			if (entityCheck && !mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(up2)).isEmpty())
+				return false;
+
+			for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(up2))) {
+				if (!(entity instanceof EntityEnderCrystal))
+					return false;
+			}
+		}
+
+		return true;
+	}
+
 	private boolean isHoldingCrystal() {
 		return mc.player.getHeldItemMainhand().getItem().equals(Items.END_CRYSTAL) ||
 				mc.player.getHeldItemOffhand().getItem().equals(Items.END_CRYSTAL);
