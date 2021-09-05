@@ -216,10 +216,7 @@ public class CrystalAura extends Hack {
 			if (entity.isDead) continue;
 			if (mc.player.getDistance(entity) < breakRange.getValue()) continue;
 
-			// mc.playerController.attackEntity(mc.player, entity);
-			mc.player.connection.sendPacket(new CPacketUseEntity(entity));
-			if (!cancelSwing.getValue())
-				mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+			mc.playerController.attackEntity(mc.player, entity);
 		}
 
 		bTimer.reset();
