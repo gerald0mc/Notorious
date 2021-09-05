@@ -43,6 +43,12 @@ public class CrystalAura extends Hack {
 	private final NumSetting breakDelay = new NumSetting("BreakDelay", 50, 0, 1000, 1);
 
 	@RegisterSetting
+	private final NumSetting minTDamage = new NumSetting("MinTargetDamage", 4, 0, 36, 1);
+
+	@RegisterSetting
+	private final NumSetting maxSDamage = new NumSetting("MaxSelfDamage", 10, 0, 36, 1);
+
+	@RegisterSetting
 	private final BooleanSetting oneThirteen = new BooleanSetting("1.13+", false);
 
 	@RegisterSetting
@@ -54,7 +60,6 @@ public class CrystalAura extends Hack {
 
 	private EntityPlayer target;
 	private BlockPos renderPos;
-
 
 	@Override
 	protected void onEnable() {
