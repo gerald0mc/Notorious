@@ -214,6 +214,7 @@ public class CrystalAura extends Hack {
 		for (Entity entity : mc.world.loadedEntityList) {
 			if (!(entity instanceof EntityEnderCrystal)) continue;
 			if (entity.isDead) continue;
+			if (mc.player.getDistance(entity) < breakRange.getValue()) continue;
 
 			// mc.playerController.attackEntity(mc.player, entity);
 			mc.player.connection.sendPacket(new CPacketUseEntity(entity));
