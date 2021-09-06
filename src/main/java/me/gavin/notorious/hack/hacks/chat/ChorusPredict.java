@@ -43,16 +43,18 @@ public class ChorusPredict extends Hack {
         }
     }
 
+    public void onTick() {
+        if(timer.hasTimeElapsed(2000L)) {
+            chorusPos = null;
+            return;
+        }
+    }
+
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         if(chorusPos != null) {
-            if(timer.hasTimeElapsed(2000L)) {
-                chorusPos = null;
-                return;
-            }
-            AxisAlignedBB bb = new AxisAlignedBB(chorusPos);
-            RenderUtil.renderFilledBB(bb, boxColor.getAsColor());
-            RenderUtil.renderOutlineBB(bb, outlineColor.getAsColor());
+            RenderUtil.renderFilledBB(new AxisAlignedBB(chorusPos), boxColor.getAsColor());
+            RenderUtil.renderOutlineBB(new AxisAlignedBB(chorusPos), outlineColor.getAsColor());
         }
     }
 }

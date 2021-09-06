@@ -42,6 +42,22 @@ public class ColorUtil {
         return new Color(r, g, b);
     }
 
+    public static Color brightenFade(float value, Color color) {
+        final float sr = color.getRed() / 255f;
+        final float sg = color.getGreen() / 255f;
+        final float sb = color.getBlue() / 255f;
+
+        final float er = color.getRed() / 3f;
+        final float eg = color.getGreen() / 3f;
+        final float eb = color.getBlue() / 3f;
+
+        final float r = MathHelper.clamp(sr * value + er * (4f - value), 0.0f, 1.0f);
+        final float g = MathHelper.clamp(sg * value + eg * (4f - value), 0.0f, 1.0f);
+        final float b = MathHelper.clamp(sb * value + eb * (4f - value), 0.0f, 1.0f);
+
+        return new Color(r, g, b);
+    }
+
     public static Color getColorFlow(double time, double speed, Color startColor, Color endColor) {
         final float sin = (float) (Math.sin(((System.currentTimeMillis() / speed) + time)) * 0.5f) + 0.5f;
         return normalizedFade(sin, startColor, endColor);

@@ -1,5 +1,6 @@
 package me.gavin.notorious.hack.hacks.combatrewrite;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
@@ -14,6 +15,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Criticals extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Packet", "Packet", "FakeJump", "Jump", "MiniJump");
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + mode.getMode() + ChatFormatting.RESET + "]";
+    }
 
     @SubscribeEvent
     public void onPacketSend(PacketEvent.Send event){

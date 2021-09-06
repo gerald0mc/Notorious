@@ -19,7 +19,7 @@ public class ClickGuiScreen extends GuiScreen {
         int xoffset = 0;
         for (Hack.Category category : Hack.Category.values()) {
             panels.add(new Panel(category, 10 + xoffset, 10, 100, 15));
-            xoffset += 110;
+            xoffset += 100;
         }
     }
 

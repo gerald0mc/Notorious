@@ -60,15 +60,13 @@ public class HackManager {
         addHack(new AnvilBurrow());
         addHack(new BurrowBreaker());
         addHack(new KillAura());
-        addHack(new Offhand());
-        addHack(new AutoTotem());
         addHack(new PacketCity());
         addHack(new Quiver());
 
         // combatrewrite
         addHack(new AutoCrystal());
         addHack(new Criticals());
-        addHack(new CrystalAura());
+        //addHack(new CrystalAura());
 
         // misc
         addHack(new AutoLog());

@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -44,19 +45,13 @@ public class EGapFinder extends Hack {
     @RegisterSetting
     public final BooleanSetting books = new BooleanSetting("AllBooks", true);
 
-    @SubscribeEvent
-    public void onTick(TickEvent.WorldTickEvent event) {
-        if (event.world == null || event.world.loadedTileEntityList == null || event.world.loadedEntityList == null) {
-            disable();
-            return;
-        }
-        World world = event.world;
+    public void onTick() {
         EntityPlayer entityPlayer = null;
-        if (!world.loadedTileEntityList.isEmpty()) {
-            entityPlayer = world.playerEntities.get(0);
-            for (TileEntity tileEntity : world.loadedTileEntityList) {
-                if (tileEntity instanceof TileEntityLockableLoot) {
-                    TileEntityLockableLoot chest = (TileEntityLockableLoot)tileEntity;
+        if (!mc.world.loadedTileEntityList.isEmpty()) {
+            entityPlayer = mc.world.playerEntities.get(0);
+            for (TileEntity tileEntity : mc.world.loadedTileEntityList) {
+                if (tileEntity instanceof TileEntityChest) {
+                    TileEntityChest chest = (TileEntityChest)tileEntity;
                     chest.fillWithLoot(entityPlayer);
                     for (byte b = 0; b < chest.getSizeInventory(); b++) {
                         ItemStack itemStack = chest.getStackInSlot(b);
@@ -102,7 +97,7 @@ public class EGapFinder extends Hack {
                     }
                 }
             }
-            for (Entity entity : world.loadedEntityList) {
+            for (Entity entity : mc.world.loadedEntityList) {
                 if (entity instanceof EntityMinecartContainer) {
                     EntityMinecartContainer minecart = (EntityMinecartContainer)entity;
                     if (minecart.getLootTable() != null) {

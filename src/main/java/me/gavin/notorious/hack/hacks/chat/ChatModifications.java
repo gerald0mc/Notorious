@@ -36,6 +36,8 @@ public class ChatModifications extends Hack {
     @RegisterSetting
     public final BooleanSetting chatTimestamps = new BooleanSetting("ChatTimestamps", true);
     @RegisterSetting
+    public final BooleanSetting clearChat = new BooleanSetting("ClearChat", true);
+    @RegisterSetting
     public final BooleanSetting colorChat = new BooleanSetting("ColorChat", false);
 
     @Override

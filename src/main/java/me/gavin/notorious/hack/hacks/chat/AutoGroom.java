@@ -3,6 +3,10 @@ package me.gavin.notorious.hack.hacks.chat;
 import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
+import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.TickTimer;
+import me.gavin.notorious.util.TimerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -13,9 +17,13 @@ import java.util.List;
 @RegisterHack(name = "AutoGroom", description = "SyndicateNA simulator", category = Hack.Category.Chat)
 public class AutoGroom extends Hack {
 
+    @RegisterSetting
+    public final NumSetting delay = new NumSetting("Delay", 10, 1, 15, 1);
+
     private List<String> peopleInArea;
     private List<String> peopleNearbyNew;
     private List<String> peopleToRemove;
+    private TickTimer timer = new TickTimer();
 
     @Override
     public void onEnable() {
@@ -34,7 +42,10 @@ public class AutoGroom extends Hack {
         if(peopleNearbyNew.size() > 0) {
             for(String name : peopleNearbyNew) {
                 if(!peopleInArea.contains(name)) {
-                    mc.player.sendChatMessage("/msg " + name + " hewwo wittle kitten, come be my wittle discord girl? | discord.gg/BU9g9HgGBa");
+                    if (timer.hasTicksPassed((long) (delay.getValue() * 20))) {
+                        mc.player.sendChatMessage("/msg " + name + " hewwo wittle kitten, come be my wittle discord girl? | discord.gg/BU9g9HgGBa");
+                        timer.reset();
+                    }
                     peopleInArea.add(name);
                 }
             }
@@ -43,7 +54,10 @@ public class AutoGroom extends Hack {
             for(String name : peopleInArea) {
                 if(!peopleNearbyNew.contains(name)) {
                     peopleToRemove.add(name);
-                    mc.player.sendChatMessage("/msg " + name + " ow no pwease dont weave me my wittle kitten UWU");
+                    if (timer.hasTicksPassed((long) (delay.getValue() * 20))) {
+                        mc.player.sendChatMessage("/msg " + name + " ow no pwease dont weave me my wittle kitten UWU");
+                        timer.reset();
+                    }
                 }
             }
             if(peopleToRemove.size() > 0) {

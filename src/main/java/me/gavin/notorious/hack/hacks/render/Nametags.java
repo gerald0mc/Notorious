@@ -55,8 +55,6 @@ public class Nametags extends Hack {
             Gui.drawRect((int) -((mc.fontRenderer.getStringWidth(str) + 2) / 2f), -(mc.fontRenderer.FONT_HEIGHT + 2),(mc.fontRenderer.getStringWidth(str) + 2) / (int) 2f, 1, -1);
 
             mc.fontRenderer.drawStringWithShadow(str, -(mc.fontRenderer.getStringWidth(str) / 2f), -(mc.fontRenderer.FONT_HEIGHT), -1);
-
-            int y = -(mc.fontRenderer.FONT_HEIGHT * 3);
             GlStateManager.popMatrix();
         }
     }

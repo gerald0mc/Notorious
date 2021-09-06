@@ -1,6 +1,8 @@
 package me.gavin.notorious.hack.hacks.combatrewrite;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
+import me.gavin.notorious.event.events.PlayerLivingUpdateEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
@@ -11,6 +13,7 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.MathUtil;
 import me.gavin.notorious.util.RenderUtil;
+import me.gavin.notorious.util.TickTimer;
 import me.gavin.notorious.util.TimerUtils;
 import me.gavin.notorious.util.rewrite.DamageUtil;
 import me.gavin.notorious.util.rewrite.InventoryUtil;
@@ -55,7 +58,7 @@ public class AutoCrystal extends Hack {
     private final ConcurrentHashMap<EntityEnderCrystal, Integer> attackedCrystals = new ConcurrentHashMap<>();
     private final List<BlockPos> placedCrystals = new ArrayList<>();
 
-    private final TimerUtils clearTimer = new TimerUtils();
+    private final TickTimer clearTimer = new TickTimer();
 
     private int hitTicks;
     private int placeTicks;
@@ -107,8 +110,17 @@ public class AutoCrystal extends Hack {
     @RegisterSetting public final ColorSetting fillColor = new ColorSetting("FillColor", 255, 255, 255, 255);
     @RegisterSetting public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 255, 255, 255, 255);
 
+    @Override
+    public String getMetaData() {
+        if(target != null) {
+            return " [" + ChatFormatting.GRAY + target.getDisplayNameString() + ChatFormatting.RESET + "]";
+        }else {
+            return "";
+        }
+    }
+
     @SubscribeEvent
-    public void onUpdate(LivingEvent.LivingUpdateEvent event){
+    public void onUpdate(PlayerLivingUpdateEvent event){
         if (mc.player == null || mc.world == null) return;
         doAutoCrystal();
     }
@@ -117,7 +129,7 @@ public class AutoCrystal extends Hack {
     public void onTick(TickEvent.ClientTickEvent event){
         if (mc.player == null || mc.world == null) return;
 
-        if (clearTimer.hasTimeElapsed(500L)){
+        if (clearTimer.hasTicksPassed(5L)){
             attackedCrystals.clear();
             placedCrystals.clear();
             clearTimer.reset();
@@ -215,7 +227,7 @@ public class AutoCrystal extends Hack {
         boolean silentSwitched = false;
         double maxDamage = 0;
 
-        NonNullList<BlockPos> positions = NonNullList.create();
+        List<BlockPos> positions = NonNullList.create();
         for (BlockPos pos : getSphere(new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ)), placeRange.getValue(), (int) placeRange.getValue(), false, true, 0)) {
         	if (mc.world.getBlockState(pos).getBlock() == Blocks.AIR) continue;
         	if (!canPlaceCrystal(pos, !multiPlace.getValue(), placeUnderBlock.getValue())) continue;
@@ -225,9 +237,9 @@ public class AutoCrystal extends Hack {
 	    for (BlockPos pos : positions) {
 		    if (!canSeePosition(pos) && raytrace.getValue()) continue;
 		    if (canSeePosition(pos)) {
-			    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeRange.getValue())) continue;
+			    if (mc.player.getDistanceSq(pos) > placeRange.getValue()) continue;
 		    } else {
-			    if (mc.player.getDistanceSq(pos) > MathUtil.square(placeWallsRange.getValue())) continue;
+			    if (mc.player.getDistanceSq(pos) > placeWallsRange.getValue()) continue;
 		    }
 
 		    double targetDamage = DamageUtil.calculateDamage(pos, target);
@@ -261,8 +273,9 @@ public class AutoCrystal extends Hack {
             renderPosition = targetPosition;
             RayTraceResult result = mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + (double) mc.player.getEyeHeight(), mc.player.posZ), new Vec3d((double) targetPosition.getX() + 0.5, (double) targetPosition.getY() - 0.5, (double) targetPosition.getZ() + 0.5));
             EnumFacing facing = result == null || result.sideHit == null ? EnumFacing.UP : result.sideHit;
+            Vec3d hitVec = result == null || result.hitVec == null ? new Vec3d(0, 0, 0) : result.hitVec;
             if (rotation.getValue()) notorious.rotationManager.rotateToPosition(targetPosition);
-            mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(targetPosition, facing, silentSwitched ? EnumHand.MAIN_HAND : mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND, 0.5f, 0.5f, 0.5f));
+            mc.playerController.processRightClickBlock(mc.player, mc.world, targetPosition, facing, hitVec, silentSwitched ? EnumHand.MAIN_HAND : getHand());
             if (placeSwing.getValue()) mc.player.connection.sendPacket(new CPacketAnimation(getHand()));
             placedCrystals.add(targetPosition);
         } else {
@@ -364,29 +377,29 @@ public class AutoCrystal extends Hack {
     }
 
     private EntityPlayer getTarget() {
-    	EntityPlayer optimal = null;
-	    for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)) {
-		    if (player.getHealth() <= 0) continue;
-		    if (player.equals(mc.player)) continue;
-		    if (player.getName().equals(mc.player.getName())) continue;
-		    if (notorious.friend.isFriend(player.getName())) continue;
-		    if (player.getDistanceSq(mc.player) > MathUtil.square(targetRange.getValue())) continue;
+        EntityPlayer optimal = null;
+        for (EntityPlayer player : new ArrayList<>(mc.world.playerEntities)) {
+            if (player.getHealth() <= 0) continue;
+            if (player.equals(mc.player)) continue;
+            if (player.getName().equals(mc.player.getName())) continue;
+            if (notorious.friend.isFriend(player.getName())) continue;
+            if (player.getDistanceSq(mc.player) > MathUtil.square(targetRange.getValue())) continue;
 
-		    if (optimal == null) {
-			    optimal = player;
-		        continue;
-		    }
+            if (optimal == null) {
+                optimal = player;
+                continue;
+            }
 
-		    if (optimal.getHealth() > player.getHealth()) {
-			    optimal = player;
-		        continue;
-		    }
+            if (optimal.getHealth() > player.getHealth()) {
+                optimal = player;
+                continue;
+            }
 
-		    if (mc.player.getDistance(optimal) > mc.player.getDistance(player)) {
-			    optimal = player;
-		    }
-	    }
-	    return optimal;
+            if (mc.player.getDistance(optimal) > mc.player.getDistance(player)) {
+                optimal = player;
+            }
+        }
+        return optimal;
     }
 
     private void addAttackedCrystal(EntityEnderCrystal crystal) {
