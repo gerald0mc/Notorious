@@ -123,12 +123,6 @@ public class AutoCrystal extends Hack {
     public void onUpdate(PlayerLivingUpdateEvent event){
         if (mc.player == null || mc.world == null) return;
         doAutoCrystal();
-    }
-
-    @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event){
-        if (mc.player == null || mc.world == null) return;
-
         if (clearTimer.hasTicksPassed(5L)){
             attackedCrystals.clear();
             placedCrystals.clear();
