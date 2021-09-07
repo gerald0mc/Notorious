@@ -1,0 +1,19 @@
+[
+  {
+    "modid": "notorious",
+    "name": "Notorious",
+    "description": "Notorious is a 1.12.2 Minecraft Utility mod aimed at Anarchy servers.",
+    "version": "1.0.0",
+    "mcversion": "1.12.2",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "gerald0mc",
+      "Gav06"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

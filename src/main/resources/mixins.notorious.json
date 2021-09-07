@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.7.10",
+  "package": "dev.notorious.client.mixins.impl",
+  "refmap": "mixins.notorious.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinNetworkManager"
+  ],
+  "client": [
+    "MixinEntityPlayerSP"
+  ]
+}
