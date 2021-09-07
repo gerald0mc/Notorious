@@ -2,6 +2,7 @@ package dev.notorious.client;
 
 import dev.notorious.client.event.EventManager;
 import dev.notorious.client.managers.CommandManager;
+import dev.notorious.client.managers.ConfigManager;
 import dev.notorious.client.managers.HackManager;
 import dev.notorious.client.managers.PlayerManager;
 import dev.notorious.client.managers.friend.FriendManager;
@@ -28,6 +29,7 @@ public class Notorious {
     public static CommandManager COMMAND_MANAGER;
     public static FriendManager FRIEND_MANAGER;
     public static PlayerManager PLAYER_MANAGER;
+    public static ConfigManager CONFIG_MANAGER;
     public static EventManager EVENT_MANAGER;
 
     @Mod.EventHandler
@@ -44,6 +46,10 @@ public class Notorious {
         FRIEND_MANAGER = new FriendManager();
         PLAYER_MANAGER = new PlayerManager();
         EVENT_MANAGER = new EventManager();
+        CONFIG_MANAGER = new ConfigManager();
+
+        CONFIG_MANAGER.load();
+        CONFIG_MANAGER.attach();
 
         LOGGER.info("Finished Initialization process for Notorious v" + VERSION + "!");
     }
