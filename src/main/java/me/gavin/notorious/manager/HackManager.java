@@ -81,6 +81,7 @@ public class HackManager {
         // movement
         addHack(new AntiVoid());
         addHack(new AutoHop());
+        addHack(new ReverseStep());
         addHack(new Sprint());
         addHack(new Step());
         addHack(new Velocity());

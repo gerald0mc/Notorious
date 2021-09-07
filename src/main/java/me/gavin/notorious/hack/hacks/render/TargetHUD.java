@@ -6,6 +6,7 @@ import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.hack.hacks.combatrewrite.AutoCrystal;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.ColorUtil;
 import me.gavin.notorious.util.MathUtil;

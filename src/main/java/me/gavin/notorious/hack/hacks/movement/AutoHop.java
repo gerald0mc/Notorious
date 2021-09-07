@@ -16,7 +16,7 @@ public class AutoHop extends Hack {
 
     @SubscribeEvent
     public void onUpdate(PlayerLivingUpdateEvent event) {
-        if(mc.player.onGround && !mc.player.isSneaking() && !mc.player.isInLava() && !mc.player.isInWater()) {
+        if(mc.player.onGround && !mc.player.isSneaking() && !mc.player.isInLava() && !mc.player.isInWater() && !mc.player.isOnLadder() && !mc.player.noClip && !mc.gameSettings.keyBindSneak.isKeyDown() && !mc.gameSettings.keyBindJump.isKeyDown()) {
             mc.player.jump();
         }
     }
