@@ -1,6 +1,7 @@
 package dev.notorious.client;
 
 import dev.notorious.client.event.EventManager;
+import dev.notorious.client.gui.ClickGuiScreen;
 import dev.notorious.client.managers.CommandManager;
 import dev.notorious.client.managers.ConfigManager;
 import dev.notorious.client.managers.HackManager;
@@ -32,6 +33,8 @@ public class Notorious {
     public static ConfigManager CONFIG_MANAGER;
     public static EventManager EVENT_MANAGER;
 
+    public static ClickGuiScreen CLICK_GUI;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
 
@@ -50,6 +53,8 @@ public class Notorious {
 
         CONFIG_MANAGER.load();
         CONFIG_MANAGER.attach();
+
+        CLICK_GUI = new ClickGuiScreen();
 
         LOGGER.info("Finished Initialization process for Notorious v" + VERSION + "!");
     }

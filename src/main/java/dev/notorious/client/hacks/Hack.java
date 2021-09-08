@@ -169,8 +169,18 @@ public class Hack {
         InputStream stream = Files.newInputStream(Paths.get("Notorious/Hacks/" + category.getName() + "/" + getName() + ".json"));
         JsonObject hackObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
         if (hackObject.get("Name") == null) return;
+        if (hackObject.get("Toggle") == null) return;
 
-        JsonObject toggleObject = hackObject.get("Toggle").getAsJsonObject();
+        JsonObject toggleObject;
+
+        try {
+            toggleObject = hackObject.get("Toggle").getAsJsonObject();
+        } catch (IllegalStateException exception){
+            toggleObject = null;
+        }
+
+        if (toggleObject == null) return;
+
         JsonElement toggleDataObject = toggleObject.get("Toggle");
         if (toggleDataObject != null && toggleDataObject.isJsonPrimitive()){
             if (toggleDataObject.getAsBoolean()){
