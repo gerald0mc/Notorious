@@ -301,7 +301,6 @@ public class AutoCrystal extends Hack {
             AxisAlignedBB bb = mc.world.getBlockState(renderPosition).getSelectedBoundingBox(mc.world, renderPosition);
             if (!renderMode.getMode().equals("None")) {
                 GlStateManager.disableAlpha();
-
                 if(fill)
                     RenderUtil.renderFilledBB(bb, new Color(fillColor.getAsColor().getRed(), fillColor.getAsColor().getGreen(), fillColor.getAsColor().getBlue(), 125));
                 if(outline)

@@ -8,6 +8,8 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ModeSetting;
+import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.rewrite.DamageUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
@@ -17,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketExplosion;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.UUID;
@@ -24,10 +27,20 @@ import java.util.UUID;
 @RegisterHack(name = "FakePlayer", description = "Spawns a fake player", category = Hack.Category.Misc)
 public class FakePlayer extends Hack {
 
-    @RegisterSetting
-    private final BooleanSetting pops = new BooleanSetting("Totem Pops", true);
+    @RegisterSetting private final BooleanSetting pops = new BooleanSetting("TotemPops", true);
+    @RegisterSetting private final BooleanSetting totemPopSound = new BooleanSetting("TotemPopSound", true);
+    @RegisterSetting private final BooleanSetting totemPopParticle = new BooleanSetting("TotemPopParticle", true);
+    @RegisterSetting private final ModeSetting mode = new ModeSetting("MovementMode", "Static", "Static", "Chase");
+    @RegisterSetting private final NumSetting chaseX = new NumSetting("ChaseX", 4, 1, 120, 0.1f);
+    @RegisterSetting private final NumSetting chaseY = new NumSetting("ChaseY", 2, 1, 120, 0.1f);
+    @RegisterSetting private final NumSetting chaseZ = new NumSetting("ChaseZ", 2, 1, 120, 0.1f);
 
     public EntityOtherPlayerMP fakePlayer;
+
+    @Override
+    public String getMetaData() {
+        return " [" + ChatFormatting.GRAY + mode.getMode() + ChatFormatting.RESET + "]";
+    }
 
     @Override
     protected void onEnable() {
@@ -35,7 +48,7 @@ public class FakePlayer extends Hack {
             disable();
         }else {
             UUID playerUUID = mc.player.getUniqueID();
-            fakePlayer = new EntityOtherPlayerMP(mc.world, new GameProfile(UUID.fromString(playerUUID.toString()), "gerald0mc"));
+            fakePlayer = new EntityOtherPlayerMP(mc.world, new GameProfile(UUID.fromString(playerUUID.toString()), mc.player.getDisplayNameString()));
             fakePlayer.copyLocationAndAnglesFrom(mc.player);
             fakePlayer.inventory.copyInventory(mc.player.inventory);
             mc.world.addEntityToWorld(-7777, fakePlayer);
@@ -57,6 +70,14 @@ public class FakePlayer extends Hack {
         }
     }
 
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
+        if(mode.getMode().equals("Chase")) {
+            fakePlayer.posX = mc.player.posX + chaseX.getValue();
+            fakePlayer.posY = chaseY.getValue();
+            fakePlayer.posZ = mc.player.posZ + chaseZ.getValue();
+        }
+    }
 
     @SubscribeEvent
     public void onPacketReceive(PacketEvent.Receive event) {
@@ -84,7 +105,7 @@ public class FakePlayer extends Hack {
     }
 
     private void fakePop(Entity entity) {
-        this.mc.effectRenderer.emitParticleAtEntity(entity, EnumParticleTypes.TOTEM, 30);
-        this.mc.world.playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_TOTEM_USE, entity.getSoundCategory(), 1.0F, 1.0F, false);
+        if(totemPopParticle.isEnabled()) this.mc.effectRenderer.emitParticleAtEntity(entity, EnumParticleTypes.TOTEM, 30);
+        if(totemPopSound.isEnabled()) this.mc.world.playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_TOTEM_USE, entity.getSoundCategory(), 1.0F, 1.0F, false);
     }
 }

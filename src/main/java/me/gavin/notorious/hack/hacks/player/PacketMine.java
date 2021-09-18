@@ -73,7 +73,7 @@ public class PacketMine extends Hack {
         }
         ((IRenderGlobal) mc.renderGlobal).getDamagedBlocks().forEach((integer, destroyBlockProgress) -> {
             if (renderBlock != null) {
-                AxisAlignedBB bb = mc.world.getBlockState(renderBlock).getSelectedBoundingBox(mc.world, renderBlock);
+                AxisAlignedBB bb = new AxisAlignedBB(renderBlock);
                 if (fade.isEnabled())
                     bb = bb.shrink((3 - (destroyBlockProgress.getPartialBlockDamage()) / (2.0 + (2.0 / 3.0))) / 9.0);
                 if (outline)

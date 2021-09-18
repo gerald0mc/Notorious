@@ -75,6 +75,7 @@ public class HackManager {
         addHack(new CopyIP());
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
+        addHack(new NoAds());
         addHack(new RubberBandDetect());
         addHack(new WeaknessLog());
 
@@ -112,6 +113,7 @@ public class HackManager {
         addHack(new RBandESP());
         addHack(new ShulkerRender());
         addHack(new SkyColor());
+        addHack(new SmartAlpha());
         addHack(new StorageESP());
         addHack(new TargetHUD());
         addHack(new ViewModel());

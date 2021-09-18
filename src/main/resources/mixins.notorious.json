@@ -15,6 +15,7 @@
     "NetworkManagerMixin",
     "PlayerControllerMPMixin",
     "RenderManagerMixin",
+    "RenderPlayerMixin",
     "accessor.ICPacketPlayerMixin",
     "accessor.ICPacketUseEntityMixin",
     "accessor.IEntityMixin",

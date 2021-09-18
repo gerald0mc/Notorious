@@ -2,11 +2,17 @@ package me.gavin.notorious.util.rewrite;
 
 import me.gavin.notorious.util.Instance;
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class InventoryUtil implements Instance {
     /* NOTE TO DEVS!!!

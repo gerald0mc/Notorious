@@ -42,7 +42,7 @@ public class Notification implements IMinecraft {
 			mc.fontRenderer.drawString(title, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 2 - 35, -1);
 			mc.fontRenderer.drawString(message, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 15, -1);
 		}else {
-			mc.fontRenderer.drawString(message, sr.getScaledWidth() - width + 8, sr.getScaledHeight() - 15, -1);
+			mc.fontRenderer.drawString(message, sr.getScaledWidth() - width + 4, sr.getScaledHeight() - 15, -1);
 		}
 	}
 

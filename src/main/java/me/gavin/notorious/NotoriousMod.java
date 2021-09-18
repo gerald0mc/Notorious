@@ -26,9 +26,8 @@ public class NotoriousMod {
 
     public static final String MOD_ID = "notorious";
     public static final String MOD_NAME = "Notorious";
-    public static final String VERSION = "beta-0.6.1";
+    public static final String VERSION = "0.6.2";
     public static final String NAME_VERSION = MOD_NAME + " " + VERSION;
-    public static final String HWID_URL = "https://pastebin.com/raw/twrT83RF";
 
     public static final Logger LOGGER = LogManager.getLogger("Notorious");
 

@@ -73,4 +73,14 @@ public class DamageUtil implements IMinecraft {
 
         return false;
     }
+
+    public static float getDamageInPercent(ItemStack stack) {
+        float green = ((float)stack.getMaxDamage() - (float)stack.getItemDamage()) / (float)stack.getMaxDamage();
+        float red = 1.0f - green;
+        return 100 - (int)(red * 100.0f);
+    }
+
+    public static int getRoundedDamage(ItemStack stack) {
+        return (int)getDamageInPercent(stack);
+    }
 }

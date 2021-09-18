@@ -10,6 +10,7 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -28,22 +29,19 @@ import java.awt.*;
 )
 public class Chams extends Hack {
 
-    @RegisterSetting
-    private final BooleanSetting players = new BooleanSetting("Players", true);
-    @RegisterSetting
-    private final BooleanSetting animals = new BooleanSetting("Animals", false);
-    @RegisterSetting
-    private final BooleanSetting mobs = new BooleanSetting("Mobs", false);
-    @RegisterSetting
-    private final BooleanSetting walls = new BooleanSetting("Walls", true);
-    @RegisterSetting
-    private final BooleanSetting texture = new BooleanSetting("Texture", true);
-    @RegisterSetting
-    private final NumSetting lineWidth = new NumSetting("Line Width", 1f, 0.1f, 3f, 0.1f);
-    @RegisterSetting
-    private final ColorSetting color = new ColorSetting("Color", Color.CYAN);
-    @RegisterSetting
-    private final ModeSetting mode = new ModeSetting("Style", "Normal", "Normal", "Wireframe", "Color");
+    @RegisterSetting private final BooleanSetting players = new BooleanSetting("Players", true);
+    @RegisterSetting private final BooleanSetting crystal = new BooleanSetting("Crystal", true);
+    @RegisterSetting private final BooleanSetting animals = new BooleanSetting("Animals", false);
+    @RegisterSetting private final BooleanSetting mobs = new BooleanSetting("Mobs", false);
+    @RegisterSetting private final BooleanSetting walls = new BooleanSetting("Walls", true);
+    @RegisterSetting private final BooleanSetting texture = new BooleanSetting("Texture", true);
+    @RegisterSetting private final BooleanSetting glint = new BooleanSetting("Glint", true);
+    @RegisterSetting private final NumSetting lineWidth = new NumSetting("Line Width", 1f, 0.1f, 3f, 0.1f);
+    @RegisterSetting private final NumSetting r = new NumSetting("Red", 255, 0, 255, 1);
+    @RegisterSetting private final NumSetting g = new NumSetting("Green", 255, 0, 255, 1);
+    @RegisterSetting private final NumSetting b = new NumSetting("Blue", 255, 0, 255, 1);
+    @RegisterSetting private final NumSetting a = new NumSetting("Alpha", 255, 0, 255, 1);
+    @RegisterSetting private final ModeSetting mode = new ModeSetting("RenderMode", "Color", "Color", "Wireframe", "Skin");
 
     @SubscribeEvent
     public void onRenderEntity(RenderEntityEvent.Pre event) {
@@ -72,51 +70,65 @@ public class Chams extends Hack {
     }
 
     private void startWireframe() {
-        GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glLineWidth(lineWidth.getValue());
-        this.glColor();
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        GL11.glLineWidth(lineWidth.getValue());
+        GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, 1f);
     }
 
     private void endWireframe() {
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
         GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glPopMatrix();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
     private void startColor() {
-        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ALL_CLIENT_ATTRIB_BITS);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        this.glColor();
-        GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(false);
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, a.getValue() / 255f);
     }
 
     private void endColor() {
-        GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor4f(1f, 1f, 1f, 1f);
-        GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private void setupChams() {
-        if (!texture.getValue() && mode.getMode() != "Normal")
+        if (!texture.getValue() && mode.getMode() != "Skin")
             GL11.glDisable(GL11.GL_TEXTURE_2D);
 
         mc.getRenderManager().setRenderShadow(false);
         if (walls.getValue())
             startDepthRange();
 
-        if (mode.getMode() == "Wireframe")
+        if (mode.getMode().equals("Wireframe")) {
             startWireframe();
-        else if (mode.getMode() == "Color")
+        }else if (mode.getMode().equals("Color")) {
             startColor();
+        }else if(mode.getMode().equals("Both")) {
+            startWireframe();
+            startColor();
+        }
     }
 
     private void endChams() {
@@ -128,6 +140,10 @@ public class Chams extends Hack {
             endWireframe();
         else if (mode.getMode() == "Color")
             endColor();
+        else if(mode.getMode() == "Both") {
+            endColor();
+            endWireframe();
+        }
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
@@ -137,11 +153,13 @@ public class Chams extends Hack {
             return true;
         } else if ((entity instanceof EntityMob || entity instanceof EntitySlime) && mobs.getValue()) {
             return true;
-        } else return entity instanceof EntityAnimal && animals.getValue();
+        }else if(entity instanceof EntityEnderCrystal && crystal.getValue()) {
+            return true;
+        }else return entity instanceof EntityAnimal && animals.getValue();
     }
 
     private void glColor() {
-        final Color clr = color.getAsColor();
-        GL11.glColor4f(clr.getRed() / 255f, clr.getGreen() / 255f, clr.getBlue() / 255f, color.getAlpha().getValue());
+        final Color clr = new Color(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, a.getValue() / 255f);
+        GL11.glColor4f(clr.getRed() / 255f, clr.getGreen() / 255f, clr.getBlue() / 255f, clr.getAlpha() / 255f);
     }
 }

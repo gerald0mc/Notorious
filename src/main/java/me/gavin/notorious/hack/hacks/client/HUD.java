@@ -62,9 +62,9 @@ public class HUD extends Hack {
     @RegisterSetting
     public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
     @RegisterSetting
-    public final NumSetting sexySpeed = new NumSetting("SexyColorSpeed", 350, 1, 750, 1);
-    @RegisterSetting
     public final NumSetting saturation = new NumSetting("Saturation", 0.5f, 0.1f, 1f, 0.1f);
+    @RegisterSetting
+    public final NumSetting sexySpeed = new NumSetting("SexyColorSpeed", 350, 1, 750, 1);
     @RegisterSetting
     public final NumSetting wordSpacing = new NumSetting("WordSpacing", 0.1f, 0.1f, 30, 0.1f);
     @RegisterSetting
@@ -93,8 +93,6 @@ public class HUD extends Hack {
     @SubscribeEvent
     public void onRenderWatermark(RenderGameOverlayEvent.Text event) {
         if(waterMark.isEnabled()) {
-            float saturation = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).saturation.getValue();
-            float time = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).length.getValue();
             Font font = Notorious.INSTANCE.hackManager.getHack(Font.class);
             ServerData data = mc.getCurrentServerData();
             String string = "";
@@ -124,39 +122,41 @@ public class HUD extends Hack {
             if (fps.isEnabled()) {
                 string += (Notorious.INSTANCE.hackManager.getHack(Font.class).isEnabled() ? " | " : " \u23d0 ") + "FPS:" + Minecraft.getDebugFPS();
             }
-            Color colorRainbow;
+            Color colorColor;
             if (watermarkMode.getMode().equals("Rainbow")) {
-                colorRainbow = ColorUtil.colorRainbow((int) time, saturation, 1f);
+                colorColor = ColorUtil.colorRainbow((int) length.getValue(), saturation.getValue(), 1f);
             } else if (watermarkMode.getMode().equals("ClientSync")) {
-                colorRainbow = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor();
+                colorColor = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor();
             } else {
-                colorRainbow = rgbWatermark.getAsColor();
+                colorColor = rgbWatermark.getAsColor();
             }
-            int intRainbow;
+            int intColor;
             if (watermarkMode.getMode().equals("Rainbow")) {
-                intRainbow = ColorUtil.getRainbow(time, saturation);
+                intColor = ColorUtil.getRainbow(length.getValue(), saturation.getValue());
             } else if (watermarkMode.getMode().equals("ClientSync")) {
-                intRainbow = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
+                intColor = Notorious.INSTANCE.hackManager.getHack(ClickGUI.class).guiColor.getAsColor().getRGB();
             } else {
-                intRainbow = rgbWatermark.getAsColor().getRGB();
+                intColor = rgbWatermark.getAsColor().getRGB();
             }
             if (renderMode.getMode().equals("Basic")) {
                 if (font.isEnabled()) {
-                    notorious.fontRenderer.drawStringWithShadow(string, xWatermark.getValue() + 2, yWatermark.getValue(), colorRainbow);
+                    notorious.fontRenderer.drawStringWithShadow(string, xWatermark.getValue() + 2, yWatermark.getValue(), colorColor);
                 } else {
-                    mc.fontRenderer.drawStringWithShadow(string, (int) xWatermark.getValue() + 2, (int) yWatermark.getValue(), intRainbow);
+                    mc.fontRenderer.drawStringWithShadow(string, (int) xWatermark.getValue() + 2, (int) yWatermark.getValue(), intColor);
                 }
             }
             if (renderMode.getMode().equals("Skeet")) {
+                //real background
+                Gui.drawRect((int) xWatermark.getValue() - (int) 1.5f, (int) yWatermark.getValue() - (int) 1.5f, (int) xWatermark.getValue() + (Notorious.INSTANCE.hackManager.getHack(Font.class).isEnabled() ? notorious.fontRenderer.getStringWidth(string) : mc.fontRenderer.getStringWidth(string)) + 5, (int) yWatermark.getValue() + mc.fontRenderer.FONT_HEIGHT + 4, new Color(80, 80, 80, 255).getRGB());
                 //background
                 Gui.drawRect((int) xWatermark.getValue(), (int) yWatermark.getValue(), (int) xWatermark.getValue() + (Notorious.INSTANCE.hackManager.getHack(Font.class).isEnabled() ? notorious.fontRenderer.getStringWidth(string) : mc.fontRenderer.getStringWidth(string)) + 4, (int) yWatermark.getValue() + mc.fontRenderer.FONT_HEIGHT + 3, new Color(0, 0, 0, 255).getRGB());
                 //rainbow line
-                Gui.drawRect((int) xWatermark.getValue(), (int) yWatermark.getValue(), (int) xWatermark.getValue() + (Notorious.INSTANCE.hackManager.getHack(Font.class).isEnabled() ? notorious.fontRenderer.getStringWidth(string) : mc.fontRenderer.getStringWidth(string)) + 4, (int) yWatermark.getValue() + 1, ColorUtil.getRainbow(3f, 1f));
+                Gui.drawRect((int) xWatermark.getValue(), (int) yWatermark.getValue(), (int) xWatermark.getValue() + (Notorious.INSTANCE.hackManager.getHack(Font.class).isEnabled() ? notorious.fontRenderer.getStringWidth(string) : mc.fontRenderer.getStringWidth(string)) + 4, (int) yWatermark.getValue() + 1, ColorUtil.getRainbow(length.getValue(), saturation.getValue()));
                 //string
                 if (font.isEnabled()) {
-                    notorious.fontRenderer.drawStringWithShadow(string, xWatermark.getValue() + 2, yWatermark.getValue() + 4, colorRainbow);
+                    notorious.fontRenderer.drawStringWithShadow(string, xWatermark.getValue() + 2, yWatermark.getValue() + 4, colorColor);
                 } else {
-                    mc.fontRenderer.drawStringWithShadow(string, (int) xWatermark.getValue() + 2, (int) yWatermark.getValue() + 3, intRainbow);
+                    mc.fontRenderer.drawStringWithShadow(string, (int) xWatermark.getValue() + 2, (int) yWatermark.getValue() + 3, intColor);
                 }
             }
         }
