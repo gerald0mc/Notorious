@@ -22,6 +22,7 @@ public class Notorious {
     public final HackManager hackManager;
     public final ClickGuiScreen clickGuiScreen;
     public final CFontRenderer fontRenderer;
+    public final CommandManager commandManager;
     public final MessageManager messageManager;
     public final RotationManager rotationManager;
     public final TotemPopListener popListener;
@@ -35,6 +36,7 @@ public class Notorious {
         hackManager = new HackManager();
         fontRenderer = new CFontRenderer(CFontLoader.HELVETICA, true, true);
         clickGuiScreen = new ClickGuiScreen();
+        commandManager = new CommandManager();
         messageManager = new MessageManager();
         rotationManager = new RotationManager();
         popListener = new TotemPopListener();

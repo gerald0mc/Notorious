@@ -1,17 +1,18 @@
-package me.gavin.notorious.hack.hacks.combatrewrite;
+package me.gavin.notorious.hack.hacks.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.hack.hacks.combat.AutoCrystal;
 import me.gavin.notorious.setting.ModeSetting;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@RegisterHack(name = "Criticals", description = "Makes every one of your hits a critical.", category = Hack.Category.CombatRewrite)
+@RegisterHack(name = "Criticals", description = "Makes every one of your hits a critical.", category = Hack.Category.Combat)
 public class Criticals extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Packet", "Packet", "FakeJump", "Jump", "MiniJump");

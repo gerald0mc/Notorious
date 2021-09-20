@@ -7,6 +7,7 @@ import me.gavin.notorious.friend.Friend;
 import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
+import me.gavin.notorious.manager.HackManager;
 import me.gavin.notorious.setting.BooleanSetting;
 import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
@@ -29,66 +30,36 @@ import java.util.Objects;
 @RegisterHack(name = "HUD", description = "ez", category = Hack.Category.Client)
 public class HUD extends Hack {
 
-    @RegisterSetting
-    public final ModeSetting renderMode = new ModeSetting("Mode", "Skeet", "Skeet", "Basic");
-    @RegisterSetting
-    public final BooleanSetting waterMark = new BooleanSetting("Watermark", true);
-    @RegisterSetting
-    public final BooleanSetting arrayList = new BooleanSetting("HackList", true);
-    @RegisterSetting
-    public final BooleanSetting friendList = new BooleanSetting("FriendList", true);
-    @RegisterSetting
-    public final BooleanSetting welcomer = new BooleanSetting("Welcomer", true);
-    @RegisterSetting
-    public final ModeSetting watermarkMode = new ModeSetting("WaterMarkColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
-    @RegisterSetting
-    public final ModeSetting arrayListMode = new ModeSetting("HackListColor", "Flow", "Flow", "RGB", "Sexy", "ClientSync");
-    @RegisterSetting
-    public final ModeSetting friendListMode = new ModeSetting("FriendListColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
-    @RegisterSetting
-    public final ModeSetting welcomerMode = new ModeSetting("WelcomerType", "Normal", "Normal", "Subscribe");
-    @RegisterSetting
-    public final ModeSetting welcomerColor = new ModeSetting("FriendListColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
-    @RegisterSetting
-    public final ColorSetting rgbWatermark = new ColorSetting("RGBWatermark", 255, 255, 255, 255);
-    @RegisterSetting
-    public final ColorSetting rgbArrayList = new ColorSetting("RGBHackList", 255, 0, 255, 255);
-    @RegisterSetting
-    public final ColorSetting rgbArrayList2 = new ColorSetting("RGBHackList2", 0, 0, 255, 255);
-    @RegisterSetting
-    public final ColorSetting rgbFriendList = new ColorSetting("RGBFriendList", 255, 255, 255, 255);
-    @RegisterSetting
-    public final ColorSetting rgbWelcomer = new ColorSetting("RGBWelcomer", 255, 255, 255, 255);
-    @RegisterSetting
-    public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
-    @RegisterSetting
-    public final NumSetting saturation = new NumSetting("Saturation", 0.5f, 0.1f, 1f, 0.1f);
-    @RegisterSetting
-    public final NumSetting sexySpeed = new NumSetting("SexyColorSpeed", 350, 1, 750, 1);
-    @RegisterSetting
-    public final NumSetting wordSpacing = new NumSetting("WordSpacing", 0.1f, 0.1f, 30, 0.1f);
-    @RegisterSetting
-    public final BooleanSetting version = new BooleanSetting("Version", false);
-    @RegisterSetting
-    public final BooleanSetting name = new BooleanSetting("Name", true);
-    @RegisterSetting
-    public final BooleanSetting ping = new BooleanSetting("Ping", true);
-    @RegisterSetting
-    public final BooleanSetting ip = new BooleanSetting("IP", true);
-    @RegisterSetting
-    public final BooleanSetting fps = new BooleanSetting("FPS", false);
-    @RegisterSetting
-    public final NumSetting xWatermark = new NumSetting("XWatermark", 2.0f, 0.1f, 1000.0f, 0.1f);
-    @RegisterSetting
-    public final NumSetting yWatermark = new NumSetting("YWatermark", 2.0f, 0.1f, 600.0f, 0.1f);
-    @RegisterSetting
-    public final NumSetting xFriendList = new NumSetting("XFriendList", 2.0f, 0.1f, 1000.0f, 0.1f);
-    @RegisterSetting
-    public final NumSetting yFriendList = new NumSetting("YFriendList", 2.0f, 0.1f, 600.0f, 0.1f);
-    @RegisterSetting
-    public final NumSetting xWelcomer = new NumSetting("XWelcomer", 2.0f, 0.1f, 1000.0f, 0.1f);
-    @RegisterSetting
-    public final NumSetting yWelcomer = new NumSetting("YWelcomer", 2.0f, 0.1f, 600.0f, 0.1f);
+    @RegisterSetting public final ModeSetting renderMode = new ModeSetting("Mode", "Skeet", "Skeet", "Basic");
+    @RegisterSetting public final BooleanSetting waterMark = new BooleanSetting("Watermark", true);
+    @RegisterSetting public final BooleanSetting arrayList = new BooleanSetting("HackList", true);
+    @RegisterSetting public final BooleanSetting friendList = new BooleanSetting("FriendList", true);
+    @RegisterSetting public final BooleanSetting welcomer = new BooleanSetting("Welcomer", true);
+    @RegisterSetting public final ModeSetting watermarkMode = new ModeSetting("WaterMarkColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
+    @RegisterSetting public final ModeSetting arrayListMode = new ModeSetting("HackListColor", "Flow", "Flow", "RGB", "Sexy", "ClientSync");
+    @RegisterSetting public final ModeSetting friendListMode = new ModeSetting("FriendListColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
+    @RegisterSetting public final ModeSetting welcomerMode = new ModeSetting("WelcomerType", "Normal", "Normal", "Subscribe");
+    @RegisterSetting public final ModeSetting welcomerColor = new ModeSetting("FriendListColor", "Rainbow", "Rainbow", "RGB", "ClientSync");
+    @RegisterSetting public final ColorSetting rgbWatermark = new ColorSetting("RGBWatermark", 255, 255, 255, 255);
+    @RegisterSetting public final ColorSetting rgbArrayList = new ColorSetting("RGBHackList", 255, 0, 255, 255);
+    @RegisterSetting public final ColorSetting rgbArrayList2 = new ColorSetting("RGBHackList2", 0, 0, 255, 255);
+    @RegisterSetting public final ColorSetting rgbFriendList = new ColorSetting("RGBFriendList", 255, 255, 255, 255);
+    @RegisterSetting public final ColorSetting rgbWelcomer = new ColorSetting("RGBWelcomer", 255, 255, 255, 255);
+    @RegisterSetting public final NumSetting length = new NumSetting("Length", 7f, 1f, 15f, 1f);
+    @RegisterSetting public final NumSetting saturation = new NumSetting("Saturation", 0.5f, 0.1f, 1f, 0.1f);
+    @RegisterSetting public final NumSetting sexySpeed = new NumSetting("SexyColorSpeed", 350, 1, 750, 1);
+    @RegisterSetting public final NumSetting wordSpacing = new NumSetting("WordSpacing", 0.1f, 0.1f, 30, 0.1f);
+    @RegisterSetting public final BooleanSetting version = new BooleanSetting("Version", false);
+    @RegisterSetting public final BooleanSetting name = new BooleanSetting("Name", true);
+    @RegisterSetting public final BooleanSetting ping = new BooleanSetting("Ping", true);
+    @RegisterSetting public final BooleanSetting ip = new BooleanSetting("IP", true);
+    @RegisterSetting public final BooleanSetting fps = new BooleanSetting("FPS", false);
+    @RegisterSetting public final NumSetting xWatermark = new NumSetting("XWatermark", 2.0f, 0.1f, 1000.0f, 0.1f);
+    @RegisterSetting public final NumSetting yWatermark = new NumSetting("YWatermark", 2.0f, 0.1f, 600.0f, 0.1f);
+    @RegisterSetting public final NumSetting xFriendList = new NumSetting("XFriendList", 2.0f, 0.1f, 1000.0f, 0.1f);
+    @RegisterSetting public final NumSetting yFriendList = new NumSetting("YFriendList", 2.0f, 0.1f, 600.0f, 0.1f);
+    @RegisterSetting public final NumSetting xWelcomer = new NumSetting("XWelcomer", 2.0f, 0.1f, 1000.0f, 0.1f);
+    @RegisterSetting public final NumSetting yWelcomer = new NumSetting("YWelcomer", 2.0f, 0.1f, 600.0f, 0.1f);
 
     @SubscribeEvent
     public void onRenderWatermark(RenderGameOverlayEvent.Text event) {
@@ -163,7 +134,7 @@ public class HUD extends Hack {
         if(arrayList.isEnabled()) {
             int yOffset = 2;
             for (Hack hack : notorious.hackManager.getSortedHacks()) {
-                if (hack.isEnabled() || (!hack.isEnabled() && (System.currentTimeMillis() - hack.lastDisabledTime) < 250)) {
+                if(hack.isEnabled() || (!hack.isEnabled() && (System.currentTimeMillis() - hack.lastDisabledTime) < 50)) {
                     final String n = hack.getName();
                     final String md = hack.getMetaData();
                     final String name = n + md;

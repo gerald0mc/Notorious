@@ -24,8 +24,8 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@RegisterHack(name = "ChatModifications", description = "Modifies chat.", category = Hack.Category.Chat)
-public class ChatModifications extends Hack {
+@RegisterHack(name = "ChatMods", description = "Modifies chat.", category = Hack.Category.Chat)
+public class ChatMods extends Hack {
 
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("SuffixMode", "Unicode", "Unicode", "Vanilla", "UnicodeVer", "Custom");

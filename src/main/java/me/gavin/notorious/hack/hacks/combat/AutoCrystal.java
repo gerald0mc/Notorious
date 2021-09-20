@@ -1,4 +1,4 @@
-package me.gavin.notorious.hack.hacks.combatrewrite;
+package me.gavin.notorious.hack.hacks.combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.gavin.notorious.event.events.PacketEvent;
@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 // Note to devs: The "new ArrayList<>" prevents concurrentmodification crashes apparently
-@RegisterHack(name = "AutoCrystal", description = "Automatically places and breaks crystals to destroy your enemies.", category = Hack.Category.CombatRewrite)
+@RegisterHack(name = "AutoCrystal", description = "Automatically places and breaks crystals to destroy your enemies.", category = Hack.Category.Combat)
 public class AutoCrystal extends Hack {
     public static EntityPlayer target = null;
     public static boolean isPredicting = false;

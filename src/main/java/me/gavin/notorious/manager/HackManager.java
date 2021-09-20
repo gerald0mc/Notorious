@@ -6,9 +6,8 @@ import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.hack.hacks.chat.*;
 import me.gavin.notorious.hack.hacks.client.*;
 import me.gavin.notorious.hack.hacks.combat.*;
-import me.gavin.notorious.hack.hacks.combatrewrite.AutoCrystal;
-import me.gavin.notorious.hack.hacks.combatrewrite.Criticals;
-import me.gavin.notorious.hack.hacks.combatrewrite.CrystalAura;
+import me.gavin.notorious.hack.hacks.combat.AutoCrystal;
+import me.gavin.notorious.hack.hacks.combat.Criticals;
 import me.gavin.notorious.hack.hacks.misc.*;
 import me.gavin.notorious.hack.hacks.movement.*;
 import me.gavin.notorious.hack.hacks.player.*;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 public class HackManager {
 
     private final ArrayList<Hack> hacks;
-    private final ArrayList<Hack> sortedHacks;
+    private ArrayList<Hack> sortedHacks;
 
     public HackManager() {
         hacks = new ArrayList<>();
@@ -40,7 +39,7 @@ public class HackManager {
         addHack(new AutoDox());
         addHack(new AutoEZ());
         addHack(new AutoGroom());
-        addHack(new ChatModifications());
+        addHack(new ChatMods());
         addHack(new ChorusPredict());
         addHack(new PotionAlert());
         //addHack(new StringTestModule());
@@ -58,25 +57,23 @@ public class HackManager {
 
         // combat
         addHack(new AnvilBurrow());
+        addHack(new AutoCrystal());
+        addHack(new Burrow());
         addHack(new BurrowBreaker());
+        addHack(new Criticals());
+        //addHack(new CrystalAura());
         addHack(new KillAura());
         addHack(new PacketCity());
         addHack(new Quiver());
 
-        // combatrewrite
-        addHack(new AutoCrystal());
-        addHack(new Criticals());
-        //addHack(new CrystalAura());
-
         // misc
         addHack(new AutoLog());
-        addHack(new AutoRespawn());
+        addHack(new Respawn());
         addHack(new CopyCoords());
         addHack(new CopyIP());
         addHack(new FakePlayer());
         addHack(new GhastNotifier());
-        addHack(new NoAds());
-        addHack(new RubberBandDetect());
+        addHack(new RBandDetect());
         addHack(new WeaknessLog());
 
         // movement
@@ -88,11 +85,10 @@ public class HackManager {
         addHack(new Velocity());
 
         // player
-        addHack(new AutoSuicide());
         addHack(new FastPlace());
         addHack(new MiddleClick());
         addHack(new PacketMine());
-        addHack(new SpeedMine());
+        addHack(new Suicide());
         addHack(new ToggleXP());
 
         // render
@@ -100,20 +96,20 @@ public class HackManager {
         addHack(new BlockHighlight());
         addHack(new BreakESP());
         addHack(new BurrowESP());
-        addHack(new EnchantGlint());
         addHack(new ESP());
         addHack(new FuckedDetector());
         addHack(new Fullbright());
+        addHack(new Glint());
         addHack(new HellenKeller());
         addHack(new HoleESP());
         addHack(new Nametags());
         addHack(new NoRender());
-        addHack(new PenisESP()); 
+        addHack(new PenisESP());
         addHack(new PopESP());
         addHack(new RBandESP());
         addHack(new ShulkerRender());
         addHack(new SkyColor());
-        addHack(new SmartAlpha());
+        addHack(new Alpha());
         addHack(new StorageESP());
         addHack(new TargetHUD());
         addHack(new ViewModel());
@@ -134,7 +130,9 @@ public class HackManager {
         return hacks;
     }
 
-    public ArrayList<Hack> getSortedHacks() { return sortedHacks; }
+    public ArrayList<Hack> getSortedHacks() {
+        return sortedHacks;
+    }
 
     @SuppressWarnings("unchecked")
     public <T extends Hack> T getHack(Class<T> clazz) {
@@ -153,6 +151,25 @@ public class HackManager {
             }
         }
         return null;
+    }
+
+    public ArrayList<Hack> getEnabledHacksWithDrawnHacksForArraylist() {
+        ArrayList<Hack> enabledHacks = new ArrayList<>();
+        for (Hack hack : this.hacks) {
+            if (!hack.isEnabled()) continue;
+            if (!hack.isDrawn()) continue;
+            enabledHacks.add(hack);
+        }
+        return enabledHacks;
+    }
+
+    public ArrayList<Hack> getEnabledHacks() {
+        ArrayList<Hack> enabledHacks = new ArrayList<>();
+        for (Hack module : this.hacks) {
+            if (!module.isEnabled()) continue;
+            enabledHacks.add(module);
+        }
+        return enabledHacks;
     }
 
     public ArrayList<Hack> getHacksFromCategory(Hack.Category category) {

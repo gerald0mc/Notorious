@@ -9,8 +9,8 @@ import net.minecraft.client.gui.GuiGameOver;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@RegisterHack(name = "AutoRespawn", description = "Respawn automatically", category = Hack.Category.Misc)
-public class AutoRespawn extends Hack {
+@RegisterHack(name = "Respawn", description = "Respawn automatically", category = Hack.Category.Misc)
+public class Respawn extends Hack {
 
     @RegisterSetting
     public final BooleanSetting antiDeathScreen = new BooleanSetting("Respawn", true);

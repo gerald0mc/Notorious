@@ -17,6 +17,7 @@ public class ConfigManager {
             loadHacks();
             loadToggles();
             loadBinds();
+            loadDrawn();
         } catch (IOException exception){
             exception.printStackTrace();
         }
@@ -28,6 +29,7 @@ public class ConfigManager {
             saveHacks();
             saveToggles();
             saveBinds();
+            saveDrawn();
         } catch (IOException exception){
             exception.printStackTrace();
         }
@@ -151,6 +153,47 @@ public class ConfigManager {
         }
 
         hackObject.add("Hacks", toggleObject);
+        stream.write(gson.toJson(new JsonParser().parse(hackObject.toString())));
+        stream.close();
+    }
+
+    public void loadDrawn() throws IOException {
+        if (!Files.exists(Paths.get("Notorious/Client/Drawn.json")))
+            return;
+
+        InputStream stream = Files.newInputStream(Paths.get("Notorious/Client/Drawn.json"));
+        JsonObject hackObject = new JsonParser().parse(new InputStreamReader(stream)).getAsJsonObject();
+        if (hackObject.get("Hacks") == null) return;
+
+        JsonObject toggleObject = hackObject.get("Hacks").getAsJsonObject();
+
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            JsonElement dataObject = toggleObject.get(hack.getName());
+            if (dataObject != null && dataObject.isJsonPrimitive()){
+                if (dataObject.getAsBoolean()){
+                    hack.enable();
+                }
+            }
+        }
+
+        stream.close();
+    }
+
+    public void saveDrawn() throws IOException {
+        if (Files.exists(Paths.get("Notorious/Client/Drawn.json")))
+            new File("Notorious/Client/Drawn.json").delete();
+        Files.createFile(Paths.get("Notorious/Client/Drawn.json"));
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        OutputStreamWriter stream = new OutputStreamWriter(new FileOutputStream("Notorious/Client/Drawn.json"), StandardCharsets.UTF_8);
+        JsonObject hackObject = new JsonObject();
+        JsonObject drawnObject = new JsonObject();
+
+        for (Hack hack : Notorious.INSTANCE.hackManager.getHacks()){
+            drawnObject.add(hack.getName(), new JsonPrimitive(hack.isDrawn()));
+        }
+
+        hackObject.add("Hacks", drawnObject);
         stream.write(gson.toJson(new JsonParser().parse(hackObject.toString())));
         stream.close();
     }

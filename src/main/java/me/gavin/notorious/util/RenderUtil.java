@@ -3,10 +3,7 @@ package me.gavin.notorious.util;
 import me.gavin.notorious.stuff.IMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -25,6 +22,11 @@ import static org.lwjgl.opengl.GL11.GL_SMOOTH;
 
 public class RenderUtil implements IMinecraft {
     private final static Frustum frustrum = new Frustum();
+    public static final Tessellator tessellator;
+
+    static {
+        tessellator = Tessellator.getInstance();
+    }
 
     public static void prepare() {
         GlStateManager.pushMatrix();
@@ -39,6 +41,12 @@ public class RenderUtil implements IMinecraft {
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
     }
 
+    public static void prepare2D() {
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+    }
+
     public static void release() {
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GlStateManager.depthMask(true);
@@ -48,6 +56,11 @@ public class RenderUtil implements IMinecraft {
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
+    }
+
+    public static void release2D() {
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     public static AxisAlignedBB generateBB(long x, long y, long z) {
@@ -229,6 +242,59 @@ public class RenderUtil implements IMinecraft {
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
+    }
+
+    public static void drawBorderedRect(float x, float y, float x1, float y1, final int insideC, final int borderC) {
+        prepare2D();
+        x *= 2.0f;
+        x1 *= 2.0f;
+        y *= 2.0f;
+        y1 *= 2.0f;
+        GL11.glScalef(0.5f, 0.5f, 0.5f);
+        drawVLine(x, y, y1 - 1.0f, borderC);
+        drawVLine(x1 - 1.0f, y, y1, borderC);
+        drawHLine(x, x1 - 1.0f, y, borderC);
+        drawHLine(x, x1 - 2.0f, y1 - 1.0f, borderC);
+        drawRect(x + 1.0f, y + 1.0f, x1 - 1.0f, y1 - 1.0f, insideC);
+        GL11.glScalef(2.0f, 2.0f, 2.0f);
+        release2D();
+    }
+
+    public static void drawVLine(final float x, float y, float x1, final int y1) {
+        if (x1 < y) {
+            final float var5 = y;
+            y = x1;
+            x1 = var5;
+        }
+        drawRect(x, y + 1.0f, x + 1.0f, x1, y1);
+    }
+
+    public static void drawHLine(float x, float y, final float x1, final int y1) {
+        if (y < x) {
+            final float var5 = x;
+            x = y;
+            y = var5;
+        }
+        drawRect(x, x1, y + 1.0f, x1 + 1.0f, y1);
+    }
+
+    public static void drawRect(final float x, final float y, final float x1, final float y1, final int color) {
+        final float alpha = (color >> 24 & 0xFF) / 255.0f;
+        final float red = (color >> 16 & 0xFF) / 255.0f;
+        final float green = (color >> 8 & 0xFF) / 255.0f;
+        final float blue = (color & 0xFF) / 255.0f;
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        final BufferBuilder builder = RenderUtil.tessellator.getBuffer();
+        builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        builder.pos(x, y1, 0.0).color(red, green, blue, alpha).endVertex();
+        builder.pos(x1, y1, 0.0).color(red, green, blue, alpha).endVertex();
+        builder.pos(x1, y, 0.0).color(red, green, blue, alpha).endVertex();
+        builder.pos(x, y, 0.0).color(red, green, blue, alpha).endVertex();
+        RenderUtil.tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     public static boolean isInViewFrustrum(AxisAlignedBB bb) {

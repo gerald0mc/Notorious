@@ -11,8 +11,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 
-@RegisterHack(name = "EnchantGlint", description = "ez", category = Hack.Category.Render)
-public class EnchantGlint extends Hack {
+@RegisterHack(name = "Glint", description = "ez", category = Hack.Category.Render)
+public class Glint extends Hack {
 
     @RegisterSetting
     public final ColorSetting colorShit = new ColorSetting("Color", 255, 255, 255, 255);

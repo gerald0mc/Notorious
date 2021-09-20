@@ -62,4 +62,9 @@ public class ColorUtil {
         final float sin = (float) (Math.sin(((System.currentTimeMillis() / speed) + time)) * 0.5f) + 0.5f;
         return normalizedFade(sin, startColor, endColor);
     }
+
+    public static Color getColorBrighten(double time, double speed, Color startColor, Color endColor) {
+        final float sin = (float) (Math.sin(((System.currentTimeMillis() / speed) + time)) * 0.5f) + 0.5f;
+        return normalizedFade(sin, startColor, endColor);
+    }
 }

@@ -5,9 +5,9 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
-import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -36,6 +36,7 @@ public class Chams extends Hack {
     @RegisterSetting private final BooleanSetting walls = new BooleanSetting("Walls", true);
     @RegisterSetting private final BooleanSetting texture = new BooleanSetting("Texture", true);
     @RegisterSetting private final BooleanSetting glint = new BooleanSetting("Glint", true);
+    @RegisterSetting private final BooleanSetting rainbow = new BooleanSetting("Rainbow", false);
     @RegisterSetting private final NumSetting lineWidth = new NumSetting("Line Width", 1f, 0.1f, 3f, 0.1f);
     @RegisterSetting private final NumSetting r = new NumSetting("Red", 255, 0, 255, 1);
     @RegisterSetting private final NumSetting g = new NumSetting("Green", 255, 0, 255, 1);
@@ -43,10 +44,13 @@ public class Chams extends Hack {
     @RegisterSetting private final NumSetting a = new NumSetting("Alpha", 255, 0, 255, 1);
     @RegisterSetting private final ModeSetting mode = new ModeSetting("RenderMode", "Color", "Color", "Wireframe", "Skin");
 
+    public Entity entityBeingRendered;
+
     @SubscribeEvent
     public void onRenderEntity(RenderEntityEvent.Pre event) {
         if (shouldDoChams(event.getEntity())) {
             setupChams();
+            entityBeingRendered = event.getEntity();
             if (walls.isEnabled())
                 startDepthRange();
         }
@@ -57,6 +61,7 @@ public class Chams extends Hack {
         if (shouldDoChams(event.getEntity())) {
             if (walls.isEnabled())
                 endDepthRange();
+            entityBeingRendered = null;
             endChams();
         }
     }
@@ -79,7 +84,7 @@ public class Chams extends Hack {
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
         GL11.glLineWidth(lineWidth.getValue());
-        GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, 1f);
+        GL11.glColor4f(rainbow.getValue() ? ColorUtil.getRainbow(6f, 1f) : r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, 1f);
     }
 
     private void endWireframe() {
@@ -99,7 +104,7 @@ public class Chams extends Hack {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, a.getValue() / 255f);
+        GL11.glColor4f(rainbow.getValue() ? ColorUtil.getRainbow(6f, 1f) : r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, a.getValue() / 255f);
     }
 
     private void endColor() {
@@ -156,10 +161,5 @@ public class Chams extends Hack {
         }else if(entity instanceof EntityEnderCrystal && crystal.getValue()) {
             return true;
         }else return entity instanceof EntityAnimal && animals.getValue();
-    }
-
-    private void glColor() {
-        final Color clr = new Color(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, a.getValue() / 255f);
-        GL11.glColor4f(clr.getRed() / 255f, clr.getGreen() / 255f, clr.getBlue() / 255f, clr.getAlpha() / 255f);
     }
 }

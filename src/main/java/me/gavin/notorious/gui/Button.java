@@ -93,6 +93,14 @@ public class Button extends AbstractToggleContainer implements IMinecraft {
                 hack.toggle();
             }else if (mouseButton == 1) {
                 open = !open;
+            }else if(mouseButton == 2) {
+                if(hack.isDrawn()) {
+                    hack.setUndrawn();
+                    Notorious.INSTANCE.messageManager.sendMessage(hack.getName() + " is no longer Drawn.");
+                }else {
+                    hack.setDrawn();
+                    Notorious.INSTANCE.messageManager.sendMessage(hack.getName() + " is now Drawn.");
+                }
             }
         }
 

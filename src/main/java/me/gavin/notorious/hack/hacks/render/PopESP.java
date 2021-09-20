@@ -51,6 +51,8 @@ public class PopESP extends Hack {
 
     private static final HashMap<EntityOtherPlayerMP, Long> popFakePlayerMap = new HashMap<>();
 
+    float fade = 1.0f;
+
     @Override
     public String getMetaData() {
         if(fadeMode.getMode().equals("Elevator")) {
@@ -75,14 +77,16 @@ public class PopESP extends Hack {
                 wireFrame = false;
                 textured = true;
             }
-            if (System.currentTimeMillis() - entry.getValue() < (long) fadeTime.getValue() && fadeMode.getMode().equals("Elevator")) {
+            if(System.currentTimeMillis() - entry.getValue() < (long) fadeTime.getValue() && fadeMode.getMode().equals("Elevator")) {
                 if(elevatorMode.getMode().equals("Heaven")) {
                     entry.getKey().posY += fadeSpeed.getValue() * event.getPartialTicks();
                 }else {
                     entry.getKey().posY -= fadeSpeed.getValue() * event.getPartialTicks();
                 }
+            }else if(System.currentTimeMillis() - entry.getValue() < (long) fadeTime.getValue() && fadeMode.getMode().equals("Fade")) {
+                fade -= fadeSpeed.getValue();
             }
-            if (System.currentTimeMillis() - entry.getValue() > (long) fadeTime.getValue()) {
+            if(System.currentTimeMillis() - entry.getValue() > (long) fadeTime.getValue() || fade == 0.0f) {
                 popFakePlayerMap.remove(entry.getKey());
                 continue;
             }
@@ -97,7 +101,7 @@ public class PopESP extends Hack {
                 GL11.glLineWidth(lineWidth.getValue());
                 GL11.glEnable(GL11.GL_LINE_SMOOTH);
                 GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-                GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, 1f);
+                GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, fadeMode.getMode().equals("Fade") ? fade : 1f);
                 renderEntityStatic(entry.getKey(), event.getPartialTicks(), true);
                 GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_DONT_CARE);
                 GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
@@ -115,7 +119,7 @@ public class PopESP extends Hack {
                 GL11.glDepthMask(false);
                 GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
                 GL11.glLineWidth(1.5f);
-                GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, a.getValue() / 255f);
+                GL11.glColor4f(r.getValue() / 255f, g.getValue() / 255f, b.getValue() / 255f, fadeMode.getMode().equals("Fade") ? fade : a.getValue() / 255f);
                 renderEntityStatic(entry.getKey(), event.getPartialTicks(), true);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                 GL11.glDepthMask(true);
@@ -128,6 +132,7 @@ public class PopESP extends Hack {
             }
             GL11.glDepthRange(0.0, 1.0f);
             GL11.glPopMatrix();
+            fade = 1.0f;
         }
     }
 

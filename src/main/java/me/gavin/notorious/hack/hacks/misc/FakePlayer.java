@@ -12,7 +12,10 @@ import me.gavin.notorious.setting.ModeSetting;
 import me.gavin.notorious.setting.NumSetting;
 import me.gavin.notorious.util.rewrite.DamageUtil;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -30,6 +33,7 @@ public class FakePlayer extends Hack {
     @RegisterSetting private final BooleanSetting pops = new BooleanSetting("TotemPops", true);
     @RegisterSetting private final BooleanSetting totemPopSound = new BooleanSetting("TotemPopSound", true);
     @RegisterSetting private final BooleanSetting totemPopParticle = new BooleanSetting("TotemPopParticle", true);
+    @RegisterSetting private final BooleanSetting move = new BooleanSetting("Move", true);
     @RegisterSetting private final ModeSetting mode = new ModeSetting("MovementMode", "Static", "Static", "Chase");
     @RegisterSetting private final NumSetting chaseX = new NumSetting("ChaseX", 4, 1, 120, 0.1f);
     @RegisterSetting private final NumSetting chaseY = new NumSetting("ChaseY", 2, 1, 120, 0.1f);
@@ -68,6 +72,9 @@ public class FakePlayer extends Hack {
                 }
             }
         }
+        if(move.isEnabled() && !mode.getMode().equals("Chase")) {
+            travel(fakePlayer.moveStrafing, fakePlayer.moveVertical, fakePlayer.moveForward);
+        }
     }
 
     @SubscribeEvent
@@ -93,6 +100,30 @@ public class FakePlayer extends Hack {
                 }
             }
         }
+    }
+
+    public void travel(float strafe, float vertical, float forward) {
+        double d0 = this.fakePlayer.posY;
+        float f1 = 0.8F;
+        float f2 = 0.02F;
+        float f3 = EnchantmentHelper.getDepthStriderModifier(this.fakePlayer);
+        if (f3 > 3.0F)
+            f3 = 3.0F;
+        if (!this.fakePlayer.onGround)
+            f3 *= 0.5F;
+        if (f3 > 0.0F) {
+            f1 += (0.54600006F - f1) * f3 / 3.0F;
+            f2 += (this.fakePlayer.getAIMoveSpeed() - f2) * f3 / 4.0F;
+        }
+        this.fakePlayer.moveRelative(strafe, vertical, forward, f2);
+        this.fakePlayer.move(MoverType.SELF, this.fakePlayer.motionX, this.fakePlayer.motionY, this.fakePlayer.motionZ);
+        this.fakePlayer.motionX *= f1;
+        this.fakePlayer.motionY *= 0.800000011920929D;
+        this.fakePlayer.motionZ *= f1;
+        if (!this.fakePlayer.hasNoGravity())
+            this.fakePlayer.motionY -= 0.02D;
+        if (this.fakePlayer.collidedHorizontally && this.fakePlayer.isOffsetPositionInLiquid(this.fakePlayer.motionX, this.fakePlayer.motionY + 0.6000000238418579D - this.fakePlayer.posY + d0, this.fakePlayer.motionZ))
+            this.fakePlayer.motionY = 0.30000001192092896D;
     }
 
     @Override

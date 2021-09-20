@@ -1,4 +1,4 @@
-package me.gavin.notorious.hack.hacks.combatrewrite;
+package me.gavin.notorious.hack.hacks.combat;
 
 import me.gavin.notorious.event.events.PacketEvent;
 import me.gavin.notorious.hack.Hack;
@@ -34,7 +34,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 
-@RegisterHack(name = "AutoCrystalRewrite", description = "nigus", category = Hack.Category.CombatRewrite)
+@RegisterHack(name = "AutoCrystalRewrite", description = "nigus", category = Hack.Category.Combat)
 public class CrystalAura extends Hack {
 
 	//Range

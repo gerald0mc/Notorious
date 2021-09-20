@@ -5,7 +5,9 @@ import me.gavin.notorious.hack.Hack;
 import me.gavin.notorious.hack.RegisterHack;
 import me.gavin.notorious.hack.RegisterSetting;
 import me.gavin.notorious.setting.BooleanSetting;
+import me.gavin.notorious.setting.ColorSetting;
 import me.gavin.notorious.setting.NumSetting;
+import me.gavin.notorious.util.ColorUtil;
 import me.gavin.notorious.util.ProjectionUtil;
 import me.gavin.notorious.util.RenderUtil;
 import net.minecraft.client.gui.Gui;
@@ -25,6 +27,8 @@ import java.awt.*;
 public class Nametags extends Hack {
 
     @RegisterSetting public final NumSetting scale = new NumSetting("Scale", 2.5f, 1, 5, 0.1f);
+    @RegisterSetting public final ColorSetting outlineColor = new ColorSetting("OutlineColor", 120, 81, 169, 255);
+    @RegisterSetting public final BooleanSetting rainbow = new BooleanSetting("Rainbow", true);
     @RegisterSetting public final BooleanSetting armor = new BooleanSetting("Armor", false);
     @RegisterSetting public final BooleanSetting items = new BooleanSetting("Items", true);
 
@@ -54,21 +58,22 @@ public class Nametags extends Hack {
 
             double health = player.getHealth() + player.getAbsorptionAmount();
 
-            // le render
+            //le render
             String str = "";
             str += ChatFormatting.GRAY + "" + ping + "ms " + ChatFormatting.RESET;
             str += player.getName();
             str += " " + getHealthColor(health) + String.format("%.1f", health);
             if(armor.isEnabled()) {
-                int xOffset = 10;
+                int xOffset = 1;
                 for (ItemStack stack : player.getArmorInventoryList()) {
                     if (stack == null) continue;
                     ItemStack armourStack = stack.copy();
-                    renderItem(armourStack, 30, 15);
-                    xOffset += 13;
+                    renderItem(armourStack, xOffset + 10, -(26));
+                    xOffset -= 13;
                 }
             }
-            Gui.drawRect((int) -((mc.fontRenderer.getStringWidth(str) + 2) / 2f), -(mc.fontRenderer.FONT_HEIGHT + 2),(mc.fontRenderer.getStringWidth(str) + 2) / (int) 2f, 1, new Color(0, 0, 0, 125).getRGB());
+            mc.player.getName();
+            RenderUtil.drawBorderedRect(-((mc.fontRenderer.getStringWidth(str) + 2) / 2f), -(mc.fontRenderer.FONT_HEIGHT + 2), (float) ((mc.fontRenderer.getStringWidth(str) + 2) / (int) 2f), 1, new Color(0, 0, 0, 125).getRGB(), rainbow.getValue() ? ColorUtil.getRainbow(6f, 1f) : outlineColor.getAsColor().getRGB());
 
             mc.fontRenderer.drawStringWithShadow(str, -(mc.fontRenderer.getStringWidth(str) / 2f), -(mc.fontRenderer.FONT_HEIGHT), -1);
             GlStateManager.popMatrix();

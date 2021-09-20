@@ -28,13 +28,13 @@ public class HoleESP extends Hack {
     @RegisterSetting
     public final ModeSetting mode = new ModeSetting("Mode", "Both", "Both", "Outline", "Box");
     @RegisterSetting
-    public final ColorSetting bedrockOutlineColor = new ColorSetting("UnSafeOutlineColor", 255, 0, 0, 255);
+    public final ColorSetting bedrockOutlineColor = new ColorSetting("SafeOutlineColor", 255, 0, 0, 255);
     @RegisterSetting
-    public final ColorSetting bedrockFillColor = new ColorSetting("UnSafeFillColor", 255, 0, 0, 125);
+    public final ColorSetting bedrockFillColor = new ColorSetting("SafeFillColor", 255, 0, 0, 125);
     @RegisterSetting
-    public final ColorSetting obsidianOutlineColor = new ColorSetting("SafeOutlineColor", 0, 0, 255, 255);
+    public final ColorSetting obsidianOutlineColor = new ColorSetting("UnSafeOutlineColor", 0, 0, 255, 255);
     @RegisterSetting
-    public final ColorSetting obsidianFillColor = new ColorSetting("SafeFillColor", 0, 0, 255, 125);
+    public final ColorSetting obsidianFillColor = new ColorSetting("UnSafeFillColor", 0, 0, 255, 125);
 
     private List<BlockPos> holes = new ArrayList<>();
     public boolean fill;
