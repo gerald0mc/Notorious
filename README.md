@@ -4,6 +4,16 @@
 
 <h3>Based client so swag</h3>
 
+
+<!-- 
+  For you braindeads that dont understand the html credits:
+  <ul></ul> is the thingymajigy that makes the list
+  <li></li> is another thingymajigy that makes content in the list
+  <br> is to make a line-break (new line thingy)
+  &emsp; is to make spaces in the text that markdown will allow
+  <i></i> is to make the text italic
+-->
+
 <p>
   Made by:
   <ul>
