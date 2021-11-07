@@ -12,6 +12,3 @@
     <li>Ethius<br>&emsp;&emsp;<i>amazing</i></li>
   </ul>
 </p>
-
-
-<h6><small><small>readme made cooler by acaiberii xD</small></small></h6>
