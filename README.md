@@ -1,3 +1,8 @@
+<!--
+  Ensure 75% width on all devices.
+  This may break the height on some devices.
+-->
+
 <div align="center">
   <img src="/content/icon-full.png" width="75%">
 </div>
